@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
             }
             if (loginUsername.isNotEmpty() && loginPassword.isNotEmpty()) {
-                loginUser(loginUsername,loginPassword)
+                loginUser(loginUsername,loginPassword )
             }else{
                 Toast.makeText(this@LoginActivity, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-
+    /*text changes to just test if commits are really made*/
     private fun loginUser(username: String, password: String){ /*parameters*/
         databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object :
             ValueEventListener {
