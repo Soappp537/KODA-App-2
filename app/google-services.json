@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590290505796",
+    "project_id": "koda-application",
+    "storage_bucket": "koda-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590290505796:android:ce9c4a59682a692cf22c11",
+        "android_client_info": {
+          "package_name": "com.example.kodaapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBlb5_lAOyPy-wPyaUJ4PiGOlBR5Tjuv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
