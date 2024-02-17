@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    /*text changes to just test if commits are really made*/
+    /*text changes to just test if commits are reasdlly made*/
     private fun loginUser(username: String, password: String){ /*parameters*/
         databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object :
             ValueEventListener {
