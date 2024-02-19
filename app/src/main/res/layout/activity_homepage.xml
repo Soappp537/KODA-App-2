@@ -23,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:backgroundTint="#6C6836"
+            android:layout_marginRight="10dp"
             android:onClick="onBackButtonClick"
             android:text="Back"
             android:textColor="#F8F9FA"
@@ -43,15 +44,13 @@
         android:id="@+id/layout_One"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:padding="5dp"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialToolbar"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
 
         <TextView
             android:layout_width="wrap_content"
