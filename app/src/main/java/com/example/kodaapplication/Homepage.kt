@@ -1,19 +1,26 @@
 package com.example.kodaapplication
 
-import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
-import android.widget.Toast
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class homepage : AppCompatActivity() {
+
+class Homepage : AppCompatActivity() {
+    var dialog: AlertDialog? = null
+    var layout: LinearLayout? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
@@ -25,14 +32,47 @@ class homepage : AppCompatActivity() {
         )
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
-
-        val backButton = findViewById<Button>(R.id.backButton)
+       /* val backButton = findViewById<Button>(R.id.backButton)
         backButton.setOnClickListener {
             showAlertDialog()
-
+        }*/
+        val add = findViewById<ExtendedFloatingActionButton>(R.id.addingBtn)
+        layout = findViewById(R.id.recycle_container)
+        buildDialog()
+        add.setOnClickListener {
+            dialog?.show()
         }
+
     }
-    fun showAlertDialog() {
+    private fun buildDialog(){
+        val builder = AlertDialog.Builder(this)
+        val view = layoutInflater.inflate(R.layout.add_item, null)
+        val name: EditText = view.findViewById(R.id.userName)
+        val age: EditText = view.findViewById(R.id.userAge)
+        builder.setView(view)
+            .setPositiveButton("Ok"){
+                dialog, which ->
+                addCard(name.text.toString(), age.text.toString())
+            }
+            .setNegativeButton("Cancel"){
+                dialog, which ->
+                dialog.dismiss()
+            }
+        dialog = builder.create()
+    }
+    private fun addCard(name: String, age: String){
+        val view = layoutInflater.inflate(R.layout.list_item, null)
+        val nameView: TextView = view.findViewById(R.id.mTitle)
+        val ageView: TextView = view.findViewById(R.id.mSubTitle)
+        val delete: Button = view.findViewById(R.id.delete)
+        nameView.text = name
+        ageView.text = (age + " years old")
+        delete.setOnClickListener {
+            layout?.removeView(view)
+        }
+        layout?.addView(view)
+    }
+    /*fun showAlertDialog() {
         // Create a new AlertDialog builder
         val builder = AlertDialog.Builder(this)
         // Set the title and message
@@ -53,7 +93,7 @@ class homepage : AppCompatActivity() {
         // Create and show the AlertDialog
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
-    }
+    }*/
     private fun enableEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
@@ -62,5 +102,4 @@ class homepage : AppCompatActivity() {
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
     }
-
 }

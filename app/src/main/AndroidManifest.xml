@@ -17,7 +17,7 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".homepage"
+            android:name=".Homepage"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
