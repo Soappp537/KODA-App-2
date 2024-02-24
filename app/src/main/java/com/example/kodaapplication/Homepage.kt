@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -65,10 +66,15 @@ class Homepage : AppCompatActivity() {
         val nameView: TextView = view.findViewById(R.id.mTitle)
         val ageView: TextView = view.findViewById(R.id.mSubTitle)
         val delete: Button = view.findViewById(R.id.delete)
+        val layoutOuter: LinearLayout = view.findViewById(R.id.outer_layout)
         nameView.text = name
         ageView.text = (age + " years old")
         delete.setOnClickListener {
             layout?.removeView(view)
+        }
+        layoutOuter.setOnClickListener {
+            startActivity(Intent(this@Homepage, child_homescreen::class.java))
+            finish()
         }
         layout?.addView(view)
     }
