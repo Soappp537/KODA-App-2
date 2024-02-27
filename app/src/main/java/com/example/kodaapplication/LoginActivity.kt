@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
     private lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        databaseReference = firebaseDatabase.reference.child("users")
+        databaseReference = firebaseDatabase.reference.child("users") /*creation of firebase*/
 
         binding.loginButton.setOnClickListener {
             val loginUsername = binding.loginUsername.text.toString()
@@ -57,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    /*text changes to just test if commits are reasdlly made*/
     private fun loginUser(username: String, password: String){ /*parameters*/
         databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object :
             ValueEventListener {
@@ -65,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                 if (dataSnapshot.exists()){
                     for (userSnapshot in dataSnapshot.children){ /*credentials will be taken here*/
                         val userData = userSnapshot.getValue(UserData::class.java)
-
                         if (userData != null && userData.password==password){
                             Toast.makeText(this@LoginActivity,"Login Successful", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))

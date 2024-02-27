@@ -57,7 +57,7 @@ class SignupActivity : AppCompatActivity() {
         databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot){
                 if (!dataSnapshot.exists()){
-                    val id = databaseReference.push().key
+                    val id = databaseReference.push().key /*generates a unique token*/
                     val userData = UserData(id,username,password)
                     databaseReference.child(id!!).setValue(userData)
                     Toast.makeText(this@SignupActivity, "Signup Successful", Toast.LENGTH_SHORT).show()

@@ -51,7 +51,7 @@
             android:layout_gravity="center"
             android:padding="10dp">
             <Button
-                android:id="@+id/edit"
+                android:id="@+id/editButt"
                 android:elevation="10dp"
                 android:shadowColor="@color/black"
                 android:layout_width="wrap_content"

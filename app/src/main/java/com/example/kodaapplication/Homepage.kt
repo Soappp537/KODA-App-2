@@ -66,9 +66,14 @@ class Homepage : AppCompatActivity() {
         val nameView: TextView = view.findViewById(R.id.mTitle)
         val ageView: TextView = view.findViewById(R.id.mSubTitle)
         val delete: Button = view.findViewById(R.id.delete)
+        val editButton: Button = view.findViewById(R.id.editButt)
         val layoutOuter: LinearLayout = view.findViewById(R.id.outer_layout)
         nameView.text = name
         ageView.text = (age + " years old")
+        editButton.setOnClickListener {
+            startActivity(Intent(this@Homepage, qrCodeScanner::class.java))
+            finish()
+        }
         delete.setOnClickListener {
             layout?.removeView(view)
         }
