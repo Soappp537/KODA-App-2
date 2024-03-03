@@ -22,9 +22,6 @@
             android:name=".child_homescreen"
             android:exported="false" />
         <activity
-            android:name=".Homepage"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
