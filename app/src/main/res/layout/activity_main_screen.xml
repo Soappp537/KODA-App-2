@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".mainScreen">
 <!--sdsd-->
+    <!--ssdkjfh-->
     <!--this is a comment-->
     <FrameLayout
         android:id="@+id/frameLayout"
