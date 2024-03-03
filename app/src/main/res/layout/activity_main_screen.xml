@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".mainScreen">
-<!--sdsd-->
-    <!--ssdkjfh-->
-    <!--this is a comment-->
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -17,6 +15,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_anchor="@+id/frameLayout"
+            app:layout_anchorGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,12 +28,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
         app:layout_anchor="@id/frameLayout"
         app:layout_anchorGravity="bottom|end"
         android:text="Add Child"
-        android:textSize="20sp"
-        />
-
-
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="15dp"
+        android:textSize="20sp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
