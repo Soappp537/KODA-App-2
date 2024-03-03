@@ -7,7 +7,6 @@
     app:cardElevation="8dp"
     app:cardMaxElevation="5dp"
     android:layout_margin="10dp"
-    android:layout_marginTop="20dp"
     >
     <LinearLayout
         android:id="@+id/outer_layout"
@@ -36,7 +35,7 @@
 
             <TextView
                 android:id="@+id/mSubTitle"
-                android:text="SubTitle"
+                android:text="Child Age"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"
                 android:textStyle="bold"

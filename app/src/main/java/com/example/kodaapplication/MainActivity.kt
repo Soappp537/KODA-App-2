@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun parentClicked() {
-        startActivity(Intent(this@MainActivity, Homepage::class.java))
+        startActivity(Intent(this@MainActivity, mainScreen::class.java))
         finish()
     }
     fun childCLicked() {

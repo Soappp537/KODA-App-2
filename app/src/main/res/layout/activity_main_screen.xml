@@ -31,7 +31,7 @@
         app:layout_anchor="@id/frameLayout"
         app:layout_anchorGravity="bottom|end"
         android:text="Add Child"
-        android:textSize="20dp"
+        android:textSize="20sp"
         />
 
 
