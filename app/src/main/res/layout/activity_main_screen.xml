@@ -13,6 +13,8 @@
         android:layout_height="match_parent">
         <!-- Your main content here -->
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recyclerView"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_anchor="@+id/frameLayout"

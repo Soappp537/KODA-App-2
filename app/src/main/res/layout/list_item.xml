@@ -28,14 +28,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-                android:text="Title"
+                android:text="Child's First Name"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/mTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:text="Child's Last Name"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/mSubTitle"
-                android:text="Child Age"
+                android:text="Child's Age"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="15sp"
                 android:textStyle="bold"
