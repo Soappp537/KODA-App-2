@@ -38,10 +38,10 @@ class mainScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
 
-        val toChild = findViewById<ExtendedFloatingActionButton>(R.id.fab)
+        /*val toChild = findViewById<ExtendedFloatingActionButton>(R.id.fab)
         toChild.setOnClickListener {
             startActivity(Intent(this@mainScreen, addChildInfo::class.java))
-        }
+        }*/
 
         childRecyclerView = findViewById(R.id.main_recyclerView)
         childRecyclerView.layoutManager = LinearLayoutManager(this)

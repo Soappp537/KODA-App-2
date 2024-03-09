@@ -37,6 +37,19 @@ android {
     buildFeatures{
         viewBinding = true
     }
+    dependencies {
+        // Import the Firebase BoM
+        implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+
+
+        // TODO: Add the dependencies for Firebase products you want to use
+        // When using the BoM, don't specify versions in Firebase dependencies
+        implementation("com.google.firebase:firebase-analytics")
+
+
+        // Add the dependencies for any other desired Firebase products
+        // https://firebase.google.com/docs/android/setup#available-libraries
+    }
 }
 
 dependencies {
@@ -47,8 +60,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
-    implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("androidx.activity:activity:1.8.0")
+    implementation("com.google.firebase:firebase-firestore:20.10.3")
     testImplementation("junit:junit:4.13.2")
     implementation ("com.google.zxing:core:3.4.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
