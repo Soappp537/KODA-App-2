@@ -20,7 +20,6 @@
         android:ems="10"
         android:fontFamily="@font/architects_daughter_font"
         android:gravity="center"
-        android:inputType="text"
         android:minHeight="48dp"
         android:text="Hi! Welcome to KODA"
         android:textSize="25sp"

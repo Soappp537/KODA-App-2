@@ -72,7 +72,8 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Toast.makeText(this@LoginActivity,"Login Failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity,"Login Failed, Account does not exist", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

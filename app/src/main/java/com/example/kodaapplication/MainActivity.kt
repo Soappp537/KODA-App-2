@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     }
     fun parentClicked() {
         startActivity(Intent(this@MainActivity, mainScreen::class.java))
-        finish()
     }
     fun childCLicked() {
         startActivity(Intent(this@MainActivity, child_homescreen::class.java))

@@ -7,33 +7,22 @@
     android:fitsSystemWindows="true"
     tools:context=".mainScreen">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!-- Your main content here -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recyclerView"
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             app:layout_anchor="@+id/frameLayout"
             app:layout_anchorGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/list_item" />
-    </FrameLayout>
+    </LinearLayout>
 
-    <!--<com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        app:layout_anchor="@id/frameLayout"
-        app:layout_anchorGravity="bottom|end"
-        android:text="Add Child"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="15dp"
-        android:textSize="20sp"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

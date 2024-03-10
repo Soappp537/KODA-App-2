@@ -1,45 +1,62 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.webkit.WebView.FindListener
+import android.widget.EditText
 import android.widget.Toast
 import com.example.kodaapplication.databinding.ActivityAddChildInfoBinding
+import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.firestore
 import java.util.UUID
 
 class addChildInfo : AppCompatActivity() {
     private lateinit var binding : ActivityAddChildInfoBinding
-    private lateinit var database : DatabaseReference
+    private var db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddChildInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.buttonChild.setOnClickListener {
-            createChild()
+            addChildToFireStore()
+        }
+
+        binding.backTextView.setOnClickListener {
+            startActivity(Intent(this@addChildInfo, child_homescreen::class.java))
         }
     }
 
-    private fun createChild() {
-        val firstName = binding.childFirstName.text.toString()
-        val lastName = binding.childLastName.text.toString()
-        val age = binding.childAge.text.toString()
+    private fun addChildToFireStore() {
+        val storeFirstName = binding.childFirstName.text.toString().trim()
+        val storeLastName = binding.childLastName.text.toString().trim()
+        val storeChildAge = binding.childAge.text.toString().trim()
         val randomId = UUID.randomUUID().toString().substring(0,10)
 
-        database = FirebaseDatabase.getInstance().getReference("childData")
-        val childData = childData(randomId,firstName,lastName,age)
-        database.child(firstName).setValue(childData).addOnSuccessListener {
-            binding.childFirstName.text.clear()
-            binding.childLastName.text.clear()
-            binding.childAge.text.clear()
+        val userMap = hashMapOf(
+            "first name" to storeFirstName,
+            "last name" to storeLastName,
+            "age" to storeChildAge,
+            "child id" to randomId
+        )
 
-            Toast.makeText(this,"Successfully Added!",Toast.LENGTH_SHORT).show()
-            finish()
-
-        }.addOnFailureListener {
-            Toast.makeText(this,"Failed!",Toast.LENGTH_SHORT).show()
-        }
+        db.collection("ChildAccounts").document().set(userMap)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
+                binding.childFirstName.text.clear()
+                binding.childLastName.text.clear()
+                binding.childAge.text.clear()
+                /*binding.parentId.text.clear()*/
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
+            }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Add any additional custom behavior here
     }
 }
