@@ -1,9 +1,11 @@
 package com.example.kodaapplication
 
+import com.google.firebase.database.PropertyName
+
 data class childData(
-        var childFirstName:String? = null,
-        var childLastName:String? = null,
-        var childAge:String? = null,
-        var childId: String? = null
-        /*this is a data class for the children*/
+    val age:String? = "",
+    val childId: String? = "",
+    val firstName: String? = "",
+    val lastName: String? = ""
+    /*this is a data class for the children*/
     )

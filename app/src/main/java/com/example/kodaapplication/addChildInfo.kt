@@ -37,10 +37,10 @@ class addChildInfo : AppCompatActivity() {
         val randomId = UUID.randomUUID().toString().substring(0,10)
 
         val userMap = hashMapOf(
-            "first name" to storeFirstName,
-            "last name" to storeLastName,
             "age" to storeChildAge,
-            "child id" to randomId
+            "firstName" to storeFirstName,
+            "lastName" to storeLastName,
+            "childId" to randomId
         )
 
         db.collection("ChildAccounts").document().set(userMap)

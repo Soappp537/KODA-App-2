@@ -7,22 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context=".mainScreen">
 
-    <LinearLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <!-- Your main content here -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            app:layout_anchor="@+id/frameLayout"
             app:layout_anchorGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/list_item" />
-    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
