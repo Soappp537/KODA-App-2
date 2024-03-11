@@ -3,7 +3,7 @@ package com.example.kodaapplication
 import com.google.firebase.database.PropertyName
 
 data class childData(
-    val age:String? = "",
+    val age: String? = "",
     val childId: String? = "",
     val firstName: String? = "",
     val lastName: String? = ""

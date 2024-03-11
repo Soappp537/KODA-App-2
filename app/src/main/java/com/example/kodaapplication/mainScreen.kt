@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,7 +40,7 @@ class mainScreen : AppCompatActivity() {
         childRecyclerView = findViewById(R.id.main_recyclerView)
         childRecyclerView.layoutManager = LinearLayoutManager(this)
         childRecyclerView.setHasFixedSize(true)
-        childArrayList = arrayListOf<childData>()
+        childArrayList = arrayListOf()
         aadapter = childAdapter(childArrayList)
         childRecyclerView.adapter = aadapter
         getChildData()
@@ -49,6 +50,7 @@ class mainScreen : AppCompatActivity() {
         bd = FirebaseFirestore.getInstance()
         bd.collection("ChildAccounts")
             .addSnapshotListener(object : EventListener<QuerySnapshot>{
+            @SuppressLint("NotifyDataSetChanged")
             override fun onEvent(
                 value: QuerySnapshot?,
                 error: FirebaseFirestoreException?

@@ -46,7 +46,7 @@
         android:layout_below="@id/child_lastName"
         android:layout_marginTop="16dp"
         android:hint="Age"
-        android:inputType="text|number"
+        android:inputType="text"
         android:minHeight="48dp" />
     <!--<EditText
         android:id="@+id/parent_id"

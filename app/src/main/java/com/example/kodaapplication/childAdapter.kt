@@ -18,7 +18,7 @@ class childAdapter(private val childList : ArrayList<childData>) : RecyclerView.
         val child : childData = childList[position]
         holder.nameA.text = child.firstName
         holder.nameB.text = child.lastName
-        holder.nameAge.text = child.age.toString()
+        holder.nameAge.text = child.age
     }
     override fun getItemCount(): Int {
         return childList.size
