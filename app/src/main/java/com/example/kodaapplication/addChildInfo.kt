@@ -25,31 +25,35 @@ class addChildInfo : AppCompatActivity() {
             addChildToFireStore()
         }
 
-        binding.backTextView.setOnClickListener {
+        /*binding.backTextView.setOnClickListener {
             startActivity(Intent(this@addChildInfo, child_homescreen::class.java))
-        }
+            finish()
+        }*/
     }
 
     private fun addChildToFireStore() {
         val storeFirstName = binding.childFirstName.text.toString().trim()
         val storeLastName = binding.childLastName.text.toString().trim()
         val storeChildAge = binding.childAge.text.toString().trim()
+        val storeChildParentId = binding.parentId.text.toString().trim()
         val randomId = UUID.randomUUID().toString().substring(0,10)
 
         val userMap = hashMapOf(
             "age" to storeChildAge,
+            "childId" to randomId,
+            "parentId" to storeChildParentId,
             "firstName" to storeFirstName,
             "lastName" to storeLastName,
-            "childId" to randomId
         )
 
         db.collection("ChildAccounts").document().set(userMap)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
+                println("Child account created successfully")
                 binding.childFirstName.text.clear()
                 binding.childLastName.text.clear()
                 binding.childAge.text.clear()
-                /*binding.parentId.text.clear()*/
+                binding.parentId.text.clear()
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()

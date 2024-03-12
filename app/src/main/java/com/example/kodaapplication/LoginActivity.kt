@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        databaseReference = firebaseDatabase.reference.child("users") /*creation of firebase*/
+        databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
 
         binding.loginButton.setOnClickListener {
             val loginUsername = binding.loginUsername.text.toString()

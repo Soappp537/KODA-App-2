@@ -48,15 +48,15 @@
         android:hint="Age"
         android:inputType="text"
         android:minHeight="48dp" />
-    <!--<EditText
+    <EditText
         android:id="@+id/parent_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/child_age"
         android:layout_marginTop="16dp"
         android:hint="parent id"
-        android:inputType="number"
-        android:minHeight="48dp" />-->
+        android:inputType="text"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonChild"
@@ -64,9 +64,9 @@
         android:layout_height="wrap_content"
         android:text="Add child"
         android:textSize="20dp"
-        android:layout_below="@id/child_age"
+        android:layout_below="@id/parent_id"
         android:layout_marginTop="16dp"/>
-    <TextView
+   <!-- <TextView
         android:id="@+id/backTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,6 +77,6 @@
         android:gravity="center"
         android:textAlignment="center"
         android:clickable="true"
-        android:layout_below="@id/buttonChild"/>
+        android:layout_below="@id/buttonChild"/>-->
 
 </RelativeLayout>

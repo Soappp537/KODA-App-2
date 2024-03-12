@@ -24,7 +24,6 @@ class child_homescreen : AppCompatActivity() {
         val toChild = findViewById<ExtendedFloatingActionButton>(R.id.fab)
         toChild.setOnClickListener {
             startActivity(Intent(this@child_homescreen, addChildInfo::class.java))
-            finish()
         }
     }
 }

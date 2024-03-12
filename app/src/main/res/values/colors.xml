@@ -6,4 +6,6 @@
     <color name="gray">#252424</color>
     <color name="pale_orange">#CF8F3A</color>
     <color name="light_blue">#4379D3</color>
+    <color name="fab_background_color">#3F51B5</color>
+    <color name="fab_outline_color">#FFFFFF</color>
 </resources>

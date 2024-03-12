@@ -8,15 +8,34 @@
     tools:context=".mainScreen">
 
         <!-- Your main content here -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="10dp"
             app:layout_anchorGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/list_item" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabBB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:drawableEnd="@android:drawable/ic_menu_manage"
+            android:elevation="8dp"
+            android:text="My Account"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:translationZ="4dp"
+            app:backgroundTint="@color/white"
+            app:layout_anchorGravity="bottom|end"
+            app:rippleColor="#12020202"
+            app:strokeColor="#12020202"
+            app:strokeWidth="1dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
