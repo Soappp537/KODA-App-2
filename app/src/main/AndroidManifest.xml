@@ -13,11 +13,24 @@
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
         <activity
-            android:name=".child_homescreen"
-            android:exported="false">
-        </activity>
+            android:name=".ShowParentInfo"
+            android:exported="false" />
         <activity
-            android:name=".homepage"
+            android:name=".sampleTest"
+            android:exported="false"
+            android:theme="@style/Theme.KODAApplication"></activity>
+        <activity
+            android:name=".addChildData"
+            android:exported="false" />
+        <activity
+            android:name=".addChildInfo"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".mainScreen"
+            android:exported="false" />
+        <activity
+            android:name=".child_homescreen"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

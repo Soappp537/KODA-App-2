@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import com.example.kodaapplication.databinding.ActivitySignupBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,7 +35,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        databaseReference = firebaseDatabase.reference.child("users")
+        databaseReference = firebaseDatabase.reference.child("parentAccounts")
 
         binding.signupButton.setOnClickListener {
             val signupUsername = binding.getUsername.text.toString()
@@ -52,25 +53,39 @@ class SignupActivity : AppCompatActivity() {
             finish()
         }
     }
+    override fun onBackPressed() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Warning")
+            .setMessage("Are you sure you want to go back to the login screen?")
+            .setPositiveButton("Yes") { _, _ ->
+                startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .create()
+        alertDialog.show()
+    }
 
-    private fun signupUser(username: String, password: String){ /*parameters*/
-        databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(dataSnapshot: DataSnapshot){
-                if (!dataSnapshot.exists()){
-                    val id = databaseReference.push().key
-                    val userData = UserData(id,username,password)
-                    databaseReference.child(id!!).setValue(userData)
-                    Toast.makeText(this@SignupActivity, "Signup Successful", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
-                    finish()
-                }else{
-                    Toast.makeText(this@SignupActivity, "User already exists", Toast.LENGTH_SHORT).show()
+
+    private fun signupUser(username: String, password: String) {
+        databaseReference.orderByChild("username").equalTo(username)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (!dataSnapshot.exists()) {
+                        val id = databaseReference.push().key /*generates a unique token*/
+                        val userData = UserData(id, username, password)
+                        databaseReference.child(id!!).setValue(userData)
+                        Toast.makeText(this@SignupActivity, "Signup Successful", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this@SignupActivity, "User already exists", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(this@SignupActivity, "Database Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(this@SignupActivity, "Database Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

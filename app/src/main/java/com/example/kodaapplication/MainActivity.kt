@@ -4,15 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,12 +32,22 @@ class MainActivity : AppCompatActivity() {
             childCLicked()
         }
     }
+    override fun onBackPressed() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Warning")
+            .setMessage("Are you sure you want to go back to the login screen?")
+            .setPositiveButton("Yes") { _, _ ->
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .create()
+        alertDialog.show()
+    }
     fun parentClicked() {
-        startActivity(Intent(this@MainActivity, homepage::class.java))
-        finish()
+        startActivity(Intent(this@MainActivity, mainScreen::class.java))
     }
     fun childCLicked() {
         startActivity(Intent(this@MainActivity, child_homescreen::class.java))
-        finish()
     }
 }
