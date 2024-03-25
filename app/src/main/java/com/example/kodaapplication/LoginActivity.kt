@@ -9,14 +9,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.WindowCompat
 import com.example.kodaapplication.databinding.ActivityLoginBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
+@Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -57,31 +55,41 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    private fun loginUser(username: String, password: String){ /*parameters*/
-        databaseReference.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(object :
-            ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot){
-                if (dataSnapshot.exists()){
-                    for (userSnapshot in dataSnapshot.children){ /*credentials will be taken here*/
-                        val userData = userSnapshot.getValue(UserData::class.java)
-                        if (userData != null && userData.password==password){
-                            Toast.makeText(this@LoginActivity,"Login Successful", Toast.LENGTH_SHORT).show()
+    private fun loginUser(username: String, password: String) {
+        val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
+        usersCollection.whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    for (document in querySnapshot.documents) {
+                        val userData = document.toObject(UserData::class.java)
+                        if (userData != null && userData.password == password) {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Login Successful",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             finish()
-                            return
+                            return@addOnSuccessListener
                         }
                     }
                 }
-                Toast.makeText(this@LoginActivity,"Login Failed, Account does not exist", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Login Failed, Account does not exist or incorrect password",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(this@LoginActivity, "Database Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Failed to login: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-
-        })
     }
+
 
     private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

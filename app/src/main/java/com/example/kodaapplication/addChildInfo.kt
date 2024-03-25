@@ -1,15 +1,15 @@
 package com.example.kodaapplication
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
 import android.widget.Toast
 import com.example.kodaapplication.databinding.ActivityAddChildInfoBinding
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firestore.v1.DocumentChange
 import java.util.UUID
 
 class addChildInfo : AppCompatActivity() {
@@ -45,7 +45,6 @@ class addChildInfo : AppCompatActivity() {
             "firstName" to storeFirstName,
             "lastName" to storeLastName,
         )
-
         db.collection("ChildAccounts").document().set(userMap)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
@@ -59,6 +58,7 @@ class addChildInfo : AppCompatActivity() {
                 Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
             }
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         // Add any additional custom behavior here
