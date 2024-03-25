@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.kodaapplication.databinding.ActivityAddChildInfoBinding
 import com.google.firebase.Firebase
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firestore.v1.DocumentChange
 import java.util.UUID
