@@ -64,6 +64,7 @@ class mainScreen : AppCompatActivity() {
     private fun getChildData() {
         bd = FirebaseFirestore.getInstance()
         bd.collection("ChildAccounts")
+            .whereEqualTo("parentId", CurrentUser.loggedInParentId)
             .addSnapshotListener(object : EventListener<QuerySnapshot>{
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onEvent(
@@ -74,6 +75,7 @@ class mainScreen : AppCompatActivity() {
                         Log.e("Firestore Error", error.message.toString())
                         return
                     }
+                    childArrayList.clear()
                     for (dc : DocumentChange in value?.documentChanges!!){
                         if (dc.type == DocumentChange.Type.ADDED){
                             childArrayList.add(dc.document.toObject(childData::class.java))
