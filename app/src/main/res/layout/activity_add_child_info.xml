@@ -7,76 +7,112 @@
     android:layout_height="match_parent"
     android:padding="25dp"
     android:gravity="center"
+    android:id="@+id/Child_Info_Add"
     tools:context=".addChildInfo">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/near_Out"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Child"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"/>
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add a Child"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="#333333"
+            android:padding="8dp"
+            android:background="@drawable/rounded_corner_background"
+            android:elevation="4dp"
+            android:layout_gravity="center_horizontal" />
 
-    <EditText
-        android:id="@+id/child_firstName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewTitle"
-        android:layout_marginTop="16dp"
-        android:hint="First Name"
-        android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        <EditText
+            android:id="@+id/child_firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:textColor="#333333"
+            android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/child_lastName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/child_firstName"
-        android:layout_marginTop="16dp"
-        android:hint="Last Name"
-        android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        <EditText
+            android:id="@+id/child_lastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:textColor="#333333"
+            android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/child_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/child_lastName"
-        android:layout_marginTop="16dp"
-        android:hint="Age"
-        android:inputType="text"
-        android:minHeight="48dp" />
-    <EditText
-        android:id="@+id/parent_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/child_age"
-        android:layout_marginTop="16dp"
-        android:hint="parent id"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        <EditText
+            android:id="@+id/child_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Child's Age"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:textColor="#333333"
+            android:textSize="16sp"  />
+        <LinearLayout
+            android:id="@+id/inner_Layout_AA"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <!--test-->
+            <EditText
+                android:id="@+id/parent_id"
+                android:background="@drawable/edit_text_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="parent id"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:inputType="text"
+                android:minHeight="48dp" />
+            <Button
+                android:id="@+id/modernButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="get parent id"
+                android:background="@drawable/rounded_button_background"
+                android:textColor="#00E5FF"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:elevation="4dp"
+                android:layout_gravity="center_horizontal" />
 
-    <Button
-        android:id="@+id/buttonChild"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add child"
-        android:textSize="20dp"
-        android:layout_below="@id/parent_id"
-        android:layout_marginTop="16dp"/>
-   <!-- <TextView
-        android:id="@+id/backTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Go Back"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:clickable="true"
-        android:layout_below="@id/buttonChild"/>-->
-
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/inner_Layout_AB"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/buttonChild"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add child"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

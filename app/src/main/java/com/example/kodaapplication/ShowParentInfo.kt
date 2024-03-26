@@ -1,57 +1,60 @@
 package com.example.kodaapplication
 
+import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ShowParentInfo : AppCompatActivity() {
-    private lateinit var databaseReference: DatabaseReference
     private lateinit var usernameTextView: TextView
+    private lateinit var idTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_show_parent_info)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.show_parent_info)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("parentAccounts")
-        usernameTextView = findViewById(R.id.username)
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            val userId = currentUser.uid
-            databaseReference.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (userSnapshot in dataSnapshot.children) {
-                            val userData = userSnapshot.getValue(UserData::class.java)
-                            Log.d("ShowParentInfo", "User Data: $userData")
+        usernameTextView = findViewById(R.id.par_username)
+        idTextView = findViewById(R.id.par_id)
+
+        val auth = FirebaseAuth.getInstance()
+        auth.addAuthStateListener { firebaseAuth ->
+            val currentUser = firebaseAuth.currentUser
+            if (currentUser != null) {
+                // User is signed in
+                val userId = currentUser.uid
+                Log.d("ShowParentInfo", "Current user ID: $userId")
+                val firestore = FirebaseFirestore.getInstance()
+                firestore.collection("ParentAccounts")
+                    .document(userId)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if (document != null && document.exists()) {
+                            val userData = document.toObject(UserData::class.java)
                             if (userData != null) {
                                 usernameTextView.text = "Username: ${userData.username}"
+                                idTextView.text = "ID: ${userData.id}"
+                            } else {
+                                Log.e("ShowParentInfo", "UserData is null")
                             }
+                        } else {
+                            Log.e("ShowParentInfo", "Document does not exist")
                         }
-                    } else {
-                        Log.d("ShowParentInfo", "No user data found")
                     }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle error
-                }
-            })
+                    .addOnFailureListener { exception ->
+                        Log.e("ShowParentInfo", "Error getting document", exception)
+                        Toast.makeText(this@ShowParentInfo, "Failed to fetch data: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                // User is not signed in, handle this case
+                Log.e("ShowParentInfo", "Current user is null")
+                // For example, you can redirect the user to the login screen
+                // or show a message indicating that they need to sign in
+            }
         }
     }
 }

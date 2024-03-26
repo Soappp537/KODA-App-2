@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignupActivity : AppCompatActivity() {
 
@@ -68,24 +69,53 @@ class SignupActivity : AppCompatActivity() {
 
 
     private fun signupUser(username: String, password: String) {
-        databaseReference.orderByChild("username").equalTo(username)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (!dataSnapshot.exists()) {
-                        val id = databaseReference.push().key /*generates a unique token*/
-                        val userData = UserData(id, username, password)
-                        databaseReference.child(id!!).setValue(userData)
-                        Toast.makeText(this@SignupActivity, "Signup Successful", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
-                        finish()
-                    } else {
-                        Toast.makeText(this@SignupActivity, "User already exists", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
+        val uniqueId = generateRandomString(10)
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(this@SignupActivity, "Database Error: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+        usersCollection.document(uniqueId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (!documentSnapshot.exists()) {
+                    val userData = mapOf(
+                        "id" to uniqueId,
+                        "username" to username,
+                        "password" to password
+                    )
+                    usersCollection.document(uniqueId)
+                        .set(userData)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                this@SignupActivity,
+                                "Signup Successful",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(
+                                this@SignupActivity,
+                                "Failed to add user: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                } else {
+                    // Retry with a new unique ID if the generated ID already exists
+                    signupUser(username, password)
                 }
-            })
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this@SignupActivity,
+                    "Database Error: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+    private fun generateRandomString(length: Int): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }
