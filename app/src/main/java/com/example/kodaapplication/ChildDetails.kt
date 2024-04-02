@@ -38,8 +38,9 @@ class ChildDetails : AppCompatActivity() {
                 if (!querySnapshot.isEmpty) {
                     val document = querySnapshot.documents.firstOrNull()
                     val firstName = document?.getString("firstName")
+                    val lastName = document?.getString("lastName")
                     if (firstName != null) {
-                        childNameTextView.text = firstName
+                        childNameTextView.text = "$firstName $lastName"
                     } else {
                         // Handle case where firstName is null
                         childNameTextView.text = "Name not available"
