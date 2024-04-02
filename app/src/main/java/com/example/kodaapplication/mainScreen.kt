@@ -10,20 +10,16 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.auth.AuthUI
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.example.kodaapplication.childAdapter
+import com.example.kodaapplication.childData
 
-class mainScreen : AppCompatActivity() {
+class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
     companion object {
         private const val TAG = "mainScreen"
         private const val RC_SIGN_IN = 123
@@ -50,7 +46,7 @@ class mainScreen : AppCompatActivity() {
         childRecyclerView.layoutManager = LinearLayoutManager(this)
         childRecyclerView.setHasFixedSize(true)
         childArrayList = arrayListOf()
-        aadapter = childAdapter(childArrayList)
+        aadapter = childAdapter(childArrayList, this)
         childRecyclerView.adapter = aadapter
 
         getChildData()
@@ -65,24 +61,26 @@ class mainScreen : AppCompatActivity() {
         bd = FirebaseFirestore.getInstance()
         bd.collection("ChildAccounts")
             .whereEqualTo("parentId", CurrentUser.loggedInParentId)
-            .addSnapshotListener(object : EventListener<QuerySnapshot>{
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onEvent(
-                    value: QuerySnapshot?,
-                    error: FirebaseFirestoreException?
-                ){
-                    if (error != null){
-                        Log.e("Firestore Error", error.message.toString())
-                        return
-                    }
-                    childArrayList.clear()
-                    for (dc : DocumentChange in value?.documentChanges!!){
-                        if (dc.type == DocumentChange.Type.ADDED){
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.e("Firestore Error", error.message.toString())
+                    return@addSnapshotListener
+                }
+                childArrayList.clear()
+                value?.let { snapshot ->
+                    for (dc in snapshot.documentChanges) {
+                        if (dc.type == DocumentChange.Type.ADDED) {
                             childArrayList.add(dc.document.toObject(childData::class.java))
                         }
                     }
                     aadapter.notifyDataSetChanged()
                 }
-            })
+            }
+    }
+
+    override fun onItemClick(childData: childData) {
+        val intent = Intent(this, ChildDetails::class.java)
+        intent.putExtra("childId", childData.childId)
+        startActivity(intent)
     }
 }
