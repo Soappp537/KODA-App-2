@@ -72,22 +72,24 @@
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <!--test-->
+            android:orientation="horizontal">
+
+            <!-- EditText with layout_weight -->
             <EditText
                 android:id="@+id/parent_id"
                 android:background="@drawable/edit_text_background"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="parent id"
                 android:padding="10dp"
-                android:layout_marginEnd="5dp"
                 android:inputType="text"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:layout_weight="1" />
+
+            <!-- Button -->
             <Button
                 android:id="@+id/modernButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="get parent id"
                 android:background="@drawable/rounded_button_background"
@@ -97,9 +99,10 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:elevation="4dp"
-                android:layout_gravity="center_horizontal" />
-
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp" /> <!-- Add margin to create a gap -->
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/inner_Layout_AB"
             android:layout_marginTop="16dp"
