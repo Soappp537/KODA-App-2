@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+    <!--t-->
     <LinearLayout
         android:id="@+id/the_LayoutForThisChildGetter"
         android:layout_width="wrap_content"
