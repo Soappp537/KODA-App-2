@@ -8,4 +8,7 @@
     <color name="light_blue">#4379D3</color>
     <color name="fab_background_color">#3F51B5</color>
     <color name="fab_outline_color">#FFFFFF</color>
+    <color name="primaryColor">#3F51B5</color>
+    <color name="rippleColor">#80000000</color>
+
 </resources>

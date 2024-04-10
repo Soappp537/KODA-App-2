@@ -77,7 +77,7 @@
             tools:layout_editor_absoluteY="416dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -87,6 +87,7 @@
         android:textColor="@color/gray"
         android:textSize="17.5sp"
         android:textStyle="bold"
+        app:cornerRadius="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"

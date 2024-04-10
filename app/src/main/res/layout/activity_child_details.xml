@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    tools:context=".ChildDetails">
 
     <!--t-->
     <LinearLayout
@@ -11,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="10dp"
         android:gravity="center">
 
         <TextView
@@ -21,24 +25,53 @@
             android:textSize="40sp"
             android:text="Child's First Name" />
 
-        <Button
-            android:id="@+id/button1"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_lock_apps"
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button 1" />
+            android:text="Lock Apps"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/primaryColor"
+            app:cornerRadius="8dp"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:rippleColor="@color/rippleColor"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button 2" />
+            android:text="Screentime Management"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/primaryColor"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_block"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:rippleColor="@color/rippleColor"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button 3" />
+            android:text="Web Filtering"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/primaryColor"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_block"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:rippleColor="@color/rippleColor"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
     </LinearLayout>
-
 
 </RelativeLayout>

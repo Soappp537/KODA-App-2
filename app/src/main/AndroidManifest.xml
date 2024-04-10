@@ -13,17 +13,13 @@
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
         <activity
+            android:name=".AppList"
+            android:exported="false" />
+        <activity
             android:name=".ChildDetails"
             android:exported="false" />
         <activity
             android:name=".ShowParentInfo"
-            android:exported="false" />
-        <activity
-            android:name=".sampleTest"
-            android:exported="false"
-            android:theme="@style/Theme.KODAApplication" />
-        <activity
-            android:name=".addChildData"
             android:exported="false" />
         <activity
             android:name=".addChildInfo"
@@ -50,8 +46,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"> <!-- originally true -->
-
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
 
 </manifest>

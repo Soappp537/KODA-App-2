@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -21,6 +22,9 @@ class ChildDetails : AppCompatActivity() {
         val childId = intent.getStringExtra("childId")
         if (childId != null) {
             fetchChildName(CurrentUser.loggedInParentId, childId)
+        }
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.button_lock_apps).setOnClickListener {
+
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
