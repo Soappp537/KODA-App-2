@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildDetails : AppCompatActivity() {
@@ -25,6 +26,10 @@ class ChildDetails : AppCompatActivity() {
         }
         findViewById<com.google.android.material.button.MaterialButton>(R.id.button_lock_apps).setOnClickListener {
 
+        }
+        val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
+        buttonWebFilter.setOnClickListener {
+            startActivity(Intent(this, pageForWebFiltering::class.java))
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
