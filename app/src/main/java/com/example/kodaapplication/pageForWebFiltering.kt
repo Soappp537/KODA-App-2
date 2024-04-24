@@ -24,6 +24,7 @@ class pageForWebFiltering : AppCompatActivity() {
     private lateinit var blockSiteButton: Button
     private lateinit var unBlockSiteButton: Button
     private lateinit var editTextBlockSite: EditText
+    private lateinit var editTextUnblockSite: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,7 @@ class pageForWebFiltering : AppCompatActivity() {
         blockSiteButton = findViewById(R.id.block_button)
         unBlockSiteButton = findViewById(R.id.Unblock_button)
         editTextBlockSite = findViewById(R.id.block_site)
+        editTextUnblockSite = findViewById(R.id.unblock_site)
 
         blockSiteButton.setOnClickListener {
             val siteToBlock = editTextBlockSite.text.toString()
@@ -44,8 +46,9 @@ class pageForWebFiltering : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a site to block", Toast.LENGTH_SHORT).show()
             }
         }
+
         unBlockSiteButton.setOnClickListener {
-            val siteToUnblock = editTextBlockSite.text.toString()
+            val siteToUnblock = editTextUnblockSite.text.toString()
             if (siteToUnblock.isNotEmpty()) {
                 unblockSite(siteToUnblock)
             } else {
@@ -63,26 +66,24 @@ class pageForWebFiltering : AppCompatActivity() {
         }
 
     }
+
     fun blockSite(url: String) {
         val site = Uri.parse(url).host
         if (site != null) {
-            val docRef = firebaseFirestore.collection("blocked_sites").document(site)
+            val docRef = firebaseFirestore.collection("blocked_Sites").document(site)
             docRef.set(mapOf("blocked" to true))
 
         } else {
             Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
         }
     }
+
     fun unblockSite(url: String) {
-        val domain = Uri.parse(url).host
-        if (domain != null) {
-            firebaseFirestore.collection("blocked_sites").document(domain).delete()
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Site unblocked", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to unblock site", Toast.LENGTH_SHORT).show()
-                }
+        val site = Uri.parse(url).host
+        if (site != null) {
+            val docRef = firebaseFirestore.collection("blocked_Sites").document(site)
+            docRef.set(mapOf("blocked" to false))
+
         } else {
             Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
         }

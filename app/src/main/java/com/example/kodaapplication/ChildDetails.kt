@@ -14,19 +14,24 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildDetails : AppCompatActivity() {
     private lateinit var childNameTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_child_details)
         childNameTextView = findViewById(R.id.cont_for_childName)
+        val buttonLockApps = findViewById<MaterialButton>(R.id.button_lock_apps)
+
+        buttonLockApps.setOnClickListener {
+            val intent = Intent(this@ChildDetails, AppListActivity::class.java)
+            startActivity(intent)
+        }
 
         val childId = intent.getStringExtra("childId")
         if (childId != null) {
             fetchChildName(CurrentUser.loggedInParentId, childId)
         }
-        findViewById<com.google.android.material.button.MaterialButton>(R.id.button_lock_apps).setOnClickListener {
 
-        }
         val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
         buttonWebFilter.setOnClickListener {
             startActivity(Intent(this, pageForWebFiltering::class.java))

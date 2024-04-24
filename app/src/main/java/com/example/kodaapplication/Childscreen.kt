@@ -1,9 +1,7 @@
 package com.example.kodaapplication
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -11,8 +9,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Childscreen : AppCompatActivity() {
@@ -36,19 +32,17 @@ class Childscreen : AppCompatActivity() {
                     // Allow Google search page to load
                     return false
                 }
-                webView.clearCache(true) // Clear the WebView cache
-                urlLoadingCallback = { isAllowed ->
-                    if (isAllowed) {
-                        Toast.makeText(this@Childscreen, "This site is blocked by KODA App", Toast.LENGTH_SHORT).show()
-                    } else {
-
-                        webView.settings.setCacheMode(WebSettings.LOAD_NO_CACHE)
-                        webView.settings.setDomStorageEnabled(false)
+                isSiteBlocked(url) { isBlocked ->
+                    if (!isBlocked) {
+                        webView.clearCache(true) // Clear the WebView cache
+                        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                        webView.settings.domStorageEnabled = false
                         webView.clearHistory()
                         webView.loadUrl(url)
+                    } else {
+                        Toast.makeText(this@Childscreen, "This site is blocked by KODA App", Toast.LENGTH_SHORT).show()
                     }
                 }
-                isSiteBlocked(url)
                 return true
             }
             override fun shouldOverrideKeyEvent(view: WebView?, event: KeyEvent?): Boolean {
@@ -67,34 +61,21 @@ class Childscreen : AppCompatActivity() {
 
         webView.loadUrl("https://www.google.com")
 
-
-        val fab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
-        fab.setOnClickListener { view ->
-            // Perform your desired action here, e.g. opening a new activity
-            startActivity(Intent(this, addChildInfo::class.java))
+    }
+    fun isSiteBlocked(url: String, callback: (Boolean) -> Unit) {
+        val site = Uri.parse(url).host
+        if (site != null) {
+            firebaseFirestore.collection("blocked_Sites").document(site).get().addOnSuccessListener { document ->
+                callback(document.getBoolean("blocked") ?: false)
+            }
+        } else {
+            callback(false)
         }
     }
-
-    private fun isSiteBlocked(siteToCheck: String) {
-        val url = Uri.parse(siteToCheck)
-        val domain = url.host ?: return
-        val pathSegments = url.pathSegments
-        val documentId = if (pathSegments.isNotEmpty()) {
-            pathSegments[0]
-        } else {
-            domain
-        }
-        val documentReference = firebaseFirestore.collection("blocked_Sites").document(documentId)
-        documentReference.get().addOnCompleteListener(OnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val document = task.result
-                val isBlocked = document != null && document.exists() && document.getBoolean("blocked") == true
-                urlLoadingCallback?.invoke(isBlocked)
-            } else {
-                Log.e("Firebase", "Error checking if site is blocked", task.exception)
-                urlLoadingCallback?.invoke(false)
-            }
-            urlLoadingCallback = null
-        })
+    fun updateBlockedStatus(site: String, isBlocked: Boolean) {
+        val url = Uri.parse(site)
+        val domain = url.host?: return
+        val documentReference = firebaseFirestore.collection("blocked_Sites").document(domain)
+        documentReference.set(mapOf("blocked" to isBlocked))
     }
 }
