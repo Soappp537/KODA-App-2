@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">KODA App</string>
+    <!-- Add this line to define the title_activity_child_homescreen string resource -->
+    <string name="title_activity_Child_homescreen">Child Home Screen</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

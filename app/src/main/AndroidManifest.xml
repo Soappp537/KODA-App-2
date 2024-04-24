@@ -40,8 +40,11 @@
             android:name=".mainScreen"
             android:exported="false" />
         <activity
-            android:name=".child_homescreen"
-            android:exported="false" />
+            android:name=".Childscreen"
+            android:label="@string/title_activity_Child_homescreen"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true">
