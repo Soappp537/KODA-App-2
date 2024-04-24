@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -9,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Childscreen : AppCompatActivity() {
@@ -60,6 +62,12 @@ class Childscreen : AppCompatActivity() {
         }
 
         webView.loadUrl("https://www.google.com")
+
+        val faab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
+        faab.setOnClickListener {
+            startActivity(Intent(this@Childscreen, addChildInfo::class.java))
+            finish()
+        }
 
     }
     fun isSiteBlocked(url: String, callback: (Boolean) -> Unit) {

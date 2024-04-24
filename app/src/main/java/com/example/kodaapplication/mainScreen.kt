@@ -1,23 +1,16 @@
 package com.example.kodaapplication
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
-import com.example.kodaapplication.childAdapter
-import com.example.kodaapplication.childData
 
 class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
     companion object {
@@ -51,10 +44,7 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
 
         getChildData()
 
-        val fab: ExtendedFloatingActionButton = findViewById(R.id.fabBB)
-        fab.setOnClickListener {
-            startActivity(Intent(this@mainScreen, ShowParentInfo::class.java))
-        }
+
     }
 
     private fun getChildData() {
