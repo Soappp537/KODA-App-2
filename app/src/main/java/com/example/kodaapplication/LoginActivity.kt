@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kodaapplication.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -17,9 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
-    private lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
-    private lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
+    lateinit var binding: ActivityLoginBinding
+    lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
+    lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    private fun loginUser(username: String, password: String) {
+    fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         usersCollection.whereEqualTo("username", username)
             .get()
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun isNetworkAvailable(context: Context): Boolean {
+    fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
     }

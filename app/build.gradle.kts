@@ -64,18 +64,21 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.firebaseui:firebase-ui-auth:8.0.0")
-
     implementation ("com.google.firebase:firebase-firestore-ktx:24.11.1")
     implementation("androidx.activity:activity:1.9.0")
     implementation("com.google.firebase:firebase-firestore:24.11.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    testImplementation("junit:junit:4.13.2")
-    implementation ("com.google.zxing:core:3.4.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    implementation("com.google.ar:core:1.42.0")
+    implementation("androidx.test:core-ktx:1.5.0")
+    implementation("org.testng:testng:6.9.6")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.tensorflow:tensorflow-lite:2.8.0")
     // This dependency adds the necessary TF op support.
     implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.8.0")
+
+    testImplementation ("org.robolectric:robolectric:4.6.1")
+
 
 }
