@@ -95,7 +95,7 @@ dependencies {
     androidTestImplementation(espressoIntents)
     androidTestImplementation(espressoWeb)
     testImplementation(junit)
-    androidTestImplementation ("org.hamcrest:hamcrest-library:1.3")
+    androidTestImplementation ("org.hamcrest:hamcrest-library:2.2")
 
 }
 
