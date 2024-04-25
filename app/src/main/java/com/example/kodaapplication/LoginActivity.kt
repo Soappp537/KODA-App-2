@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
     lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
 
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
@@ -55,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         usersCollection.whereEqualTo("username", username)
@@ -90,6 +92,7 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
     }
+
 
 
     fun isNetworkAvailable(context: Context): Boolean {

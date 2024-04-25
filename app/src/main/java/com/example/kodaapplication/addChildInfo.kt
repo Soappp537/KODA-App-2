@@ -1,10 +1,10 @@
 package com.example.kodaapplication
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kodaapplication.databinding.ActivityAddChildInfoBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

@@ -1,4 +1,9 @@
-
+val espressoCore = "androidx.test.espresso:espresso-core:3.4.0"
+val espressoContrib = "androidx.test.espresso:espresso-contrib:3.4.0"
+val junitExt = "androidx.test.ext:junit:1.1.3"
+val espressoIntents = "androidx.test.espresso:espresso-intents:3.4.0"
+val espressoWeb = "androidx.test.espresso:espresso-web:3.4.0"
+val junit = "junit:junit:4.13.2"
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -73,7 +78,7 @@ dependencies {
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("org.testng:testng:6.9.6")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
     implementation ("org.tensorflow:tensorflow-lite:2.8.0")
     // This dependency adds the necessary TF op support.
     implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.8.0")
@@ -81,8 +86,16 @@ dependencies {
     //noinspection GradleDependency
     testImplementation ("org.robolectric:robolectric:4.5.1")
     testImplementation ("org.robolectric:shadows-framework:4.5.1")
-    testImplementation ("androidx.test.ext:junit:1.1.3")
+    testImplementation ("androidx.test.ext:junit:1.2.0-alpha03")
     testImplementation ("org.robolectric:annotations:4.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
+    androidTestImplementation(espressoCore)
+    androidTestImplementation(espressoContrib)
+    androidTestImplementation(junitExt)
+    androidTestImplementation(espressoIntents)
+    androidTestImplementation(espressoWeb)
+    testImplementation(junit)
+    androidTestImplementation ("org.hamcrest:hamcrest-library:1.3")
 
 }
 
