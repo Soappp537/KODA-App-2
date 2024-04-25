@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
     lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
 //                Color.TRANSPARENT, Color.TRANSPARENT

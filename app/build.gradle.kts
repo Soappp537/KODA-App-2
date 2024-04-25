@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -42,6 +43,7 @@ android {
         implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
 
 
+
         // TODO: Add the dependencies for Firebase products you want to use
         // When using the BoM, don't specify versions in Firebase dependencies
         implementation("com.google.firebase:firebase-analytics")
@@ -51,8 +53,6 @@ android {
         // https://firebase.google.com/docs/android/setup#available-libraries
     }
 }
-
-
 
 dependencies {
 
@@ -65,7 +65,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.firebaseui:firebase-ui-auth:8.0.0")
     implementation ("com.google.firebase:firebase-firestore-ktx:24.11.1")
-    implementation("androidx.activity:activity:1.9.0")
+    implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("com.google.firebase:firebase-firestore:24.11.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
@@ -78,7 +78,11 @@ dependencies {
     // This dependency adds the necessary TF op support.
     implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.8.0")
 
-    testImplementation ("org.robolectric:robolectric:4.6.1")
-
+    //noinspection GradleDependency
+    testImplementation ("org.robolectric:robolectric:4.5.1")
+    testImplementation ("org.robolectric:shadows-framework:4.5.1")
+    testImplementation ("androidx.test.ext:junit:1.1.3")
+    testImplementation ("org.robolectric:annotations:4.5.1")
 
 }
+
