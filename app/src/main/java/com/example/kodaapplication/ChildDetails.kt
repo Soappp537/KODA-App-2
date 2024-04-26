@@ -36,6 +36,14 @@ class ChildDetails : AppCompatActivity() {
         buttonWebFilter.setOnClickListener {
             startActivity(Intent(this, pageForWebFiltering::class.java))
         }
+
+        val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
+        deleteChildButton.setOnClickListener {
+            val childId = intent.getStringExtra("childId")
+            if (childId!= null) {
+                deleteChildAccount(CurrentUser.loggedInParentId, childId)
+            }
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -68,6 +76,36 @@ class ChildDetails : AppCompatActivity() {
                 // Handle failure
                 Log.e("ChildDetails", "Failed to fetch child's name: ${e.message}")
                 Toast.makeText(this@ChildDetails, "Failed to fetch child's name", Toast.LENGTH_SHORT).show()
+            }
+    }
+    private fun deleteChildAccount(parentId: String, childId: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("ChildAccounts")
+            .whereEqualTo("parentId", parentId)
+            .whereEqualTo("childId", childId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.first()
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            Log.d("ChildDetails", "Child account deleted successfully")
+                            val intent = Intent(this@ChildDetails, mainScreen::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("ChildDetails", "Failed to delete child account: ${e.message}")
+                            Toast.makeText(this@ChildDetails, "Failed to delete child account", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Log.d("ChildDetails", "Child account not found")
+                    Toast.makeText(this@ChildDetails, "Child account not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ChildDetails", "Failed to fetch child account: ${e.message}")
+                Toast.makeText(this@ChildDetails, "Failed to fetch child account", Toast.LENGTH_SHORT).show()
             }
     }
 }

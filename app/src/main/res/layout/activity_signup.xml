@@ -87,6 +87,7 @@
         android:backgroundTint="@color/orange"
         android:text="Signup"
         android:textColor="@color/gray"
+        app:cornerRadius="10sp"
         app:strokeWidth="1dp"
         app:strokeColor="@color/gray"
         android:textSize="17sp"

@@ -35,7 +35,6 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
 
-
         childRecyclerView = findViewById(R.id.main_recyclerView)
         childRecyclerView.layoutManager = LinearLayoutManager(this)
         childRecyclerView.setHasFixedSize(true)
@@ -45,13 +44,12 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
 
         getChildData()
 
+
         val faab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
         faab.setOnClickListener {
             startActivity(Intent(this@mainScreen, addChildInfo::class.java))
             finish()
         }
-
-
     }
 
     private fun getChildData() {

@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -77,14 +78,14 @@ class addChildInfo : AppCompatActivity() {
                 binding.childLastName.text.clear()
                 binding.childAge.text.clear()
                 binding.parentId.text.clear()
+                val intent = Intent(this@addChildInfo, mainScreen::class.java)
+                startActivity(intent)
+                finish() // Finish the current activity
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
             }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        // Add any additional custom behavior here
-    }
+
 }
