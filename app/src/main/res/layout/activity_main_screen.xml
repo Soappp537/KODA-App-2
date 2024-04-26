@@ -36,4 +36,23 @@
 <!--            app:strokeColor="#12020202"-->
 <!--            app:strokeWidth="1dp" />-->
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20sp"
+            android:elevation="8dp"
+            android:text="Add a Child"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:translationZ="4dp"
+            app:backgroundTint="@color/white"
+            android:backgroundTint="@color/orange"
+            app:layout_anchorGravity="bottom|end"
+            app:rippleColor="#12020202"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

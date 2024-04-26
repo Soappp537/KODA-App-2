@@ -83,6 +83,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:backgroundTint="@color/orange"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/gray"
         android:text="Login"
         android:textColor="@color/gray"
         android:textSize="17.5sp"

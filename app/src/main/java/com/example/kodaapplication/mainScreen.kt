@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -43,6 +44,12 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         childRecyclerView.adapter = aadapter
 
         getChildData()
+
+        val faab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
+        faab.setOnClickListener {
+            startActivity(Intent(this@mainScreen, addChildInfo::class.java))
+            finish()
+        }
 
 
     }

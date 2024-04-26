@@ -2,5 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.KODAApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/orange</item>
     </style>
 </resources>

@@ -39,7 +39,6 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
             android:textSize="16sp" />
 
         <EditText
@@ -52,7 +51,6 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
             android:textSize="16sp" />
 
         <EditText
@@ -65,7 +63,6 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
             android:textSize="16sp"  />
         <LinearLayout
             android:id="@+id/inner_Layout_AA"
@@ -91,15 +88,20 @@
                 android:id="@+id/modernButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="get parent id"
-                android:background="@drawable/rounded_button_background"
-                android:textColor="#FFFFFF"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:elevation="41dp"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
-                android:elevation="4dp" android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp" /> <!-- Add margin to create a gap -->
+                android:text="Get Parent ID"
+                android:backgroundTint="@color/orange"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                android:textStyle="bold"
+                app:cornerRadius="10sp" /> <!-- Add margin to create a gap -->
         </LinearLayout>
 
         <LinearLayout
@@ -111,9 +113,14 @@
             android:gravity="center">
             <Button
                 android:id="@+id/buttonChild"
+                app:cornerRadius="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add child"
+                android:backgroundTint="@color/orange"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                android:textColor="@color/black"
+                android:text="Add Child"
                 android:textSize="20sp"/>
         </LinearLayout>
     </LinearLayout>
