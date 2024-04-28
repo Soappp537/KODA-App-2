@@ -41,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
         databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
 
         binding.loginButton.setOnClickListener {
-            val loginUsername = binding.loginUsername.text.toString()
-            val loginPassword = binding.loginPassword.text.toString()
+            val loginUsername = binding.loginUsername.text.toString().trim()
+            val loginPassword = binding.loginPassword.text.toString().trim()
             if (!isNetworkAvailable(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
             }
@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
-        usersCollection.whereEqualTo("username", username)
+        usersCollection.whereEqualTo("username", username.toLowerCase())
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
@@ -94,8 +94,6 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
     }
-
-
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

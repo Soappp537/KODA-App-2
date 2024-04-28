@@ -7,6 +7,7 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
+
         <activity
             android:name=".AppListActivity"
             android:exported="false" />
@@ -45,7 +47,8 @@
             android:name=".Childscreen"
             android:label="@string/title_activity_Child_homescreen"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="fullSensor"
+            tools:ignore="DiscouragedApi" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -62,6 +65,12 @@
             android:name=".MainActivity"
             android:exported="false"> <!-- originally true -->
         </activity>
+        <activity
+            android:name=".BlockedActivity"
+            android:label="Blocked Screen"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
     </application>
 
 </manifest>

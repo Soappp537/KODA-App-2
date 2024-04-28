@@ -14,14 +14,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildDetails : AppCompatActivity() {
     private lateinit var childNameTextView: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_child_details)
         childNameTextView = findViewById(R.id.cont_for_childName)
         val buttonLockApps = findViewById<MaterialButton>(R.id.button_lock_apps)
-
+        /* buttonLockApps para to sa pag pinindot ung "App Lock" mag oopen ung AppListActivity na kung
+        saan naka list laaht nung apps na nakainstall sa device */
         buttonLockApps.setOnClickListener {
             val intent = Intent(this@ChildDetails, AppListActivity::class.java)
             startActivity(intent)
