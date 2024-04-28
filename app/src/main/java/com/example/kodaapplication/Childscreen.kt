@@ -17,7 +17,7 @@ import com.example.kodaapplication.TfLiteModel.Companion.loadModel
 import com.example.kodaapplication.TfLiteModel.Companion.loadWordIndexMap
 import com.example.kodaapplication.TfLiteModel.Companion.preprocessText
 import com.google.firebase.firestore.FirebaseFirestore
-import org.tensorflow.lite.Interpreter // interpreter para sa model
+import org.tensorflow.lite.Interpreter
 
 // naka global declaration nung ibang variable para gumana ung functions sa kabila file TFLiteModel.kt
 lateinit var wordIndexMap: Map<String, Int> // walang built in tokenizer android studio kaya ung tokenized words galing sa training data ng model ginawang dictionary
@@ -71,21 +71,6 @@ class Childscreen  : AppCompatActivity() {
                 )
                 Log.d("Predicted Label:", predictedLabel.toString())
 
-                isSiteBlocked(url) { isBlocked ->
-                    if (!isBlocked) {
-                        webView.clearCache(true) // Clear the WebView cache
-                        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-                        webView.settings.domStorageEnabled = false
-                        webView.clearHistory()
-                        webView.loadUrl(url)
-                    } else {
-                        Toast.makeText(
-                            this@Childscreen,
-                            "This site is blocked by KODA App",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
                 if (predictedLabel == 1) {
                     // matic blocked
                     startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
@@ -102,7 +87,21 @@ class Childscreen  : AppCompatActivity() {
                         //
                         return false
                     }
-
+                }
+                isSiteBlocked(url) { isBlocked ->
+                    if (!isBlocked) {
+                        webView.clearCache(true) // Clear the WebView cache
+                        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+                        webView.settings.domStorageEnabled = false
+                        webView.clearHistory()
+                        webView.loadUrl(url)
+                    } else {
+                        Toast.makeText(
+                            this@Childscreen,
+                            "This site is blocked by KODA App",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }

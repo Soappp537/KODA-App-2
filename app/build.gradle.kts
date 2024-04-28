@@ -78,6 +78,10 @@ dependencies {
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("org.testng:testng:6.9.6")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.annotation:annotation:1.7.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.activity:activity:1.8.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
     implementation ("org.tensorflow:tensorflow-lite:2.8.0")
     // This dependency adds the necessary TF op support.
