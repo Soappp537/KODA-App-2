@@ -16,7 +16,7 @@ class BlockedActivity : AppCompatActivity() {
         setContentView(R.layout.activity_blocked)
 
         // Start the search
-        val keyword = getIntent().getStringExtra("keyword")
+        val keyword = intent.getStringExtra("keyword")
         if (keyword != null) {
             searchKeywordInFirestore(keyword)
         }
