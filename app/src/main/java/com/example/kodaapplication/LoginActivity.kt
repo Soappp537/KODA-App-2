@@ -15,6 +15,7 @@ import com.example.kodaapplication.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
-        usersCollection.whereEqualTo("username", username.toLowerCase())
+        usersCollection.whereEqualTo("username", username.toLowerCase(Locale.ROOT))
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {

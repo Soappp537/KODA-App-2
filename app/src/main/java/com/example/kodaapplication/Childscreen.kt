@@ -57,8 +57,8 @@ class Childscreen  : AppCompatActivity() {
             ): Boolean {
                 val url = request?.url?.toString() ?: "" // url input
                 preprocessedUrl = preprocessText(url) // preprocess
-                Log.d("text:", url.toString())
-                Log.d("preprocessed text:", preprocessedUrl.toString())
+                Log.d("text:", url)
+                Log.d("preprocessed text:", preprocessedUrl)
 
                 // Check if the keyword is blocked
                 val keyword = intent.getStringExtra("keyword")
@@ -85,15 +85,15 @@ class Childscreen  : AppCompatActivity() {
                     return true
                 } else { // incase of false positive daan sa database na may keywords
                     val detectedKeyword = containsBlockedKeywords(preprocessedUrl)
-                    if (containsBlockedKeywords(preprocessedUrl)) {
+                    return if (containsBlockedKeywords(preprocessedUrl)) {
                         // keywrods from database detected == blocked
                         startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                         Log.d("Detected Keyword:", detectedKeyword.toString())
-                        return true
+                        true
                     } else {
                         // All good proceed
                         //
-                        return false
+                        false
                     }
                 }
                 isSiteBlocked(url) { isBlocked ->
