@@ -1,7 +1,9 @@
 package com.example.kodaapplication
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -57,6 +59,14 @@ class pageForWebFiltering : AppCompatActivity() {
         }
 
         filterButton.setOnClickListener {
+            val keyword = filterText.text.toString().trim()
+            if (keyword.isNotEmpty()) {
+                val intent = Intent(this, Childscreen::class.java)
+                intent.putExtra("keyword", keyword)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show()
+            }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -65,6 +75,30 @@ class pageForWebFiltering : AppCompatActivity() {
             insets
         }
 
+    }
+
+    private fun searchKeywordInFirestore(keyword: String) {
+        firebaseFirestore.collection("blocked_Keywords").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val keywords = document.data.values
+                    if (keywords.any { it.toString().contains(keyword, ignoreCase = true) }) {
+                        // Keyword found, block the search results
+                        blockSearchResults()
+                        return@addOnSuccessListener
+                    }
+                }
+                // Keyword not found, do nothing
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error searching keyword in Firestore", Toast.LENGTH_SHORT).show()
+                Log.e("Error", "Error searching keyword in Firestore: $exception")
+            }
+    }
+
+    private fun blockSearchResults() {
+        // Start the BlockedActivity to show the blocked page
+        startActivity(Intent(this, BlockedActivity::class.java))
     }
 
     fun blockSite(url: String) {

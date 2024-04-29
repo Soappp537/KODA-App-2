@@ -2,6 +2,7 @@ package com.example.kodaapplication
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -21,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
     lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
-
+    lateinit var session: SessionManager /*added session manager*/
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -39,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
+        session = SessionManager(this) /*initialize session manager*/
 
         binding.loginButton.setOnClickListener {
             val loginUsername = binding.loginUsername.text.toString().trim()
@@ -67,8 +69,9 @@ class LoginActivity : AppCompatActivity() {
                 if (!querySnapshot.isEmpty) {
                     for (document in querySnapshot.documents) {
                         val userData = document.toObject(UserData::class.java)
-                        if (userData != null && userData.password == password) {
-                            CurrentUser.loggedInParentId = document.getString("id") ?: ""
+                        if (userData!= null && userData.password == password) {
+                            CurrentUser.loggedInParentId = document.getString("id")?: ""
+                            session.createLoginSession(username, password) /*create login session*/
                             Toast.makeText(
                                 this@LoginActivity,
                                 "Login Successful",
@@ -97,6 +100,31 @@ class LoginActivity : AppCompatActivity() {
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
+        return connectivityManager.activeNetworkInfo!= null && connectivityManager.activeNetworkInfo!!.isConnected
+    }
+}
+
+class SessionManager(context: Context) {
+    private val sharedPreferences: SharedPreferences
+
+    init {
+        sharedPreferences = context.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)
+    }
+
+    fun createLoginSession(username: String, password: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.apply()
+    }
+
+    fun isLoggedIn(): Boolean {
+        return sharedPreferences.contains("username") && sharedPreferences.contains("password")
+    }
+
+    fun logout() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
     }
 }

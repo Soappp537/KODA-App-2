@@ -60,6 +60,14 @@ class Childscreen  : AppCompatActivity() {
                 Log.d("text:", url.toString())
                 Log.d("preprocessed text:", preprocessedUrl.toString())
 
+                // Check if the keyword is blocked
+                val keyword = intent.getStringExtra("keyword")
+                if (keyword!= null && preprocessedUrl.contains(keyword, ignoreCase = true)) {
+                    // Keyword is blocked, show the BlockedActivity
+                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                    return true
+                }
+
                 //asa kabila file function mga to
                 val paddedSequence = TfLiteModel.cleanUrl(preprocessedUrl, maxLength)
                 val predictedLabel = TfLiteModel.modelInference(
