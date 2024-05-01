@@ -16,14 +16,14 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="158dp"
+            android:layout_height="158dp"
             android:layout_marginStart="@dimen/margin_32dp"
             android:layout_marginTop="@dimen/margin_8dp"
             android:layout_marginEnd="@dimen/margin_32dp"
             android:layout_marginBottom="@dimen/margin_8dp"
-            android:src="@drawable/ic_permissions_settings" />
-
+            android:src="@drawable/ic_permissions_settings"
+            tools:ignore="ContentDescription" />
 
         <TextView
             style="@style/TextViewPermissionsExplanation"

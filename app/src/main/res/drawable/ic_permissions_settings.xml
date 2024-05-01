@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
-    <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="512dp"
-        android:height="512dp"
-        android:viewportWidth="512"
-        android:viewportHeight="512" tools:ignore="RedundantNamespace">
+<vector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512" tools:ignore="RedundantNamespace,VectorRaster">
+
         <path
             android:pathData="M34.686,43.39c3.298,2.473 6.231,5.415 8.704,8.704c2.473,-3.289 5.406,-6.231 8.704,-8.704c-3.298,-2.473 -6.231,-5.415 -8.704,-8.704C40.917,37.975 37.984,40.917 34.686,43.39M43.39,86.78c-4.799,0 -8.678,-3.888 -8.678,-8.678c0,-14.353 -11.681,-26.034 -26.034,-26.034C3.879,52.068 0,48.18 0,43.39s3.879,-8.678 8.678,-8.678c14.353,0 26.034,-11.681 26.034,-26.034C34.712,3.888 38.591,0 43.39,0s8.678,3.888 8.678,8.678c0,14.353 11.681,26.034 26.034,26.034c4.799,0 8.678,3.888 8.678,8.678s-3.879,8.678 -8.678,8.678c-14.353,0 -26.034,11.681 -26.034,26.034C52.068,82.892 48.189,86.78 43.39,86.78"
             android:fillColor="#894B9D"/>
@@ -67,7 +67,5 @@
             android:strokeWidth="2"
             android:fillColor="#00000000"
             android:strokeColor="#ECF0F1"/>
-    </vector>
 
-
-</selector>
+</vector>
