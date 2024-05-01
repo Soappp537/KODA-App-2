@@ -48,6 +48,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this@MainActivity, mainScreen::class.java))
     }
     fun childCLicked() {
-        startActivity(Intent(this@MainActivity, Childscreen::class.java))
+        startActivity(Intent(this@MainActivity, addChildInfo::class.java))
     }
 }

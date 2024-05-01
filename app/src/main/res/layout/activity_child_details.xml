@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20sp"
             android:textSize="40sp"
-            android:text="Child's First Name" />
+            android:text="Child's First Name"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_lock_apps"
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lock Apps"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/gray"
             android:backgroundTint="@color/orange"
@@ -42,7 +43,8 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_screentime"
@@ -50,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Screentime\nManagement"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/gray"
             android:backgroundTint="@color/orange"
@@ -61,7 +63,8 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_WebFilter"
@@ -69,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Web Filtering"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/gray"
             android:backgroundTint="@color/orange"
@@ -80,14 +83,15 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_SiteBlocking"
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Site Blocking"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/gray"
             android:backgroundTint="@color/orange"
@@ -98,7 +102,8 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_child"
@@ -106,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DELETE CHILD"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:backgroundTint="@color/red"
@@ -117,9 +122,7 @@
             app:iconGravity="textStart"
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
-
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
-
-
 </RelativeLayout>

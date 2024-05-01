@@ -128,4 +128,8 @@ class SessionManager(context: Context) {
         editor.clear()
         editor.apply()
     }
+
+    fun getUsername(): String {
+        return sharedPreferences.getString("username", "")?: ""
+    }
 }

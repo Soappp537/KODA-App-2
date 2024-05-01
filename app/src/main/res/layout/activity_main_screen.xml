@@ -18,41 +18,22 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/list_item" />
 
-<!--        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
-<!--            android:id="@+id/fabBB"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|end"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:drawableEnd="@android:drawable/ic_menu_manage"-->
-<!--            android:elevation="8dp"-->
-<!--            android:text="My Account"-->
-<!--            android:textSize="15sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:translationZ="4dp"-->
-<!--            app:backgroundTint="@color/white"-->
-<!--            app:layout_anchorGravity="bottom|end"-->
-<!--            app:rippleColor="#12020202"-->
-<!--            app:strokeColor="#12020202"-->
-<!--            app:strokeWidth="1dp" />-->
-
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/myAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="20sp"
+            android:layout_margin="16dp"
+            android:drawableEnd="@android:drawable/ic_menu_manage"
             android:elevation="8dp"
-            android:text="Add a Child"
-            android:textSize="15sp"
-            android:textColor="@color/black"
+            android:text="Account"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:translationZ="4dp"
-            app:backgroundTint="@color/white"
-            android:backgroundTint="@color/orange"
+            app:backgroundTint="@color/light_blue"
+            android:textColor="@color/white"
             app:layout_anchorGravity="bottom|end"
             app:rippleColor="#12020202"
-            app:strokeColor="@color/gray"
-            app:strokeWidth="1dp" />
-
+            app:strokeWidth="1dp"
+            tools:ignore="HardcodedText" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

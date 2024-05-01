@@ -25,9 +25,9 @@ class addChildInfo : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        binding.modernButton.setOnClickListener {
+        /*binding.modernButton.setOnClickListener {
             getParentId()
-        }
+        }*/
 
         binding.buttonChild.setOnClickListener {
             addChildToFireStore()
@@ -35,8 +35,7 @@ class addChildInfo : AppCompatActivity() {
 
     }
 
-    private fun getParentId() {
-        // Assuming you have a way to identify the current user, such as a user ID or email
+    private fun getParentId(callback: (parentId: String) -> Unit) {
         val currentUserId = CurrentUser.loggedInParentId
 
         db.collection("ParentAccounts")
@@ -46,7 +45,7 @@ class addChildInfo : AppCompatActivity() {
                 if (!documents.isEmpty) {
                     val documentSnapshot = documents.documents[0]
                     val parentId = documentSnapshot.id
-                    binding.parentId.setText(parentId)
+                    callback(parentId)
                 } else {
                     Toast.makeText(this, "Parent account not found", Toast.LENGTH_SHORT).show()
                 }
@@ -60,31 +59,33 @@ class addChildInfo : AppCompatActivity() {
         val storeFirstName = binding.childFirstName.text.toString().trim()
         val storeLastName = binding.childLastName.text.toString().trim()
         val storeChildAge = binding.childAge.text.toString().trim()
-        val storeChildParentId = binding.parentId.text.toString().trim()
-        val randomId = UUID.randomUUID().toString().substring(0,10)
 
-        val userMap = hashMapOf(
-            "age" to storeChildAge,
-            "childId" to randomId,
-            "parentId" to storeChildParentId,
-            "firstName" to storeFirstName,
-            "lastName" to storeLastName,
-        )
-        db.collection("ChildAccounts").document().set(userMap)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
-                println("Child account created successfully")
-                binding.childFirstName.text.clear()
-                binding.childLastName.text.clear()
-                binding.childAge.text.clear()
-                binding.parentId.text.clear()
-                val intent = Intent(this@addChildInfo, mainScreen::class.java)
-                startActivity(intent)
-                finish() // Finish the current activity
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
-            }
+        getParentId { parentId ->
+            val randomId = UUID.randomUUID().toString().substring(0, 10)
+
+            val userMap = hashMapOf(
+                "age" to storeChildAge,
+                "childId" to randomId,
+                "parentId" to parentId,
+                "firstName" to storeFirstName,
+                "lastName" to storeLastName,
+            )
+            db.collection("ChildAccounts").document().set(userMap)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
+                    println("Child account created successfully")
+                    binding.childFirstName.text.clear()
+                    binding.childLastName.text.clear()
+                    binding.childAge.text.clear()
+                    /*binding.parentId.text.clear()*/
+                    val intent = Intent(this@addChildInfo, Childscreen::class.java)
+                    startActivity(intent)
+                    finish() // Finish the current activity
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
 

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".pageForWebFiltering">
 
     <!-- Filter a word section -->
@@ -13,9 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Filter a word:"
-        android:textSize="24sp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/edit_text_background"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/filter_text"
@@ -29,7 +33,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/filter_button"
@@ -37,23 +42,28 @@
         android:layout_height="wrap_content"
         android:text="Filter Word"
         android:textColor="@color/gray"
+
         android:backgroundTint="@color/orange"
         app:strokeWidth="1dp"
         app:strokeColor="@color/gray"
         android:textSize="18sp"
         android:layout_marginBottom="15dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
 
     <!-- Block a site section -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Block a Site:"
-        android:textSize="24sp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/edit_text_background"
         android:padding="10dp"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/block_site"
@@ -66,7 +76,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/block_button"
@@ -80,7 +91,8 @@
         android:textSize="18sp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
     <EditText
         android:id="@+id/unblock_site"
         android:layout_width="match_parent"
@@ -92,7 +104,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
     <Button
         android:id="@+id/Unblock_button"
         android:layout_width="wrap_content"
@@ -105,6 +118,7 @@
         android:textSize="18sp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

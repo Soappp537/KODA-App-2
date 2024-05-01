@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -45,13 +46,15 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         getChildData()
 
 
-        val faab = findViewById<ExtendedFloatingActionButton>(R.id.fab)
-        faab.setOnClickListener {
-            startActivity(Intent(this@mainScreen, addChildInfo::class.java))
-            finish()
+        val accShow = findViewById<ExtendedFloatingActionButton>(R.id.myAccount)
+        accShow.setOnClickListener {
+            val intent = Intent(this, MyAccountActivity::class.java)
+            startActivity(intent)
         }
+
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getChildData() {
         bd = FirebaseFirestore.getInstance()
         bd.collection("ChildAccounts")

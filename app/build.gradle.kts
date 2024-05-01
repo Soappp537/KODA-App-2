@@ -81,7 +81,7 @@ dependencies {
     implementation("androidx.annotation:annotation:1.7.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.activity:activity-ktx:1.9.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
     implementation ("org.tensorflow:tensorflow-lite:2.8.0")
     // This dependency adds the necessary TF op support.
@@ -89,9 +89,9 @@ dependencies {
 
     //noinspection GradleDependency
     testImplementation ("org.robolectric:robolectric:4.5.1")
-    testImplementation ("org.robolectric:shadows-framework:4.5.1")
+    testImplementation ("org.robolectric:shadows-framework:4.6.1")
     testImplementation ("androidx.test.ext:junit:1.2.0-alpha03")
-    testImplementation ("org.robolectric:annotations:4.5.1")
+    testImplementation ("org.robolectric:annotations:4.6.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
     androidTestImplementation(espressoCore)
     androidTestImplementation(espressoContrib)
@@ -100,6 +100,8 @@ dependencies {
     androidTestImplementation(espressoWeb)
     testImplementation(junit)
     androidTestImplementation ("org.hamcrest:hamcrest-library:2.2")
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
 }
 
