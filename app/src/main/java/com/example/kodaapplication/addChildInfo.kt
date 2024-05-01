@@ -78,7 +78,7 @@ class addChildInfo : AppCompatActivity() {
                     binding.childLastName.text.clear()
                     binding.childAge.text.clear()
                     /*binding.parentId.text.clear()*/
-                    val intent = Intent(this@addChildInfo, Childscreen::class.java)
+                    val intent = Intent(this@addChildInfo, ActivityPermissions::class.java)
                     startActivity(intent)
                     finish() // Finish the current activity
                 }
