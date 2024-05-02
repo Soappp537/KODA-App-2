@@ -90,6 +90,7 @@ class ChildDetails : AppCompatActivity() {
                     document.reference.delete()
                         .addOnSuccessListener {
                             Log.d("ChildDetails", "Child account deleted successfully")
+                            Toast.makeText(this@ChildDetails, "Successfully deleted child account", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@ChildDetails, mainScreen::class.java)
                             startActivity(intent)
                             finish()

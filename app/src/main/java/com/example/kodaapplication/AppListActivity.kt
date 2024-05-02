@@ -49,7 +49,11 @@ class AppListActivity : AppCompatActivity() {
         }
     }
 
-    data class AppItem(val label: String, val packageName: String, var locked: Boolean = false)
+    data class AppItem(
+        val label: String,
+        val packageName: String,
+        var locked: Boolean = false
+    )
 
     interface OnAppItemClickListener {
         fun onAppItemClick(app: AppItem)

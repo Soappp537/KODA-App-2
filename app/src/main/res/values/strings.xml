@@ -56,4 +56,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_greetings_for_KODA">Hi! Welcome to KODA</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="error_searching_keyword">Error searching keyword in Firestore</string>
 </resources>
