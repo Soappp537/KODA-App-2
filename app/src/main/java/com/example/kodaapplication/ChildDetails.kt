@@ -37,6 +37,11 @@ class ChildDetails : AppCompatActivity() {
             startActivity(Intent(this, pageForWebFiltering::class.java))
         }
 
+        /*val blockSiting = findViewById<MaterialButton>(R.id.button_SiteBlocking)
+        blockSiting.setOnClickListener {
+            startActivity(Intent(this, FilterActivity::class.java))
+        }*/
+
         val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
         deleteChildButton.setOnClickListener {
             val childId = intent.getStringExtra("childId")
@@ -44,6 +49,7 @@ class ChildDetails : AppCompatActivity() {
                 deleteChildAccount(CurrentUser.loggedInParentId, childId)
             }
         }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

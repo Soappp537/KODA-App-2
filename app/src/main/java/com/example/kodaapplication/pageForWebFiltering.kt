@@ -53,7 +53,9 @@ class pageForWebFiltering : AppCompatActivity() {
     private fun setupButtonListeners() {
         blockSiteButton.setOnClickListener { blockSite(editTextBlockSite.text.toString()) }
         unBlockSiteButton.setOnClickListener { unblockSite(editTextUnblockSite.text.toString()) }
-        filterButton.setOnClickListener { filterKeyword(filterText.text.toString().trim()) }
+        filterButton.setOnClickListener {
+            filterKeyword(filterText.text.toString().trim())
+        }
     }
 
     private fun setupWindowInsets() {

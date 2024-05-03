@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:text="Filter Word"
         android:textColor="@color/gray"
-
         android:backgroundTint="@color/orange"
         app:strokeWidth="1dp"
         app:strokeColor="@color/gray"
