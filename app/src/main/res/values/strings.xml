@@ -58,4 +58,12 @@
     <string name="title_greetings_for_KODA">Hi! Welcome to KODA</string>
     <string name="invalid_url">Invalid URL</string>
     <string name="error_searching_keyword">Error searching keyword in Firestore</string>
+    <string name="log_out">Log Out</string>
+    <string name="log_out_confirmation">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="username_format">Parent Name: %s</string>
+    <string name="id_format">Parent ID: %s</string>
+    <string name="no">No</string>
+    <string name="delete_account">Delete Account?</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete this account?</string>
 </resources>

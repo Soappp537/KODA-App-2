@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
             val loginPassword = binding.loginPassword.text.toString().trim()
             if (!isNetworkAvailable(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Add this line
             }
             if (loginUsername.isNotEmpty() && loginPassword.isNotEmpty()) {
                 loginUser(loginUsername,loginPassword)

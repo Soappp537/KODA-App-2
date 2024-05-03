@@ -27,7 +27,7 @@
             android:drawableEnd="@android:drawable/ic_menu_manage"
             android:elevation="8dp"
             android:text="Account"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:translationZ="4dp"
             app:backgroundTint="@color/light_blue"

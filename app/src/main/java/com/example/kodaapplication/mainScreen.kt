@@ -81,4 +81,19 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         intent.putExtra("childId", childData.childId)
         startActivity(intent)
     }
+
+    private var dataLoaded = false
+    override fun onResume() {
+        super.onResume()
+        if (!dataLoaded) {
+            getChildData()
+            dataLoaded = true
+        }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/gray</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/orange</item>
+
     </style>
 
     <style name="Theme.KODAApplication" parent="Base.Theme.KODAApplication" />

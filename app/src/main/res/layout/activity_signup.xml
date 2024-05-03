@@ -18,7 +18,6 @@
         android:ems="10"
         android:fontFamily="@font/architects_daughter_font"
         android:gravity="center"
-        android:inputType="text"
         android:minHeight="48dp"
         android:text="Signup"
         android:textSize="50sp"
@@ -51,7 +50,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.50"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_title" />
+            app:layout_constraintTop_toBottomOf="@+id/signup_title"
+            android:autofillHints="" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,7 +76,8 @@
             android:textColorHint="@color/black"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:importantForAutofill="no" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

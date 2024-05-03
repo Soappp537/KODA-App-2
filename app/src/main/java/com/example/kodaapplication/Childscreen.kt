@@ -1,6 +1,6 @@
 @file:Suppress("UNREACHABLE_CODE")
 
-package com.example.kodaapplication // palitan lng package
+package com.example.kodaapplication
 
 import android.content.Intent
 import android.net.Uri
@@ -35,7 +35,10 @@ class Childscreen  : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var firebaseFirestore: FirebaseFirestore
-
+    companion object {
+        private const val SESSION_PREFS = "session_prefs"
+        private const val KEYWORD_SESSION = "keyword_session"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_homescreen)
@@ -60,9 +63,8 @@ class Childscreen  : AppCompatActivity() {
                 Log.d("text:", url)
                 Log.d("preprocessed text:", preprocessedUrl)
 
-                // Check if the keyword is blocked
-                val keyword = intent.getStringExtra("keyword")
-                if (keyword!= null && preprocessedUrl.contains(keyword, ignoreCase = true)) {
+                val keyyword = getSession()
+                if (keyyword!= null && preprocessedUrl.contains(keyyword, ignoreCase = true)){
                     // Keyword is blocked, show the BlockedActivity
                     startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                     return true
@@ -127,6 +129,24 @@ class Childscreen  : AppCompatActivity() {
         }
     }
 
+    private fun getSession(): String? {
+        val prefs = getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+        return prefs.getString(KEYWORD_SESSION, null)
+    }
+
+    private fun saveSession(keyword: String) {
+        val prefs = getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putString(KEYWORD_SESSION, keyword)
+        editor.apply()
+    }
+    override fun onResume() {
+        super.onResume()
+        val keyword = intent.getStringExtra("keyword")
+        if (keyword!= null) {
+            saveSession(keyword)
+        }
+    }
     fun isSiteBlocked(url: String, callback: (Boolean) -> Unit) {
         val site = Uri.parse(url).host
         if (site != null) {
