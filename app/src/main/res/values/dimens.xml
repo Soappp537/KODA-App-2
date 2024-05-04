@@ -11,6 +11,7 @@
     <dimen name="margin_48dp">48dp</dimen>
     <dimen name="margin_64dp">64dp</dimen>
     <dimen name="margin_128dp">128dp</dimen>
+    <dimen name="margin_240dp">24dp</dimen>
 
     <dimen name="padding_2dp">2dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>

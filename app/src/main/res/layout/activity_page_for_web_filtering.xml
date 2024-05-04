@@ -25,15 +25,16 @@
         android:id="@+id/filter_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter word to filter"
-        android:inputType="text"
-        android:imeOptions="actionDone"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_text_background"
+        android:hint="Enter word to filter"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="10dp"
         tools:ignore="HardcodedText" />
 
     <Button
@@ -68,14 +69,15 @@
         android:id="@+id/block_site"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Enter a site to block"
         android:inputType="textUri"
-        android:background="@drawable/edit_text_background"
+        android:minHeight="48dp"
         android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         tools:ignore="HardcodedText" />
 
     <Button
@@ -92,18 +94,20 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         tools:ignore="HardcodedText" />
+
     <EditText
         android:id="@+id/unblock_site"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Enter a site to unblock"
         android:inputType="textUri"
-        android:background="@drawable/edit_text_background"
+        android:minHeight="48dp"
         android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         tools:ignore="HardcodedText" />
     <Button
         android:id="@+id/Unblock_button"

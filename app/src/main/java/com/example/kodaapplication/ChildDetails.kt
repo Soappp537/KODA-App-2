@@ -37,10 +37,10 @@ class ChildDetails : AppCompatActivity() {
             startActivity(Intent(this, pageForWebFiltering::class.java))
         }
 
-        /*val blockSiting = findViewById<MaterialButton>(R.id.button_SiteBlocking)
+        val blockSiting = findViewById<MaterialButton>(R.id.button_SiteBlocking)
         blockSiting.setOnClickListener {
-            startActivity(Intent(this, FilterActivity::class.java))
-        }*/
+            startActivity(Intent(this, KeywordFiltering::class.java))
+        }
 
         val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
         deleteChildButton.setOnClickListener {
