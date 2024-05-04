@@ -54,21 +54,32 @@ class Childscreen  : AppCompatActivity() {
         webView = findViewById(R.id.theWebView)
         webView.loadUrl("https://www.google.com")
         webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                val url = request?.url?.toString() ?: "" // url input
-                preprocessedUrl = preprocessText(url) // preprocess
-                Log.d("text:", url)
-                Log.d("preprocessed text:", preprocessedUrl)
-
-                val keyyword = getSession()
-                if (keyyword!= null && preprocessedUrl.contains(keyyword, ignoreCase = true)){
-                    // Keyword is blocked, show the BlockedActivity
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url?.toString() ?: ""
+                preprocessedUrl = preprocessText(url)
+                // Check if the session keyword is blocked
+                val sessionKeyword = getSession()
+                if (sessionKeyword != null && preprocessedUrl.contains(sessionKeyword, ignoreCase = true)) {
                     startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                     return true
                 }
+
+                // Check if any of the words are blocked in Firestore
+                isKeywordBlocked(preprocessedUrl) { isBlocked ->
+                    if (isBlocked) {
+                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                    } else {
+                        loadUrl(url)
+                    }
+                }
+                return true
+
+                /*// Check if the session keyword is blocked
+                val sessionKeyword = getSession()
+                if (sessionKeyword != null && preprocessedUrl.contains(sessionKeyword, ignoreCase = true)) {
+                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                    return true
+                }*/
 
                 //asa kabila file function mga to
                 val paddedSequence = TfLiteModel.cleanUrl(preprocessedUrl, maxLength)
@@ -98,6 +109,15 @@ class Childscreen  : AppCompatActivity() {
                         false
                     }
                 }
+                // Check if any of the words are blocked in Firestore
+                isKeywordBlocked(preprocessedUrl) { isBlocked ->
+                    if (isBlocked) {
+                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                    } else {
+                        loadUrl(url)
+                    }
+                }
+                return true
                 isSiteBlocked(url) { isBlocked ->
                     if (!isBlocked) {
                         webView.clearCache(true) // Clear the WebView cache
@@ -127,6 +147,32 @@ class Childscreen  : AppCompatActivity() {
                 super.onBackPressed()
             }
         }
+    }
+
+    private fun loadUrl(url: String) {
+        webView.clearCache(true)
+        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        webView.settings.domStorageEnabled = false
+        webView.clearHistory()
+        webView.loadUrl(url)
+    }
+
+    private fun isKeywordBlocked(url: String, callback: (Boolean) -> Unit) {
+        firebaseFirestore.collection("blocked_Keywords").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val blockedWords = document.get("words") as? List<String> ?: emptyList()
+                    if (blockedWords.any { url.contains(it, ignoreCase = true) }) {
+                        callback(true)
+                        return@addOnSuccessListener
+                    }
+                }
+                callback(false)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Error", "Error searching keyword in Firestore: $exception")
+                callback(false)
+            }
     }
 
     private fun getSession(): String? {

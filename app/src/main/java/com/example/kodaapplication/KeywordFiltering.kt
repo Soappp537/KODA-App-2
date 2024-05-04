@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,15 +17,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class KeywordFiltering : AppCompatActivity() {
+interface OnToggleClickListener {
+    fun onToggleClicked(category: Category, isChecked: Boolean)
+}
+class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Implement OnToggleClickListener
     private val firestore = FirebaseFirestore.getInstance()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_keyword_filtering)
 
         // Setup RecyclerView
-        val adapter = CategoryAdapter(emptyList())
+        val adapter = CategoryAdapter(emptyList(), this)
         val recyclerView_forDocuments = findViewById<RecyclerView>(R.id.recyclerView_forDocuments)
         recyclerView_forDocuments.layoutManager = LinearLayoutManager(this)
         recyclerView_forDocuments.adapter = adapter
@@ -52,33 +58,74 @@ class KeywordFiltering : AppCompatActivity() {
             insets
         }
     }
-    data class Category(val name: String, val words: List<String>)
-    class CategoryAdapter(private var categories: List<Category>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
-        @SuppressLint("NotifyDataSetChanged")
-        fun setCategories(categories: List<Category>) {
-            this.categories = categories
-            notifyDataSetChanged()
-        }
 
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val categoryName: TextView = itemView.findViewById(R.id.category_name)
-            /*val categoryWords: TextView = itemView.findViewById(R.id.category_words)*/
+    override fun onToggleClicked(category: Category, isChecked: Boolean) {
+        // Handle toggle click here
+        category.isSelected = isChecked
+        if (isChecked) {
+            // Word is blocked, handle blocking logic here
+            // For example, save the blocked words to Firestore
+            for (word in category.words) {
+                firestore.collection(category.name).document(word)
+                    .set(mapOf("blocked" to true))
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Word $word is blocked.")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e(TAG, "Error blocking word $word: ", exception)
+                    }
+            }
+        } else {
+            // Word is unblocked, handle unblocking logic here
+            // For example, remove the blocked words from Firestore
+            for (word in category.words) {
+                firestore.collection(category.name).document(word)
+                    .delete()
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Word $word is unblocked.")
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e(TAG, "Error unblocking word $word: ", exception)
+                    }
+            }
         }
+    }
+}
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false)
-            return ViewHolder(view)
+data class Category(val name: String, val words: List<String>, var isSelected: Boolean = false)
+
+class CategoryAdapter(private var categories: List<Category>, private val toggleClickListener: OnToggleClickListener) :
+RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setCategories(categories: List<Category>) {
+        this.categories = categories
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val categoryName: TextView = itemView.findViewById(R.id.category_name)
+        val categoryToggle: Switch = itemView.findViewById(R.id.category_toggle)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val category = categories[position]
+        holder.categoryName.text = category.name
+        holder.categoryToggle.isChecked = category.isSelected // Update toggle state
+        holder.categoryToggle.setOnCheckedChangeListener(null) // Remove previous listener
+        holder.categoryToggle.setOnCheckedChangeListener { _, isChecked ->
+            // Update the isSelected property of the category when the toggle is clicked
+            category.isSelected = isChecked
+            toggleClickListener.onToggleClicked(category, isChecked)
         }
+    }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val category = categories[position]
-            holder.categoryName.text = category.name
-            /*holder.categoryWords.text = category.words.joinToString(", ")*/
-        }
-
-        override fun getItemCount(): Int {
-            return categories.size
-        }
-
+    override fun getItemCount(): Int {
+        return categories.size
     }
 }

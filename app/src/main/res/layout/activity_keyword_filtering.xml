@@ -46,13 +46,16 @@
                android:layout_height="wrap_content"
                android:text="Select All"
                android:textSize="20sp"
-               android:textStyle="bold"/>
+               android:textStyle="bold"
+               tools:ignore="HardcodedText" />
+
            <Button
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:backgroundTint="@color/red"
                android:layout_marginStart="170dp"
-               android:text="Toggle All"/>
+               android:backgroundTint="@color/red"
+               android:text="Toggle All"
+               android:textColor="#000000" />
        </LinearLayout>
         <!--Line break lang to:-->
         <View

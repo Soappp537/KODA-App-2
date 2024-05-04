@@ -25,8 +25,8 @@ class BlockedActivity : AppCompatActivity() {
         firebaseFirestore.collection("blocked_Keywords").get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val keywords = document.data.values
-                    if (keywords.any { it.toString().contains(keyword, ignoreCase = true) }) {
+                    val blockedWords = document.get("words") as? List<String> ?: emptyList()
+                    if (blockedWords.any { it.contains(keyword, ignoreCase = true) }) {
                         // Keyword found, show the blocked page
                         findViewById<TextView>(R.id.blockedTextView).visibility = View.VISIBLE
                         return@addOnSuccessListener
