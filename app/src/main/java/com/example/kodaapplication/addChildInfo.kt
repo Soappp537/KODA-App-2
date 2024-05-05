@@ -62,37 +62,61 @@ class addChildInfo : AppCompatActivity() {
 
         // Check if all fields are filled
         if (storeFirstName.isEmpty() || storeLastName.isEmpty() || storeChildAge.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields first to proceed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please fill in all fields first to proceed", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         getParentId { parentId ->
-            val randomId = UUID.randomUUID().toString().substring(0, 10)
+            // Query to check if the child already exists
+            db.collection("ChildAccounts")
+                .whereEqualTo("firstName", storeFirstName)
+                .whereEqualTo("lastName", storeLastName)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        // Child account already exists
+                        Toast.makeText(
+                            this,
+                            "This child account already exists",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        // Child account doesn't exist, proceed to add
+                        val randomId = UUID.randomUUID().toString().substring(0, 10)
 
-            val userMap = hashMapOf(
-                "age" to storeChildAge,
-                "childId" to randomId,
-                "parentId" to parentId,
-                "firstName" to storeFirstName,
-                "lastName" to storeLastName,
-            )
-            db.collection("ChildAccounts").document().set(userMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT).show()
-                    println("Child account created successfully")
-                    binding.childFirstName.text.clear()
-                    binding.childLastName.text.clear()
-                    binding.childAge.text.clear()
-                    /*binding.parentId.text.clear()*/
-                    val intent = Intent(this@addChildInfo, ActivityPermissions::class.java)
-                    startActivity(intent)
-                    finish() // Finish the current activity
+                        val userMap = hashMapOf(
+                            "age" to storeChildAge,
+                            "childId" to randomId,
+                            "parentId" to parentId,
+                            "firstName" to storeFirstName,
+                            "lastName" to storeLastName,
+                        )
+                        db.collection("ChildAccounts").document().set(userMap)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Successfully added", Toast.LENGTH_SHORT)
+                                    .show()
+                                println("Child account created successfully")
+                                binding.childFirstName.text.clear()
+                                binding.childLastName.text.clear()
+                                binding.childAge.text.clear()
+                                val intent =
+                                    Intent(this@addChildInfo, ActivityPermissions::class.java)
+                                startActivity(intent)
+                                finish() // Finish the current activity
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this, "Failed added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Failed to check child account existence",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
         }
     }
-
-
 }

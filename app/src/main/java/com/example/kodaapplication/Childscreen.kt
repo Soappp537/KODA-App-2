@@ -30,7 +30,7 @@ lateinit var paddedSequence: IntArray
 val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
 // eto papalitan ng database firebase, mga example ng mga false positive ni model
 @Suppress("UNREACHABLE_CODE")
-class Childscreen : AppCompatActivity() {//sddsd
+class Childscreen : AppCompatActivity() {
 
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var webView: WebView
@@ -110,7 +110,6 @@ class Childscreen : AppCompatActivity() {//sddsd
         val documentReference = firebaseFirestore.collection("blocked_Sites").document(domain)
         documentReference.set(mapOf("blocked" to isBlocked))
     }
-
 
     // para di lng mag exit
     @Deprecated("Deprecated in Java")
