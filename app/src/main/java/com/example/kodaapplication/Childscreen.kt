@@ -30,7 +30,7 @@ lateinit var paddedSequence: IntArray
 val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
 // eto papalitan ng database firebase, mga example ng mga false positive ni model
 @Suppress("UNREACHABLE_CODE")
-class Childscreen : AppCompatActivity() {
+class Childscreen : AppCompatActivity() {//sddsd
 
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var webView: WebView
