@@ -22,7 +22,7 @@ interface OnToggleClickListener {
 }
 class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Implement OnToggleClickListener
     private val firestore = FirebaseFirestore.getInstance()
-
+    private lateinit var adapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
         setContentView(R.layout.activity_keyword_filtering)
 
         // Setup RecyclerView
-        val adapter = CategoryAdapter(emptyList(), this)
+        adapter = CategoryAdapter(emptyList(), this)
         val recyclerView_forDocuments = findViewById<RecyclerView>(R.id.recyclerView_forDocuments)
         recyclerView_forDocuments.layoutManager = LinearLayoutManager(this)
         recyclerView_forDocuments.adapter = adapter
@@ -89,6 +89,7 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
                     }
             }
         }
+        
     }
 }
 

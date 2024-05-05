@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Child's Age"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:background="@drawable/edit_text_background"
             android:padding="12dp"
             android:layout_marginTop="16dp"

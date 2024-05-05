@@ -1,6 +1,4 @@
-@file:Suppress("UNREACHABLE_CODE")
-
-package com.example.kodaapplication
+package com.example.kodaapplication // palitan lng package
 
 import android.content.Intent
 import android.net.Uri
@@ -31,93 +29,49 @@ lateinit var paddedSequence: IntArray
 
 val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
 // eto papalitan ng database firebase, mga example ng mga false positive ni model
-class Childscreen  : AppCompatActivity() {
+@Suppress("UNREACHABLE_CODE")
+class Childscreen : AppCompatActivity() {
 
-    private lateinit var webView: WebView
     private lateinit var firebaseFirestore: FirebaseFirestore
-    companion object {
-        private const val SESSION_PREFS = "session_prefs"
-        private const val KEYWORD_SESSION = "keyword_session"
-    }
+    private lateinit var webView: WebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_homescreen)
-        firebaseFirestore = FirebaseFirestore.getInstance()
 
+        firebaseFirestore = FirebaseFirestore.getInstance()
         // Load the TensorFlow Lite model
         interpreter = loadModel(this, "LSTM_Model.tflite")
 
         // Load word-index mappings from word_dict.json
-        wordIndexMap =
-            loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
+        wordIndexMap = loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
 
         webView = findViewById(R.id.theWebView)
+        /*webView.loadUrl("https://www.google.com/search?q=&safe=strict")*/
         webView.loadUrl("https://www.google.com")
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val url = request?.url?.toString() ?: ""
-                preprocessedUrl = preprocessText(url)
-                // Check if the session keyword is blocked
-                val sessionKeyword = getSession()
-                if (sessionKeyword != null && preprocessedUrl.contains(sessionKeyword, ignoreCase = true)) {
-                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
-                    return true
-                }
-
-                // Check if any of the words are blocked in Firestore
-                isKeywordBlocked(preprocessedUrl) { isBlocked ->
-                    if (isBlocked) {
-                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
-                    } else {
-                        loadUrl(url)
-                    }
-                }
-                return true
-
-                /*// Check if the session keyword is blocked
-                val sessionKeyword = getSession()
-                if (sessionKeyword != null && preprocessedUrl.contains(sessionKeyword, ignoreCase = true)) {
-                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
-                    return true
-                }*/
+                val url = request?.url?.toString() ?: "" // url input
+                preprocessedUrl = preprocessText(url) // preprocess
+                Log.d("text:", url.toString())
+                Log.d("preprocessed text:", preprocessedUrl.toString())
 
                 //asa kabila file function mga to
                 val paddedSequence = TfLiteModel.cleanUrl(preprocessedUrl, maxLength)
-                val predictedLabel = TfLiteModel.modelInference(
-                    preprocessedUrl,
-                    interpreter,
-                    wordIndexMap,
-                    maxLength,
-                    paddedSequence
-                )
+                val predictedLabel = TfLiteModel.modelInference(preprocessedUrl, interpreter, wordIndexMap, maxLength, paddedSequence)
                 Log.d("Predicted Label:", predictedLabel.toString())
 
-                if (predictedLabel == 1) {
-                    // matic blocked
+                if (predictedLabel == 1 || containsBlockedKeywords(preprocessedUrl)) {
+                    // matic blocked or detected keyword from database
                     startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                     return true
-                } else { // incase of false positive daan sa database na may keywords
-                    val detectedKeyword = containsBlockedKeywords(preprocessedUrl)
-                    return if (containsBlockedKeywords(preprocessedUrl)) {
-                        // keywrods from database detected == blocked
-                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
-                        Log.d("Detected Keyword:", detectedKeyword.toString())
-                        true
-                    } else {
-                        // All good proceed
-                        //
-                        false
-                    }
                 }
-                // Check if any of the words are blocked in Firestore
-                isKeywordBlocked(preprocessedUrl) { isBlocked ->
-                    if (isBlocked) {
-                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
-                    } else {
-                        loadUrl(url)
-                    }
+
+                if (url.startsWith("https://www.google.com/")) {
+                    // Allow Google search page to load
+                    return false
                 }
-                return true
+
                 isSiteBlocked(url) { isBlocked ->
                     if (!isBlocked) {
                         webView.clearCache(true) // Clear the WebView cache
@@ -133,66 +87,12 @@ class Childscreen  : AppCompatActivity() {
                         ).show()
                     }
                 }
+                return true
             }
         }
-        // para di lng mag exit
-        @Deprecated("Deprecated in Java")
-        fun onBackPressed() {
-            // Check if the WebView can go back in its history
-            if (webView.canGoBack()) {
-                // If so, go back in the WebView's history
-                webView.goBack()
-            } else {
-                // If not, perform the default back button action (exit the activity)
-                super.onBackPressed()
-            }
-        }
+
     }
 
-    private fun loadUrl(url: String) {
-        webView.clearCache(true)
-        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-        webView.settings.domStorageEnabled = false
-        webView.clearHistory()
-        webView.loadUrl(url)
-    }
-
-    private fun isKeywordBlocked(url: String, callback: (Boolean) -> Unit) {
-        firebaseFirestore.collection("blocked_Keywords").get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val blockedWords = document.get("words") as? List<String> ?: emptyList()
-                    if (blockedWords.any { url.contains(it, ignoreCase = true) }) {
-                        callback(true)
-                        return@addOnSuccessListener
-                    }
-                }
-                callback(false)
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Error", "Error searching keyword in Firestore: $exception")
-                callback(false)
-            }
-    }
-
-    private fun getSession(): String? {
-        val prefs = getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
-        return prefs.getString(KEYWORD_SESSION, null)
-    }
-
-    private fun saveSession(keyword: String) {
-        val prefs = getSharedPreferences(SESSION_PREFS, MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putString(KEYWORD_SESSION, keyword)
-        editor.apply()
-    }
-    override fun onResume() {
-        super.onResume()
-        val keyword = intent.getStringExtra("keyword")
-        if (keyword!= null) {
-            saveSession(keyword)
-        }
-    }
     fun isSiteBlocked(url: String, callback: (Boolean) -> Unit) {
         val site = Uri.parse(url).host
         if (site != null) {
@@ -204,11 +104,24 @@ class Childscreen  : AppCompatActivity() {
             callback(false)
         }
     }
-
     fun updateBlockedStatus(site: String, isBlocked: Boolean) {
         val url = Uri.parse(site)
-        val domain = url.host ?: return
+        val domain = url.host?: return
         val documentReference = firebaseFirestore.collection("blocked_Sites").document(domain)
         documentReference.set(mapOf("blocked" to isBlocked))
+    }
+
+
+    // para di lng mag exit
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        // Check if the WebView can go back in its history
+        if (webView.canGoBack()) {
+            // If so, go back in the WebView's history
+            webView.goBack()
+        } else {
+            // If not, perform the default back button action (exit the activity)
+            super.onBackPressed()
+        }
     }
 }

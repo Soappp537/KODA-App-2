@@ -60,6 +60,12 @@ class addChildInfo : AppCompatActivity() {
         val storeLastName = binding.childLastName.text.toString().trim()
         val storeChildAge = binding.childAge.text.toString().trim()
 
+        // Check if all fields are filled
+        if (storeFirstName.isEmpty() || storeLastName.isEmpty() || storeChildAge.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields first to proceed", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         getParentId { parentId ->
             val randomId = UUID.randomUUID().toString().substring(0, 10)
 
