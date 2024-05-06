@@ -149,14 +149,12 @@ class Childscreen : AppCompatActivity() {
                 for (document in documents) {
                     val words = document["words"] as? List<String>?: emptyList()
                     val isBlockedInDoc = document.getBoolean("blocked")?: false
-                    if (!isBlockedInDoc) {
-                        // If blocked is false, skip this document
-                        continue
-                    }
-                    for (word in words) {
-                        if (url.contains(word, ignoreCase = true)) {
-                            isBlocked = true
-                            break
+                    if (isBlockedInDoc) {
+                        for (word in words) {
+                            if (url.contains(word, ignoreCase = true)) {
+                                isBlocked = true
+                                break
+                            }
                         }
                     }
                     if (isBlocked) break
