@@ -104,6 +104,14 @@ class LoginActivity : AppCompatActivity() {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo!= null && connectivityManager.activeNetworkInfo!!.isConnected
     }
+
+    fun logout() {
+        // Clear the session and navigate to LoginActivity
+        SessionManager(this).logout()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
 
 class SessionManager(context: Context) {

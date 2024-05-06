@@ -4,10 +4,8 @@ package com.example.kodaapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
 
 class BlockedActivity : AppCompatActivity() {
-    private lateinit var firebaseFirestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_blocked)

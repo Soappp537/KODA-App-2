@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,7 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
             startActivity(intent)
         }
 
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -64,17 +66,21 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
                     Log.e("Firestore Error", error.message.toString())
                     return@addSnapshotListener
                 }
-                childArrayList.clear()
                 value?.let { snapshot ->
                     for (dc in snapshot.documentChanges) {
                         if (dc.type == DocumentChange.Type.ADDED) {
-                            childArrayList.add(dc.document.toObject(childData::class.java))
+                            val childData = dc.document.toObject(childData::class.java)
+                            // Only add if it's not already in the list
+                            if (!childArrayList.contains(childData)) {
+                                childArrayList.add(childData)
+                            }
                         }
                     }
                     aadapter.notifyDataSetChanged()
                 }
             }
     }
+
 
     override fun onItemClick(childData: childData) {
         val intent = Intent(this, ChildDetails::class.java)
@@ -90,10 +96,23 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
             dataLoaded = true
         }
     }
+
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        // Show a confirmation dialog before logging out
+        val alertDialog = android.app.AlertDialog.Builder(this)
+        alertDialog.setTitle("Log out?")
+        alertDialog.setMessage("Are you sure you want to log out?")
+        alertDialog.setPositiveButton("Yes") { _, _ ->
+            // Clear the session and navigate to LoginActivity
+            Toast.makeText(this@mainScreen, "Successfully Logged Out", Toast.LENGTH_SHORT).show()
+            SessionManager(this).logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        alertDialog.setNegativeButton("No") { _, _ -> }
+        alertDialog.show()
     }
+
 }

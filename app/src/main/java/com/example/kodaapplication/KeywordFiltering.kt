@@ -63,33 +63,38 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
         // Handle toggle click here
         category.isSelected = isChecked
         if (isChecked) {
-            // Word is blocked, handle blocking logic here
-            // For example, save the blocked words to Firestore
-            for (word in category.words) {
-                firestore.collection(category.name).document(word)
-                    .set(mapOf("blocked" to true))
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Word $word is blocked.")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Error blocking word $word: ", exception)
-                    }
-            }
+            // Block words in Firestore
+            blockWordsInFirestore(category)
         } else {
-            // Word is unblocked, handle unblocking logic here
-            // For example, remove the blocked words from Firestore
-            for (word in category.words) {
-                firestore.collection(category.name).document(word)
-                    .delete()
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Word $word is unblocked.")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Error unblocking word $word: ", exception)
-                    }
-            }
+            // Unblock words in Firestore
+            unblockWordsInFirestore(category)
         }
-        
+    }
+    private fun blockWordsInFirestore(category: Category) {
+        val collectionRef = firestore.collection("blocked_Keywords").document(category.name)
+        collectionRef.update("blocked", true) // Update the "blocked" field to false
+        for (word in category.words) {
+            collectionRef.collection("words").document(word).delete()
+                .addOnSuccessListener {
+                    Log.d(TAG, "Word $word is blocked.")
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Error unblocking word $word: ", exception)
+                }
+        }
+    }
+    private fun unblockWordsInFirestore(category: Category) {
+        val collectionRef = firestore.collection("blocked_Keywords").document(category.name)
+        collectionRef.update("blocked", false) // Update the "blocked" field to false
+        for (word in category.words) {
+            collectionRef.collection("words").document(word).delete()
+                .addOnSuccessListener {
+                    Log.d(TAG, "Word $word is unblocked.")
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Error unblocking word $word: ", exception)
+                }
+        }
     }
 }
 
