@@ -7,13 +7,22 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.QUERY_USAGE_STATS" />
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+
+    <!-- Test Foreground permissions   -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+    <!-- Test ends   -->
 
     <application
         android:allowBackup="true"
@@ -30,13 +39,13 @@
             android:exported="false" />
         <activity
             android:name=".ActivityPermissions"
-            android:exported="false"> <!-- false to true ung login -->
+            android:exported="true"> <!-- false to true ung login -->
         </activity>
 
         <receiver
             android:name=".MyDeviceAdminReceiver"
             android:exported="true"
-            android:label="Device Admin Sample"
+            android:label="Allow Koda to lock the device"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
@@ -47,7 +56,10 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
             </intent-filter>
         </receiver>
-
+        <activity
+            android:name=".getChildApps"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".MyAccountActivity"
             android:exported="false"
@@ -84,7 +96,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

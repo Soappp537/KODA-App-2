@@ -1,5 +1,6 @@
 package com.example.kodaapplication
 
+import android.app.Activity
 import android.app.AppOpsManager
 import android.app.admin.DeviceAdminReceiver
 import android.app.admin.DevicePolicyManager
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.os.Process
 import android.provider.Settings
 import android.util.Log
+import android.view.accessibility.AccessibilityManager
 import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
@@ -26,12 +28,14 @@ class ActivityPermissions : AppCompatActivity() {
     private lateinit var overlaySwitch: Switch
     private lateinit var packageUsageSwitch: Switch
     private lateinit var deviceAdminSwitch: Switch
+    private lateinit var accessibilitySwitch: Switch
     private lateinit var backButton: Button
     private lateinit var finishButton: Button
     private val REQUEST_OVERLAY_PERMISSION = 1000
-    private val REQUEST_ADMIN_PERMISSION = 1001
     private val REQUEST_CODE_DEVICE_ADMIN = 100
     private val USAGE_STATS_REQUEST_CODE= 101
+    private val REQUEST_ACCESSIBILITY_PERMISSION = 200
+    private val REQUEST_WRITE_SETTINGS_PERMISSION = 102
     private lateinit var appOpsManager: AppOpsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +44,18 @@ class ActivityPermissions : AppCompatActivity() {
         setContentView(R.layout.activity_permission_settings)
 
         appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        //        requestPackageUsagePermission()
-        //        requestOverlayPermission()
-        //        requestAdminPermission()
 
+        val childIDsharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
+        val childId = childIDsharedPreferences.getString("childId", null)
+        Log.e("ActivityPermission", "ID $childId")
+
+//                requestAccessibilityPermission()
+//                requestWriteSettingsPermission()
+//                requestOverlayPermission()
+//                requestPackageUsagePermission()
+//                requestDeviceAdminPermission()
+
+        accessibilitySwitch = findViewById(R.id.switchAccessibilityPermission)
         writeSettingsSwitch = findViewById(R.id.switchWriteSettingsPermission)
         overlaySwitch = findViewById(R.id.switchOverlayPermission)
         packageUsageSwitch = findViewById(R.id.switchPackageUsagePermission)
@@ -52,12 +64,21 @@ class ActivityPermissions : AppCompatActivity() {
         finishButton = findViewById(R.id.btnPermissionsSettingsNext)
 
         // Initial state
+        accessibilitySwitch.isChecked = false
         writeSettingsSwitch.isChecked = false
         overlaySwitch.isChecked = false
         packageUsageSwitch.isChecked = false
         deviceAdminSwitch.isChecked = false
         backButton.isEnabled = true
         finishButton.isEnabled = false
+
+        // Restore permission states from SharedPreferences
+        val PermissionsharedPreferences = getSharedPreferences("PermissionPrefs", Context.MODE_PRIVATE)
+        accessibilitySwitch.isChecked = PermissionsharedPreferences.getBoolean("accessibility_permission", false)
+        writeSettingsSwitch.isChecked = PermissionsharedPreferences.getBoolean("write_settings_permission", false)
+        overlaySwitch.isChecked = PermissionsharedPreferences.getBoolean("overlay_permission", false)
+        packageUsageSwitch.isChecked = PermissionsharedPreferences.getBoolean("package_usage_permission", false)
+        deviceAdminSwitch.isChecked = PermissionsharedPreferences.getBoolean("device_admin_permission", false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.System.canWrite(this)) {
             writeSettingsSwitch.isChecked = true
@@ -76,6 +97,14 @@ class ActivityPermissions : AppCompatActivity() {
             updateFinishButtonState()
         }
         // Switch listeners
+
+        accessibilitySwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestAccessibilityPermission()
+            }
+            updateFinishButtonState() // Update the finish button state based on all permissions
+        }
+
         writeSettingsSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 requestWriteSettingsPermission()
@@ -111,10 +140,16 @@ class ActivityPermissions : AppCompatActivity() {
         }
 
         finishButton.setOnClickListener {
-            if (writeSettingsSwitch.isChecked && overlaySwitch.isChecked && packageUsageSwitch.isChecked && deviceAdminSwitch.isChecked) {
+            if (writeSettingsSwitch.isChecked &&
+                overlaySwitch.isChecked &&
+                packageUsageSwitch.isChecked &&
+                deviceAdminSwitch.isChecked &&
+                accessibilitySwitch.isChecked) {
                 // Proceed to next screen
-                val settingsActivity = Intent(this, Childscreen::class.java)
-                startActivity(settingsActivity)
+
+                val intent = Intent(this, getChildApps::class.java)// uncomment after testing
+                intent.putExtra("childId", childId) // uncomment after test
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             } else {
                 // Show error message
@@ -130,6 +165,43 @@ class ActivityPermissions : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun requestAccessibilityPermission() {
+        if (!isAccessibilityServiceEnabled()) {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivityForResult(intent, REQUEST_ACCESSIBILITY_PERMISSION)
+        }
+    }
+
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        val accessibilityManager = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val enabledServices = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        val packageName = packageName
+
+        if (enabledServices != null) {
+            val colonIndex = enabledServices.indexOf(':')
+            var enabledService: String? = null
+            if (colonIndex != -1) {
+                enabledService = enabledServices.substring(0, colonIndex)
+            } else {
+                enabledService = enabledServices
+            }
+
+            if (enabledService != null && enabledService.contains(packageName)) {
+                return true
+            }
+        }
+        return false
+    }
+
     private fun requestDeviceAdminPermission() {
         val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         val componentName = ComponentName(this, MyDeviceAdminReceiver::class.java)
@@ -138,6 +210,8 @@ class ActivityPermissions : AppCompatActivity() {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
             startActivityForResult(intent, REQUEST_CODE_DEVICE_ADMIN)
+        } else {
+            deviceAdminSwitch.isChecked = true
         }
     }
 
@@ -159,10 +233,9 @@ class ActivityPermissions : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.System.canWrite(this)) {
                 val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-                startActivity(intent)
+                startActivityForResult(intent, REQUEST_WRITE_SETTINGS_PERMISSION)
             } else {
-                // Permission already granted
-                Log.d("Permission", "Write Settings permission already granted")
+                writeSettingsSwitch.isChecked = true
             }
         }
     }
@@ -171,6 +244,8 @@ class ActivityPermissions : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION)
+        }else {
+            overlaySwitch.isChecked = true
         }
     }
 
@@ -180,10 +255,10 @@ class ActivityPermissions : AppCompatActivity() {
             try {
                 startActivityForResult(intent, USAGE_STATS_REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
-                // Handle the case where the settings activity is not found
                 Log.e("Permission", "Usage access settings activity not found", e)
-                // You can display a Toast or log a message to inform the user
             }
+        } else {
+            packageUsageSwitch.isChecked = true
         }
     }
 
@@ -212,16 +287,22 @@ class ActivityPermissions : AppCompatActivity() {
     }
 
     private fun updateFinishButtonState() {
-        finishButton.isEnabled = writeSettingsSwitch.isChecked && overlaySwitch.isChecked && packageUsageSwitch.isChecked
-    }
+        finishButton.isEnabled = writeSettingsSwitch.isChecked &&
+                overlaySwitch.isChecked &&
+                packageUsageSwitch.isChecked &&
+                deviceAdminSwitch.isChecked &&
+                accessibilitySwitch.isChecked
+        // need better logic para dito since di priority lagpasan ko muna
 
-//    private fun requestAdminPermission() {
-//        val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-//        val componentName = ComponentName(this, DeviceAdminReceiver::class.java)
-//        if (!devicePolicyManager.isAdminActive(componentName)) {
-//            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-//            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-//            startActivityForResult(intent, REQUEST_ADMIN_PERMISSION)
-//        }
-//    }
+        // Save permission states to SharedPreferences
+        val sharedPreferences = getSharedPreferences("PermissionPrefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putBoolean("accessibility_permission", accessibilitySwitch.isChecked)
+            putBoolean("write_settings_permission", writeSettingsSwitch.isChecked)
+            putBoolean("overlay_permission", overlaySwitch.isChecked)
+            putBoolean("package_usage_permission", packageUsageSwitch.isChecked)
+            putBoolean("device_admin_permission", deviceAdminSwitch.isChecked)
+            apply()
+        }
+    }
 }

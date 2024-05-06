@@ -16,8 +16,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="158dp"
-            android:layout_height="158dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_marginStart="@dimen/margin_32dp"
             android:layout_marginTop="@dimen/margin_8dp"
             android:layout_marginEnd="@dimen/margin_32dp"
@@ -36,9 +36,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical">
-
         <FrameLayout
             android:id="@+id/layoutFirstPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp">
+
+            <TextView
+                style="@style/TextViewPermissions"
+                android:text="Accessibility Permissions"
+                tools:ignore="HardcodedText" />
+
+            <Switch
+                android:id="@+id/switchAccessibilityPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/layoutSecondPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_8dp">
@@ -57,7 +74,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/layoutSecondPermission"
+            android:id="@+id/layoutThirdPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_8dp">
@@ -76,7 +93,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/layoutThirdPermission"
+            android:id="@+id/layoutFourthPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_8dp">
@@ -95,6 +112,7 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/layoutFifthPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_8dp">
@@ -111,6 +129,25 @@
                 android:layout_gravity="end|center"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </FrameLayout>
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/layoutSixthPermission"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="@dimen/padding_8dp">-->
+
+<!--            <TextView-->
+<!--                style="@style/TextViewPermissions"-->
+<!--                android:text="Notification Permissions"-->
+<!--                tools:ignore="HardcodedText" />-->
+
+<!--            <Switch-->
+<!--                android:id="@+id/switchNotificationPermission"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end|center"-->
+<!--                tools:ignore="UseSwitchCompatOrMaterialXml" />-->
+<!--        </FrameLayout>-->
 
         <FrameLayout
             android:layout_width="match_parent"

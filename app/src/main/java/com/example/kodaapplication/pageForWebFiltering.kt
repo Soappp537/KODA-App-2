@@ -28,90 +28,98 @@ class pageForWebFiltering : AppCompatActivity() {
     private lateinit var editTextBlockSite: EditText
     private lateinit var editTextUnblockSite: EditText
 
-    private val BLOCKED_SITE_COLLECTION = "blocked_Sites"
-    private val BLOCKED_KEYWORD_COLLECTION = "blocked_Keywords"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_page_for_web_filtering)
 
-        initViews()
-        setupButtonListeners()
-        setupWindowInsets()
-    }
-
-    private fun initViews() {
         firebaseFirestore = FirebaseFirestore.getInstance()
 
         blockSiteButton = findViewById(R.id.block_button)
         unBlockSiteButton = findViewById(R.id.Unblock_button)
         editTextBlockSite = findViewById(R.id.block_site)
         editTextUnblockSite = findViewById(R.id.unblock_site)
-    }
 
-    private fun setupButtonListeners() {
-        blockSiteButton.setOnClickListener { blockSite(editTextBlockSite.text.toString()) }
-        unBlockSiteButton.setOnClickListener { unblockSite(editTextUnblockSite.text.toString()) }
-        filterButton.setOnClickListener {
-            filterKeyword(filterText.text.toString().trim())
+        blockSiteButton.setOnClickListener {
+            val siteToBlock = editTextBlockSite.text.toString()
+            if (siteToBlock.isNotEmpty()) {
+                blockSite(siteToBlock)
+            } else {
+                Toast.makeText(this, "Please enter a site to block", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
-    private fun setupWindowInsets() {
+        unBlockSiteButton.setOnClickListener {
+            val siteToUnblock = editTextUnblockSite.text.toString()
+            if (siteToUnblock.isNotEmpty()) {
+                unblockSite(siteToUnblock)
+            } else {
+                Toast.makeText(this, "Please enter a site to unblock", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        filterButton.setOnClickListener {
+            val keyword = filterText.text.toString().trim()
+            if (keyword.isNotEmpty()) {
+                val intent = Intent(this, Childscreen::class.java)
+                intent.putExtra("keyword", keyword)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
-    private fun filterKeyword(keyword: String) {
-        if (keyword.isNotEmpty()) {
-            val intent = Intent(this, Childscreen::class.java)
-            intent.putExtra("keyword", keyword)
-            startActivity(intent)
-        } else {
-            Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun searchKeywordInFirestore(keyword: String) {
-        firebaseFirestore.collection(BLOCKED_KEYWORD_COLLECTION)
-            .whereArrayContainsAny("keywords", listOf(keyword.lowercase()))
-            .get()
+        firebaseFirestore.collection("blocked_Keywords").get()
             .addOnSuccessListener { documents ->
-                if (documents.size() > 0) {
-                    blockSearchResults()
+                for (document in documents) {
+                    val keywords = document.data.values
+                    if (keywords.any { it.toString().contains(keyword, ignoreCase = true) }) {
+                        // Keyword found, block the search results
+                        blockSearchResults()
+                        return@addOnSuccessListener
+                    }
                 }
+                // Keyword not found, do nothing
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, R.string.error_searching_keyword, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error searching keyword in Firestore", Toast.LENGTH_SHORT).show()
                 Log.e("Error", "Error searching keyword in Firestore: $exception")
             }
     }
 
     private fun blockSearchResults() {
+        // Start the BlockedActivity to show the blocked page
         startActivity(Intent(this, BlockedActivity::class.java))
     }
 
     fun blockSite(url: String) {
-        val site = Uri.parse(url)?.host
-        if (site!= null) {
-            val docRef = firebaseFirestore.collection(BLOCKED_SITE_COLLECTION).document(site)
+        val site = Uri.parse(url).host
+        if (site != null) {
+            val docRef = firebaseFirestore.collection("blocked_Sites").document(site)
             docRef.set(mapOf("blocked" to true))
+
         } else {
-            Toast.makeText(this, R.string.invalid_url, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun unblockSite(url: String) {
-        val site = Uri.parse(url)?.host
-        if (site!= null) {
-            val docRef = firebaseFirestore.collection(BLOCKED_SITE_COLLECTION).document(site)
+        val site = Uri.parse(url).host
+        if (site != null) {
+            val docRef = firebaseFirestore.collection("blocked_Sites").document(site)
             docRef.set(mapOf("blocked" to false))
+
         } else {
-            Toast.makeText(this, R.string.invalid_url, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
         }
     }
 }
