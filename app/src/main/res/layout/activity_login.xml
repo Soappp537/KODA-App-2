@@ -21,7 +21,7 @@
         android:fontFamily="@font/architects_daughter_font"
         android:gravity="center"
         android:minHeight="48dp"
-        android:text="Hi! Welcome to KODA"
+        android:text="@string/title_greetings_for_KODA"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
@@ -38,20 +38,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/login_username"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="36dp"
+            android:layout_marginEnd="36dp"
             android:ems="10"
             android:hint="enter username"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="333dp" />
+            tools:layout_editor_absoluteY="333dp"
+            tools:ignore="HardcodedText" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout_password2"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/inputLayout_email"
         app:passwordToggleEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/login_password"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -74,7 +74,8 @@
             android:minHeight="48dp"
             android:padding="12dp"
             tools:layout_editor_absoluteX="58dp"
-            tools:layout_editor_absoluteY="416dp" />
+            tools:layout_editor_absoluteY="416dp"
+            tools:ignore="HardcodedText" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -83,6 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:backgroundTint="@color/orange"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/gray"
         android:text="Login"
         android:textColor="@color/gray"
         android:textSize="17.5sp"
@@ -91,7 +94,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayout_password2" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayout_password2"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/signupRedirect"
@@ -104,7 +108,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/login_button"
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -116,6 +121,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,26 +2,30 @@ package com.example.kodaapplication
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.kodaapplication.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
-    private lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
-    private lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
+    lateinit var binding: ActivityLoginBinding
+    lateinit var firebaseDatabase: FirebaseDatabase /*get firebase*/
+    lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
+    lateinit var session: SessionManager /*added session manager*/
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
 //            statusBarStyle = SystemBarStyle.light(
 //                Color.TRANSPARENT, Color.TRANSPARENT
@@ -33,15 +37,18 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
+        session = SessionManager(this) /*initialize session manager*/
 
         binding.loginButton.setOnClickListener {
-            val loginUsername = binding.loginUsername.text.toString()
-            val loginPassword = binding.loginPassword.text.toString()
+            val loginUsername = binding.loginUsername.text.toString().trim()
+            val loginPassword = binding.loginPassword.text.toString().trim()
             if (!isNetworkAvailable(this)) {
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Add this line
             }
             if (loginUsername.isNotEmpty() && loginPassword.isNotEmpty()) {
                 loginUser(loginUsername,loginPassword)
@@ -55,16 +62,18 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    private fun loginUser(username: String, password: String) {
+
+    fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
-        usersCollection.whereEqualTo("username", username)
+        usersCollection.whereEqualTo("username", username.toLowerCase(Locale.ROOT))
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     for (document in querySnapshot.documents) {
                         val userData = document.toObject(UserData::class.java)
-                        if (userData != null && userData.password == password) {
-                            CurrentUser.loggedInParentId = document.getString("id") ?: ""
+                        if (userData!= null && userData.password == password) {
+                            CurrentUser.loggedInParentId = document.getString("id")?: ""
+                            session.createLoginSession(username, password) /*create login session*/
                             Toast.makeText(
                                 this@LoginActivity,
                                 "Login Successful",
@@ -91,9 +100,45 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-
-    private fun isNetworkAvailable(context: Context): Boolean {
+    fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
+        return connectivityManager.activeNetworkInfo!= null && connectivityManager.activeNetworkInfo!!.isConnected
+    }
+
+    fun logout() {
+        // Clear the session and navigate to LoginActivity
+        SessionManager(this).logout()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+}
+
+class SessionManager(context: Context) {
+    private val sharedPreferences: SharedPreferences
+
+    init {
+        sharedPreferences = context.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)
+    }
+
+    fun createLoginSession(username: String, password: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.apply()
+    }
+
+    fun isLoggedIn(): Boolean {
+        return sharedPreferences.contains("username") && sharedPreferences.contains("password")
+    }
+
+    fun logout() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
+
+    fun getUsername(): String {
+        return sharedPreferences.getString("username", "")?: ""
     }
 }

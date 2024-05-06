@@ -2,20 +2,17 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ExampleInstrumentedTest">
+        <State />
+      </entry>
+      <entry key="KODA_AppTest">
+        <State />
+      </entry>
+      <entry key="LoginActivityTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\porro\.android\avd\Pixel_7_Pro_API_31.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-03T06:20:07.525385700Z" />
           <targetsSelectedWithDialog>
             <Target>
               <type value="QUICK_BOOT_TARGET" />
@@ -28,6 +25,9 @@
             </Target>
           </targetsSelectedWithDialog>
         </State>
+      </entry>
+      <entry key="loginActivityTest()">
+        <State />
       </entry>
     </value>
   </component>

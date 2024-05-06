@@ -6,7 +6,14 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
+    <uses-permission android:name="android.permission.QUERY_USAGE_STATS" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -18,19 +25,46 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
-
-
         <activity
-            android:name=".pageForWebFiltering"
-            android:exported="false" /><!--
-        <activity
-            android:name=".AppList"
-            android:exported="false" />-->
-        <activity
-            android:name=".ChildDetails"
+            android:name=".KeywordFiltering"
             android:exported="false" />
         <activity
-            android:name=".ShowParentInfo"
+            android:name=".ActivityPermissions"
+            android:exported="false"> <!-- false to true ung login -->
+        </activity>
+
+        <receiver
+            android:name=".MyDeviceAdminReceiver"
+            android:exported="true"
+            android:label="Device Admin Sample"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_receiver" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".MyAccountActivity"
+            android:exported="false"
+            android:theme="@style/Theme.KODAApplication" />
+        <activity
+            android:name=".AppListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".pageForWebFiltering"
+            android:exported="false" />
+        <!--
+        <activity
+            android:name=".AppList"
+            android:exported="false" />
+        -->
+        <activity
+            android:name=".ChildDetails"
             android:exported="false" />
         <activity
             android:name=".addChildInfo"
@@ -40,8 +74,11 @@
             android:name=".mainScreen"
             android:exported="false" />
         <activity
-            android:name=".child_homescreen"
-            android:exported="false" />
+            android:name=".Childscreen"
+            android:label="@string/title_activity_Child_homescreen"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="fullSensor"
+            tools:ignore="DiscouragedApi" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -58,6 +95,11 @@
             android:name=".MainActivity"
             android:exported="false"> <!-- originally true -->
         </activity>
+        <activity
+            android:name=".BlockedActivity"
+            android:exported="false"
+            android:label="Blocked Screen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

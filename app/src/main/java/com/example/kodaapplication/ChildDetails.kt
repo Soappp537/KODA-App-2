@@ -19,18 +19,37 @@ class ChildDetails : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_child_details)
         childNameTextView = findViewById(R.id.cont_for_childName)
+        val buttonLockApps = findViewById<MaterialButton>(R.id.button_lock_apps)
+        /* buttonLockApps para to sa pag pinindot ung "App Lock" mag oopen ung AppListActivity na kung
+        saan naka list laaht nung apps na nakainstall sa device */
+        buttonLockApps.setOnClickListener {
+            val intent = Intent(this@ChildDetails, AppListActivity::class.java)
+            startActivity(intent)
+        }
 
         val childId = intent.getStringExtra("childId")
         if (childId != null) {
             fetchChildName(CurrentUser.loggedInParentId, childId)
         }
-        findViewById<com.google.android.material.button.MaterialButton>(R.id.button_lock_apps).setOnClickListener {
 
-        }
         val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
         buttonWebFilter.setOnClickListener {
             startActivity(Intent(this, pageForWebFiltering::class.java))
         }
+
+        val blockSiting = findViewById<MaterialButton>(R.id.button_SiteBlocking)
+        blockSiting.setOnClickListener {
+            startActivity(Intent(this, KeywordFiltering::class.java))
+        }
+
+        val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
+        deleteChildButton.setOnClickListener {
+            val childId = intent.getStringExtra("childId")
+            if (childId!= null) {
+                deleteChildAccount(CurrentUser.loggedInParentId, childId)
+            }
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -63,6 +82,37 @@ class ChildDetails : AppCompatActivity() {
                 // Handle failure
                 Log.e("ChildDetails", "Failed to fetch child's name: ${e.message}")
                 Toast.makeText(this@ChildDetails, "Failed to fetch child's name", Toast.LENGTH_SHORT).show()
+            }
+    }
+    private fun deleteChildAccount(parentId: String, childId: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("ChildAccounts")
+            .whereEqualTo("parentId", parentId)
+            .whereEqualTo("childId", childId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.first()
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            Log.d("ChildDetails", "Child account deleted successfully")
+                            Toast.makeText(this@ChildDetails, "Successfully deleted child account", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@ChildDetails, mainScreen::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("ChildDetails", "Failed to delete child account: ${e.message}")
+                            Toast.makeText(this@ChildDetails, "Failed to delete child account", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Log.d("ChildDetails", "Child account not found")
+                    Toast.makeText(this@ChildDetails, "Child account not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("ChildDetails", "Failed to fetch child account: ${e.message}")
+                Toast.makeText(this@ChildDetails, "Failed to fetch child account", Toast.LENGTH_SHORT).show()
             }
     }
 }

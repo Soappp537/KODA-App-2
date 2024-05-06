@@ -3,21 +3,17 @@ package com.example.kodaapplication
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
-import com.example.kodaapplication.childAdapter
-import com.example.kodaapplication.childData
 
 class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
     companion object {
@@ -41,7 +37,6 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
 
-
         childRecyclerView = findViewById(R.id.main_recyclerView)
         childRecyclerView.layoutManager = LinearLayoutManager(this)
         childRecyclerView.setHasFixedSize(true)
@@ -51,12 +46,17 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
 
         getChildData()
 
-        val fab: ExtendedFloatingActionButton = findViewById(R.id.fabBB)
-        fab.setOnClickListener {
-            startActivity(Intent(this@mainScreen, ShowParentInfo::class.java))
+
+        val accShow = findViewById<ExtendedFloatingActionButton>(R.id.myAccount)
+        accShow.setOnClickListener {
+            val intent = Intent(this, MyAccountActivity::class.java)
+            startActivity(intent)
         }
+
+
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getChildData() {
         bd = FirebaseFirestore.getInstance()
         bd.collection("ChildAccounts")
@@ -66,11 +66,14 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
                     Log.e("Firestore Error", error.message.toString())
                     return@addSnapshotListener
                 }
-                childArrayList.clear()
                 value?.let { snapshot ->
                     for (dc in snapshot.documentChanges) {
                         if (dc.type == DocumentChange.Type.ADDED) {
-                            childArrayList.add(dc.document.toObject(childData::class.java))
+                            val childData = dc.document.toObject(childData::class.java)
+                            // Only add if it's not already in the list
+                            if (!childArrayList.contains(childData)) {
+                                childArrayList.add(childData)
+                            }
                         }
                     }
                     aadapter.notifyDataSetChanged()
@@ -78,9 +81,38 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
             }
     }
 
+
     override fun onItemClick(childData: childData) {
         val intent = Intent(this, ChildDetails::class.java)
         intent.putExtra("childId", childData.childId)
         startActivity(intent)
     }
+
+    private var dataLoaded = false
+    override fun onResume() {
+        super.onResume()
+        if (!dataLoaded) {
+            getChildData()
+            dataLoaded = true
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        // Show a confirmation dialog before logging out
+        val alertDialog = android.app.AlertDialog.Builder(this)
+        alertDialog.setTitle("Log out?")
+        alertDialog.setMessage("Are you sure you want to log out?")
+        alertDialog.setPositiveButton("Yes") { _, _ ->
+            // Clear the session and navigate to LoginActivity
+            Toast.makeText(this@mainScreen, "Successfully Logged Out", Toast.LENGTH_SHORT).show()
+            SessionManager(this).logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        alertDialog.setNegativeButton("No") { _, _ -> }
+        alertDialog.show()
+    }
+
 }

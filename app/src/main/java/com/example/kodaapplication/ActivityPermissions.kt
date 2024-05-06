@@ -1,0 +1,227 @@
+package com.example.kodaapplication
+
+import android.app.AppOpsManager
+import android.app.admin.DeviceAdminReceiver
+import android.app.admin.DevicePolicyManager
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import android.os.Process
+import android.provider.Settings
+import android.util.Log
+import android.widget.Button
+import android.widget.Switch
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+
+class ActivityPermissions : AppCompatActivity() {
+    private lateinit var writeSettingsSwitch: Switch
+    private lateinit var overlaySwitch: Switch
+    private lateinit var packageUsageSwitch: Switch
+    private lateinit var deviceAdminSwitch: Switch
+    private lateinit var backButton: Button
+    private lateinit var finishButton: Button
+    private val REQUEST_OVERLAY_PERMISSION = 1000
+    private val REQUEST_ADMIN_PERMISSION = 1001
+    private val REQUEST_CODE_DEVICE_ADMIN = 100
+    private val USAGE_STATS_REQUEST_CODE= 101
+    private lateinit var appOpsManager: AppOpsManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_permission_settings)
+
+        appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        //        requestPackageUsagePermission()
+        //        requestOverlayPermission()
+        //        requestAdminPermission()
+
+        writeSettingsSwitch = findViewById(R.id.switchWriteSettingsPermission)
+        overlaySwitch = findViewById(R.id.switchOverlayPermission)
+        packageUsageSwitch = findViewById(R.id.switchPackageUsagePermission)
+        deviceAdminSwitch = findViewById(R.id.switchDeviceAdminPermission)
+        backButton = findViewById(R.id.btnPermissionsSettingsPrev)
+        finishButton = findViewById(R.id.btnPermissionsSettingsNext)
+
+        // Initial state
+        writeSettingsSwitch.isChecked = false
+        overlaySwitch.isChecked = false
+        packageUsageSwitch.isChecked = false
+        deviceAdminSwitch.isChecked = false
+        backButton.isEnabled = true
+        finishButton.isEnabled = false
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.System.canWrite(this)) {
+            writeSettingsSwitch.isChecked = true
+            updateFinishButtonState()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
+            overlaySwitch.isChecked = true
+            updateFinishButtonState()
+        }
+        if (isPackageUsagePermissionGranted()) {
+            packageUsageSwitch.isChecked = true
+            updateFinishButtonState()
+        }
+        if (isAdminPermissionGranted()) {
+            deviceAdminSwitch.isChecked = true
+            updateFinishButtonState()
+        }
+        // Switch listeners
+        writeSettingsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestWriteSettingsPermission()
+            }
+            updateFinishButtonState()
+        }
+
+        overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestOverlayPermission()
+            }
+            updateFinishButtonState()
+        }
+
+        packageUsageSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestPackageUsagePermission()
+            }
+            updateFinishButtonState()
+        }
+
+        deviceAdminSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                requestDeviceAdminPermission()
+            }
+            updateFinishButtonState()
+        }
+
+        // Button listeners
+        backButton.setOnClickListener {
+            // Go back to previous screen
+            finish()
+        }
+
+        finishButton.setOnClickListener {
+            if (writeSettingsSwitch.isChecked && overlaySwitch.isChecked && packageUsageSwitch.isChecked && deviceAdminSwitch.isChecked) {
+                // Proceed to next screen
+                val settingsActivity = Intent(this, Childscreen::class.java)
+                startActivity(settingsActivity)
+                finish()
+            } else {
+                // Show error message
+                val errorMessage = "Please enable all permissions to proceed."
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    private fun requestDeviceAdminPermission() {
+        val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(this, MyDeviceAdminReceiver::class.java)
+
+        if (!devicePolicyManager.isAdminActive(componentName)) {
+            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
+            startActivityForResult(intent, REQUEST_CODE_DEVICE_ADMIN)
+        }
+    }
+
+    private fun isAdminPermissionGranted(): Boolean {
+        val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(this, DeviceAdminReceiver::class.java)
+        return devicePolicyManager.isAdminActive(componentName)
+    }
+
+    private fun isPackageUsagePermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            hasPackageUsagePermission()
+        } else {
+            true
+        }
+    }
+
+    private fun requestWriteSettingsPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(this)) {
+                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                startActivity(intent)
+            } else {
+                // Permission already granted
+                Log.d("Permission", "Write Settings permission already granted")
+            }
+        }
+    }
+
+    private fun requestOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            startActivityForResult(intent, REQUEST_OVERLAY_PERMISSION)
+        }
+    }
+
+    private fun requestPackageUsagePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && !hasPackageUsagePermission()) {
+            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            try {
+                startActivityForResult(intent, USAGE_STATS_REQUEST_CODE)
+            } catch (e: ActivityNotFoundException) {
+                // Handle the case where the settings activity is not found
+                Log.e("Permission", "Usage access settings activity not found", e)
+                // You can display a Toast or log a message to inform the user
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == USAGE_STATS_REQUEST_CODE) {
+            // Check if permission is granted after the user interacts with the settings
+            if (hasPackageUsagePermission()) {
+                // Permission granted, handle accordingly
+            } else {
+                // Permission not granted, handle accordingly (e.g., show error message)
+            }
+        }
+    }
+
+    private fun hasPackageUsagePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            appOpsManager.checkOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                Process.myUid(),
+                packageName
+            ) == AppOpsManager.MODE_ALLOWED
+        } else {
+            true
+        }
+    }
+
+    private fun updateFinishButtonState() {
+        finishButton.isEnabled = writeSettingsSwitch.isChecked && overlaySwitch.isChecked && packageUsageSwitch.isChecked
+    }
+
+//    private fun requestAdminPermission() {
+//        val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+//        val componentName = ComponentName(this, DeviceAdminReceiver::class.java)
+//        if (!devicePolicyManager.isAdminActive(componentName)) {
+//            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+//            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
+//            startActivityForResult(intent, REQUEST_ADMIN_PERMISSION)
+//        }
+//    }
+}

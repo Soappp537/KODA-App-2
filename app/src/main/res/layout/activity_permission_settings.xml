@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/main"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layoutDirection="locale"
+    tools:context=".ActivityPermissions">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="158dp"
+            android:layout_height="158dp"
+            android:layout_marginStart="@dimen/margin_32dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginEnd="@dimen/margin_32dp"
+            android:layout_marginBottom="@dimen/margin_8dp"
+            android:src="@drawable/ic_permissions_settings"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/TextViewPermissionsExplanation"
+            android:text="In order to lock and unlock apps, we need the following permissions."
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/layoutFirstPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp">
+
+            <TextView
+                style="@style/TextViewPermissions"
+                android:text="Write Setting Permissions"
+                tools:ignore="HardcodedText" />
+
+            <Switch
+                android:id="@+id/switchWriteSettingsPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutSecondPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp">
+
+            <TextView
+                style="@style/TextViewPermissions"
+                android:text="Overlay permission"
+                tools:ignore="HardcodedText" />
+
+            <Switch
+                android:id="@+id/switchOverlayPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/layoutThirdPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp">
+
+            <TextView
+                style="@style/TextViewPermissions"
+                android:text="Package usage permission"
+                tools:ignore="HardcodedText" />
+
+            <Switch
+                android:id="@+id/switchPackageUsagePermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp">
+
+            <TextView
+                style="@style/TextViewPermissions"
+                android:text="Device admin permission"
+                tools:ignore="HardcodedText" />
+
+            <Switch
+                android:id="@+id/switchDeviceAdminPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnPermissionsSettingsPrev"
+                style="@style/ButtonPermissionsPrev"
+                android:text="back"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btnPermissionsSettingsNext"
+                style="@style/ButtonPermissionsNext"
+                android:text="finish"
+                tools:ignore="HardcodedText" />
+        </FrameLayout>
+    </LinearLayout>
+
+</FrameLayout>

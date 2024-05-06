@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:layout_height="match_parent"
-    android:padding="25dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
     android:gravity="center"
     android:id="@+id/Child_Info_Add"
     tools:context=".addChildInfo">
@@ -13,7 +14,7 @@
     <LinearLayout
         android:id="@+id/near_Out"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
         <TextView
@@ -27,7 +28,8 @@
             android:padding="8dp"
             android:background="@drawable/rounded_corner_background"
             android:elevation="4dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/child_firstName"
@@ -39,8 +41,8 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/child_lastName"
@@ -52,29 +54,29 @@
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/child_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Child's Age"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:background="@drawable/edit_text_background"
             android:padding="12dp"
             android:layout_marginTop="16dp"
             android:minHeight="48dp"
-            android:textColor="#333333"
-            android:textSize="16sp"  />
-        <LinearLayout
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+       <!-- <LinearLayout
             android:id="@+id/inner_Layout_AA"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- EditText with layout_weight -->
+            &lt;!&ndash; EditText with layout_weight &ndash;&gt;
             <EditText
                 android:id="@+id/parent_id"
                 android:background="@drawable/edit_text_background"
@@ -86,21 +88,26 @@
                 android:minHeight="48dp"
                 android:layout_weight="1" />
 
-            <!-- Button -->
+            &lt;!&ndash; Button &ndash;&gt;
             <Button
                 android:id="@+id/modernButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="get parent id"
-                android:background="@drawable/rounded_button_background"
-                android:textColor="#FFFFFF"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:elevation="41dp"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
-                android:elevation="4dp" android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp" /> <!-- Add margin to create a gap -->
-        </LinearLayout>
+                android:text="Get Parent ID"
+                android:backgroundTint="@color/green"
+                android:textColor="@color/gray"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                android:textStyle="bold"
+                app:cornerRadius="10sp" /> &lt;!&ndash; Add margin to create a gap &ndash;&gt;
+        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/inner_Layout_AB"
@@ -111,10 +118,16 @@
             android:gravity="center">
             <Button
                 android:id="@+id/buttonChild"
+                app:cornerRadius="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add child"
-                android:textSize="20sp"/>
+                android:backgroundTint="@color/orange"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                android:textColor="@color/black"
+                android:text="Add Child"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

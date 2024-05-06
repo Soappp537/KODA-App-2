@@ -1,3 +1,9 @@
+val espressoCore = "androidx.test.espresso:espresso-core:3.4.0"
+val espressoContrib = "androidx.test.espresso:espresso-contrib:3.4.0"
+val junitExt = "androidx.test.ext:junit:1.1.3"
+val espressoIntents = "androidx.test.espresso:espresso-intents:3.4.0"
+val espressoWeb = "androidx.test.espresso:espresso-web:3.4.0"
+val junit = "junit:junit:4.13.2"
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -39,7 +45,8 @@ android {
     }
     dependencies {
         // Import the Firebase BoM
-        implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+        implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+
 
 
         // TODO: Add the dependencies for Firebase products you want to use
@@ -52,11 +59,9 @@ android {
     }
 }
 
-
-
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -64,17 +69,40 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.firebaseui:firebase-ui-auth:8.0.0")
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.11.1")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("com.google.firebase:firebase-firestore:24.11.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("com.google.ar:core:1.42.0")
+    implementation("androidx.test:core-ktx:1.5.0")
+    implementation("org.testng:testng:6.9.6")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.annotation:annotation:1.7.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.activity:activity:1.8.0")
-    implementation("com.google.firebase:firebase-firestore:20.10.3")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
-    testImplementation("junit:junit:4.13.2")
-    implementation ("com.google.zxing:core:3.4.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation ("org.tensorflow:tensorflow-lite:2.8.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
     implementation ("org.tensorflow:tensorflow-lite:2.8.0")
     // This dependency adds the necessary TF op support.
-    implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1")
+    implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.8.0")
+
+    //noinspection GradleDependency
+    testImplementation ("org.robolectric:robolectric:4.5.1")
+    testImplementation ("org.robolectric:shadows-framework:4.6.1")
+    testImplementation ("androidx.test.ext:junit:1.2.0-alpha03")
+    testImplementation ("org.robolectric:annotations:4.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.0-alpha03")
+    androidTestImplementation(espressoCore)
+    androidTestImplementation(espressoContrib)
+    androidTestImplementation(junitExt)
+    androidTestImplementation(espressoIntents)
+    androidTestImplementation(espressoWeb)
+    testImplementation(junit)
+    androidTestImplementation ("org.hamcrest:hamcrest-library:2.2")
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
 }
+

@@ -7,6 +7,7 @@ data class childData(
     val childId: String? = "",
     val parentId: String? = "",
     val firstName: String? = "",
-    val lastName: String? = ""
+    val lastName: String? = "",
+    @PropertyName("apps") val apps: Map<String, Any> = emptyMap()
     /*this is a data class for the children*/
-    )
+)

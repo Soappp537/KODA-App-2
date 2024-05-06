@@ -2,8 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF1744</color>
+    <color name="deep_red">#C82444</color>
+    <color name="yellow">#FFEA00</color>
     <color name="orange">#FF9100</color>
     <color name="gray">#252424</color>
+    <color name="green">#00E676</color>
+    <color name="purple">#D500F9</color>
     <color name="pale_orange">#CF8F3A</color>
     <color name="light_blue">#4379D3</color>
     <color name="fab_background_color">#3F51B5</color>
@@ -11,4 +16,12 @@
     <color name="primaryColor">#3F51B5</color>
     <color name="rippleColor">#80000000</color>
 
+    <color name="flatui_turquoise">#1abc9c</color>
+    <color name="flatui_wet_asphalt">#34495e</color>
+    <color name="flatui_midnight_blue">#2c3e50</color>
+    <color name="flatui_pumpkin">#d35400</color>
+    <color name="flatui_pomegranate">#c0392b</color>
+    <color name="flatui_clouds">#ecf0f1</color>
+    <color name="flatui_silver">#bdc3c7</color>
+    <color name="flatui_asbestos">#7f8c8d</color>
 </resources>
