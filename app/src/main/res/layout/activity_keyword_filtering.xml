@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".KeywordFiltering">
+    tools:context=".Activities.KeywordFiltering">
 <!--wag muna ito iinclude since nasa db na sya-->
     <LinearLayout
         android:layout_width="match_parent"

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:padding="16dp"
     android:focusableInTouchMode="true"
-    tools:context=".LoginActivity"
+    tools:context=".Activities.LoginActivity"
     tools:layout_editor_absoluteX="2dp"
     android:layout_gravity="center"
     tools:layout_editor_absoluteY="-38dp">

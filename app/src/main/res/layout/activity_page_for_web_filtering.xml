@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".pageForWebFiltering">
+    tools:context=".Activities.pageForWebFiltering">
 
     <!-- Filter a word section
     <TextView

@@ -9,7 +9,7 @@
     android:paddingRight="25dp"
     android:gravity="center"
     android:id="@+id/Child_Info_Add"
-    tools:context=".addChildInfo">
+    tools:context=".Activities.addChildInfo">
 
     <LinearLayout
         android:id="@+id/near_Out"

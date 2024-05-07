@@ -37,15 +37,15 @@
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
         <activity
-            android:name=".KeywordFiltering"
+            android:name=".Activities.KeywordFiltering"
             android:exported="false" />
         <activity
-            android:name=".ActivityPermissions"
+            android:name=".Activities.ActivityPermissions"
             android:exported="true"> <!-- false to true ung login -->
         </activity>
 
         <receiver
-            android:name=".MyDeviceAdminReceiver"
+            android:name=".Receiver.MyDeviceAdminReceiver"
             android:exported="true"
             android:label="Allow Koda to lock the device"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -59,18 +59,18 @@
             </intent-filter>
         </receiver>
         <activity
-            android:name=".getChildApps"
+            android:name=".Activities.getChildApps"
             android:exported="false">
         </activity>
         <activity
-            android:name=".MyAccountActivity"
+            android:name=".Activities.MyAccountActivity"
             android:exported="false"
             android:theme="@style/Theme.KODAApplication" />
         <activity
-            android:name=".AppListActivity"
+            android:name=".Activities.AppListActivity"
             android:exported="false" />
         <activity
-            android:name=".pageForWebFiltering"
+            android:name=".Activities.pageForWebFiltering"
             android:exported="false" />
         <!--
         <activity
@@ -78,23 +78,24 @@
             android:exported="false" />
         -->
         <activity
-            android:name=".ChildDetails"
+            android:name=".Activities.ChildDetails"
             android:exported="false" />
         <activity
-            android:name=".addChildInfo"
+            android:name=".Activities.addChildInfo"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".mainScreen"
+            android:name=".Activities.mainScreen"
             android:exported="false" />
         <activity
-            android:name=".Childscreen"
+            android:name=".Activities.Childscreen"
             android:label="@string/title_activity_Child_homescreen"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="fullSensor"
-            tools:ignore="DiscouragedApi" />
+            tools:ignore="DiscouragedApi">
+        </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,17 +103,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignupActivity"
+            android:name=".Activities.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="false"> <!-- originally true -->
         </activity>
         <activity
-            android:name=".BlockedActivity"
+            android:name=".Activities.BlockedActivity"
             android:exported="false"
             android:label="Blocked Screen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <service android:name=".Services.ChildMainService"
+            android:foregroundServiceType="specialUse"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true"
+            tools:ignore="ForegroundServicePermission">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Services.ChildAppInterceptorService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 
 </manifest>

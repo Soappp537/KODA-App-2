@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/main"
-    tools:context=".AppListActivity">
+    tools:context=".Activities.AppListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_list_receiver"
