@@ -8,7 +8,7 @@
     android:gravity="center"
     tools:context=".Activities.ChildDetails">
 
-    <!--t-->
+    <!--tdfd-->
     <LinearLayout
         android:id="@+id/the_LayoutForThisChildGetter"
         android:layout_width="wrap_content"
@@ -25,6 +25,15 @@
             android:textSize="40sp"
             android:text="Child's First Name"
             tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/usageTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20sp"
+            android:textSize="18sp"
+            android:text="Screentime: 00:00"
+            tools:ignore="HardcodedText" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_lock_apps"
