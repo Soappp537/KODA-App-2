@@ -14,6 +14,7 @@ class childAdapter(private val childList: ArrayList<childData>, private val list
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return MyViewHolder(itemView)
     }
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val child: childData = childList[position]
         holder.nameA.text = child.firstName

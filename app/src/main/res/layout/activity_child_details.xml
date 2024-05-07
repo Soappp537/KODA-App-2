@@ -86,11 +86,11 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             tools:ignore="HardcodedText" />
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_SiteBlocking"
+            android:id="@+id/button_DeviceScheduling"
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Site Blocking"
+            android:text="Device Scheduling"
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/gray"

@@ -19,8 +19,8 @@ sealed class FilterResult {
 }
 
 class pageForWebFiltering : AppCompatActivity() {
-    private val filterText: EditText by lazy { findViewById<EditText>(R.id.filter_text) }
-    private val filterButton: Button by lazy { findViewById<Button>(R.id.filter_button) }
+    /*private val filterText: EditText by lazy { findViewById<EditText>(R.id.filter_text) }
+    private val filterButton: Button by lazy { findViewById<Button>(R.id.filter_button) }*/
 
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var blockSiteButton: Button
@@ -58,7 +58,8 @@ class pageForWebFiltering : AppCompatActivity() {
             }
         }
 
-        filterButton.setOnClickListener {
+        /*DI NA NEED ITO*/
+        /*filterButton.setOnClickListener {
             val keyword = filterText.text.toString().trim()
             if (keyword.isNotEmpty()) {
                 val intent = Intent(this, Childscreen::class.java)
@@ -67,7 +68,7 @@ class pageForWebFiltering : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
