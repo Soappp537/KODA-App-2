@@ -46,6 +46,13 @@ android {
     dependencies {
         // Import the Firebase BoM
         implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+        testImplementation ("junit:junit:4.13.2")
+        testImplementation ("org.mockito:mockito-core:3.12.4")
+        testImplementation ("org.mockito:mockito-android:3.12.4")
+        testImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+        testImplementation ("androidx.test:runner:1.4.0")
+        testImplementation ("androidx.test:rules:1.4.0")
+        testImplementation ("org.easymock:easymock:4.0.2")
 
 
 
@@ -104,6 +111,12 @@ dependencies {
     androidTestImplementation ("org.hamcrest:hamcrest-library:2.2")
 
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.mockito:mockito-core:3.12.4")
+    testImplementation ("org.mockito:mockito-android:3.12.4")
+    testImplementation ("com.google.firebase:firebase-firestore:24.0.0")
+    testImplementation ("org.easymock:easymock:4.0.2")
 
 }
 
