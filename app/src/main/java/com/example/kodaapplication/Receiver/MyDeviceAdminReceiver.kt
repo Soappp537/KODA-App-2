@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Receiver
 
 import android.app.admin.DeviceAdminReceiver
 import android.content.Context

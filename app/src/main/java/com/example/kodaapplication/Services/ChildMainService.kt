@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.kodaapplication.R
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +24,6 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 //data class AppItem(val label: String, val packageName: String, var isBlocked: Boolean)
-data class AppItem(val label: String, val packageName: String)
 
 
 class ChildMainService : Service() {
@@ -78,7 +78,7 @@ class ChildMainService : Service() {
             fetchCompareApps()
             fetchAppDataFromFirestore()
             Log.d("LAP NUMBER", "5 second delay completed")
-            handler.postDelayed(runnable, TimeUnit.SECONDS.toMillis(5))
+            handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(10))
         }
         handler.post(runnable)
     }
@@ -145,6 +145,8 @@ class ChildMainService : Service() {
             counterValue = 0
         }
     }
+
+    data class AppItem(val label: String, val packageName: String)
 
     private fun fetchCompareApps() {
 //        Get list of installed apps

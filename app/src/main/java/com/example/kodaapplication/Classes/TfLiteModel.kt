@@ -1,7 +1,9 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 import android.content.Context
 import android.util.Log
+import com.example.kodaapplication.Activities.finalText
+import com.example.kodaapplication.Activities.wordIndexMap
 import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
@@ -44,7 +46,7 @@ class TfLiteModel {
 //            Log.d("Preprocessed url/text:", preprocessedUrl)
 
             // Tokenize the preprocessed text using word-index mappings
-            val tokens = tokenizeText(preprocessedUrl)
+            val tokens = tokenizeText(finalText)
             Log.d("Tokens:", tokens.joinToString(", "))
 
             // Pad the sequence - based on the model
@@ -120,6 +122,61 @@ class TfLiteModel {
                 paddedSequence[startIdx + index] = token
             }
             return paddedSequence
+        }
+        // leetspeak to normal words
+        fun translateLeetToNormal(leetText: String): String {
+            val leetToNormalMap = mapOf(
+                'a' to listOf("4", "@", "/-\\", "^", "Д", "α", "Ã", "ã", "Å", "å", "Ā", "ā", "À", "à", "Á", "á", "Â", "â", "Ä", "ä"),
+                'b' to listOf("|3", "ß", "!3", "(3", "/3", ")3", "ẞ", "ദ", "♭", "ḃ", "ḅ", "ḇ", "Ḇ", "Ḅ", "൫", "ⓑ"),
+                'c' to listOf("¢", "<", "(", "©", "[", "Ç", "ℂ", "℃", "₡", "∁"),
+                'd' to listOf("|)", "[)", "I>", "?", "T)", "I7", "cl", "|}", "|]", "ḋ", "ḍ", "ḏ", "ḑ", "ḓ", "d", "Ḓ", "Ḋ", "Ḍ", "Ḏ", "Ḑ"),
+                'e' to listOf("3", "£", "€", "[-", "ë", "£", "Ē", "ē", "Ê", "ê", "Ë", "ë", "È", "è", "É", "é", "ℇ", "℈", "℉", "℮", "ℯ", "ⓔ", "∊"),
+                'f' to listOf("ƒ", "/=", "Ⅎ"),
+                'g' to listOf("&","ℊ", "ġ", "❡", "ⓖ"),
+                'h' to listOf("#", "/-/", "\\-\\", "]-[", ")-(", "(-)", ":-:", "|~|", "|-|", "]~[", "}{", "ℋ", "ℌ", "ℍ", "ℎ", "ℏ"),
+                'i' to listOf("1", "|", "][", "!", "Ì", "ì", "Ï", "ï", "Ī", "ī", "Î", "î", "Í", "í", "℩", "유"),
+                'j' to listOf("ℐ", "ℑ", "ʝ", "Ⓙ", "ⓙ", "♩"),
+                'k' to listOf(">|", "|<", "|c", "|(","7<", "K.", "ⓚ", "₭"),
+                'l' to listOf("|_", "|", "ℒ"),
+                'm' to listOf("/\\/", "/V\\", "[V]", "|/|", "^^", "<\\/>", "{V}", "(v)", "(V)", "|\\|\\", "]\\/[", "Պ", "ണ", "൩", "൬", "ന", "സ", "ⓜ"),
+                'n' to listOf("^/", "|\\|", "/\\/", "[\\]", "<\\>", "{\\}", "/V", "^", "ท", "И", "ℕ", "Ṋ", "Ṉ", "Ṇ", "Ṅ", "₦", "ῇ", "ῆ", "ῄ", "ῃ", "ῂ", "ᾗ", "ᾖ", "ᾕ", "ᾔ", "ᾓ", "ᾒ", "ᾑ", "ᾐ", "ή", "ὴ", "ἧ", "ἦ", "ἥ" ,"ἤ", "ἣ", "ἢ", "ἡ", "ṅ", "ṇ", "ṉ", "ṋ", "ἠ", "ഗ"),
+                'o' to listOf("0", "()", "[]", "Ø", "°", "Õ", "õ", "Ō", "ō", "Ò", "ò", "Ö", "ö", "Ô", "ô", "Ó", "ó", "Ω", "℧"),
+                'p' to listOf("(_,)", "℗", "¶", "ℙ", "ṗ", "ṕ", "ῥ", "ῤ", "Ῥ", "Ṕ"),
+                'q' to listOf("զ", "ⓠ", "ҩ", "ℚ", "ǭ", "Ǭ"),
+                'r' to listOf("®", "Я", "ℜ", "ℝ", "℞", "Ṟ", "Ṝ", "Ṛ", "Ṙ", "℟", "ℜ", "ṝ", "ṟ", "ṙ", "ṛ", "Ի", "ⓡ"),
+                's' to listOf("$", "§", "ʂ", "Ṩ", "Ṧ", "Ṥ", "Ṣ", "Ṡ", "Š", "ş", "ṩ", "ṧ", "ṥ", "ṣ", "ṡ", "ട", "5"),
+                't' to listOf("+", "†", "' ][ '", "Ṱ", "Ṯ", "Ṭ", "₮", "ẗ", "ṱ", "ṯ", "ṭ", "ṫ", "ⓣ"),
+                'u' to listOf("(_)", "|_|", "บ", "µ"),
+                'v' to listOf("\\/\\/", "|/", "\\\\|", "ν", "ѵ", "ⓥ", "ṽ", "ṿ", "Ṽ", "Ṿ"),
+                'w' to listOf("\\/\\/", "\\^/", "\\/\\/", "\\\\X/", "\\\\|/", "\\\\_\\_/", "พ", "₩", "ⓦ", "ഡ", "ധ", "ω", "ẁ", "ẃ", "ẅ", "ẇ", "ẉ", "ẘ", "ὠ", "ὡ", "ὢ", "ὣ", "ὤ", "ὥ", "ὦ", "ὧ", "ὼ", "ώ", "ᾠ", "ᾡ", "ᾢ", "ᾣ", "ᾤ", "ᾥ", "ᾦ", "ᾧ", "ῲ", "ῳ", "ῴ", "ῶ", "ῷ", "₩", "Ẁ", "Ẃ", "Ẅ", "Ẇ", "Ẉ"),
+                'x' to listOf("><", "}{" , "×", "}{", ")(", "ⓧ", "✗", "✘", "ẋ", "Ẋ", "Ẍ", "ẍ", "x"),
+                'y' to listOf("¥", "Ỹ", "Ỵ", "Ỷ", "Ỵ", "Ỳ", "Ύ", "Ὺ", "Ῡ", "Ῠ", "Ὗ", "Ὕ", "Ὓ", "Ὑ", "Ẏ", "ㄚ", "ẏ", "ỹ", "ỷ", "ỳ", "ẙ", "ഴ", "⑂", "൮", "ⓨ"),
+                'z' to listOf("2", "ʐ", "ⓩ", "ẑ", "ẓ", "ẕ", "Ẓ", "Ẕ", "Ẑ", "Ž")
+            )
+
+            val normalWord = StringBuilder()
+
+            for (char in leetText.toLowerCase()) {
+                val normalChar = leetToNormalMap.entries.firstOrNull { it.value.contains(char.toString()) }?.key
+                normalWord.append(normalChar ?: char)
+            }
+
+            return normalWord.toString()
+        }
+            //text normalization
+        fun normalizeText(text: String): String {
+            // Convert text to lowercase
+            var normalizedText = text.toLowerCase()
+
+            // Remove punctuation
+            normalizedText = normalizedText.replace(Regex("[^a-zA-Z0-9\\s]"), "")
+
+            // Replace multiple whitespaces with a single space
+            normalizedText = normalizedText.replace(Regex("\\s+"), " ")
+
+            // Additional normalization steps can be added here, such as handling contractions, etc.
+
+            return normalizedText
         }
 
         fun modelInference(

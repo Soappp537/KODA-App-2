@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.app.Activity
 import android.content.Context
@@ -28,9 +28,6 @@ class addChildInfo : AppCompatActivity() {
         binding = ActivityAddChildInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Store flag indicating setup completion in SharedPreferences
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean("setupCompleted", true).apply()
 
         auth = FirebaseAuth.getInstance()
         sessionManager = SessionManager(this)// initialize session

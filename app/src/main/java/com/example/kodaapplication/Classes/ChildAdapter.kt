@@ -1,10 +1,12 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.Activities.mainScreen
+import com.example.kodaapplication.R
 
 class childAdapter(private val childList: ArrayList<childData>, private val listener: mainScreen) : RecyclerView.Adapter<childAdapter.MyViewHolder>() {
     interface OnItemClickListener {

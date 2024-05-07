@@ -1,12 +1,13 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kodaapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BlockedActivity : AppCompatActivity() {

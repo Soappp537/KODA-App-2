@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 interface OnToggleClickListener {

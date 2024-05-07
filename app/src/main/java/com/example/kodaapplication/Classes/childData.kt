@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 import com.google.firebase.database.PropertyName
 

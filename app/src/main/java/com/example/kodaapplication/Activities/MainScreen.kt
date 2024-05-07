@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -11,6 +11,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.Classes.CurrentUser
+import com.example.kodaapplication.R
+import com.example.kodaapplication.Classes.childAdapter
+import com.example.kodaapplication.Classes.childData
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore

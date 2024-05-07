@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.kodaapplication.Classes.UserData
 import com.example.kodaapplication.databinding.ActivityLoginBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase

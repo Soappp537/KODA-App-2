@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 import android.app.Application
 import android.app.NotificationChannel

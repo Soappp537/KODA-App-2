@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 data class UserData(
     val id: String? = null,

@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.app.Activity
 import android.content.Context
@@ -11,6 +11,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kodaapplication.R
 
 class MainActivity : AppCompatActivity() {
 

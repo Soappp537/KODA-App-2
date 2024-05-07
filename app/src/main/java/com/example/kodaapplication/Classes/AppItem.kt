@@ -1,12 +1,15 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Classes
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.R
+import com.example.kodaapplication.Services.ChildMainService
+
 data class AppItem2(val label: String, val packageName: String, var isBlocked: Boolean)
 
-class AppAdapter(private val apps: List<AppItem>) :
+class AppAdapter(private val apps: List<ChildMainService.AppItem>) :
     RecyclerView.Adapter<AppAdapter.AppViewHolder>() {
 
     class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

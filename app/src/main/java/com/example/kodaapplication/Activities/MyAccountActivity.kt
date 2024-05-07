@@ -1,10 +1,12 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kodaapplication.Classes.CurrentUser
+import com.example.kodaapplication.R
 import com.example.kodaapplication.databinding.ActivityMyAccountBinding
 
 class MyAccountActivity : AppCompatActivity() {

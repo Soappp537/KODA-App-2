@@ -1,6 +1,5 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -10,6 +9,7 @@ import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.Classes.AppItem2
 import com.google.firebase.firestore.FirebaseFirestore
 
 class getChildApps : AppCompatActivity() {
@@ -37,7 +37,7 @@ class getChildApps : AppCompatActivity() {
         val childId = childIdSharedPreferences.getString("childId", null)
 
         val intent = Intent(this, Childscreen::class.java)
-        setResult(Activity.RESULT_OK, intent)
+        startActivity(intent)
         finish()
     }
 

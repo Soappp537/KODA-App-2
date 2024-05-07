@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodaapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AppListActivity : AppCompatActivity() {

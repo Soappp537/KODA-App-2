@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Services
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.example.kodaapplication.Activities.BlockedActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildAppInterceptorService : AccessibilityService() {
@@ -20,7 +21,6 @@ class ChildAppInterceptorService : AccessibilityService() {
         // Retrieve childId from SharedPreferences
         val childId = sharedPreferences.getString("childId", "") ?: ""
         Log.d("ChildAppInterceptor", "childId: $childId")
-
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {

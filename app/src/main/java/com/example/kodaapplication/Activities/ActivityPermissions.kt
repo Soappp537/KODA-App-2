@@ -1,6 +1,5 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
-import android.app.Activity
 import android.app.AppOpsManager
 import android.app.admin.DeviceAdminReceiver
 import android.app.admin.DevicePolicyManager
@@ -21,6 +20,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.kodaapplication.Receiver.MyDeviceAdminReceiver
+import com.example.kodaapplication.R
 
 
 class ActivityPermissions : AppCompatActivity() {
@@ -71,14 +72,6 @@ class ActivityPermissions : AppCompatActivity() {
         deviceAdminSwitch.isChecked = false
         backButton.isEnabled = true
         finishButton.isEnabled = false
-
-        // Restore permission states from SharedPreferences
-        val PermissionsharedPreferences = getSharedPreferences("PermissionPrefs", Context.MODE_PRIVATE)
-        accessibilitySwitch.isChecked = PermissionsharedPreferences.getBoolean("accessibility_permission", false)
-        writeSettingsSwitch.isChecked = PermissionsharedPreferences.getBoolean("write_settings_permission", false)
-        overlaySwitch.isChecked = PermissionsharedPreferences.getBoolean("overlay_permission", false)
-        packageUsageSwitch.isChecked = PermissionsharedPreferences.getBoolean("package_usage_permission", false)
-        deviceAdminSwitch.isChecked = PermissionsharedPreferences.getBoolean("device_admin_permission", false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.System.canWrite(this)) {
             writeSettingsSwitch.isChecked = true
@@ -149,7 +142,7 @@ class ActivityPermissions : AppCompatActivity() {
 
                 val intent = Intent(this, getChildApps::class.java)// uncomment after testing
                 intent.putExtra("childId", childId) // uncomment after test
-                setResult(Activity.RESULT_OK, intent)
+                startActivity(intent)
                 finish()
             } else {
                 // Show error message
@@ -293,16 +286,5 @@ class ActivityPermissions : AppCompatActivity() {
                 deviceAdminSwitch.isChecked &&
                 accessibilitySwitch.isChecked
         // need better logic para dito since di priority lagpasan ko muna
-
-        // Save permission states to SharedPreferences
-        val sharedPreferences = getSharedPreferences("PermissionPrefs", Context.MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            putBoolean("accessibility_permission", accessibilitySwitch.isChecked)
-            putBoolean("write_settings_permission", writeSettingsSwitch.isChecked)
-            putBoolean("overlay_permission", overlaySwitch.isChecked)
-            putBoolean("package_usage_permission", packageUsageSwitch.isChecked)
-            putBoolean("device_admin_permission", deviceAdminSwitch.isChecked)
-            apply()
-        }
     }
 }

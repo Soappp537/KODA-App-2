@@ -1,4 +1,4 @@
-package com.example.kodaapplication
+package com.example.kodaapplication.Activities
 
 import android.content.ContentValues
 import android.content.Context
@@ -13,9 +13,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kodaapplication.TfLiteModel.Companion.loadModel
-import com.example.kodaapplication.TfLiteModel.Companion.loadWordIndexMap
-import com.example.kodaapplication.TfLiteModel.Companion.preprocessText
+import com.example.kodaapplication.R
+import com.example.kodaapplication.Services.ChildMainService
+import com.example.kodaapplication.Classes.TfLiteModel
+import com.example.kodaapplication.Classes.TfLiteModel.Companion.loadModel
+import com.example.kodaapplication.Classes.TfLiteModel.Companion.loadWordIndexMap
+import com.example.kodaapplication.Classes.TfLiteModel.Companion.normalizeText
+import com.example.kodaapplication.Classes.TfLiteModel.Companion.preprocessText
+import com.example.kodaapplication.Classes.TfLiteModel.Companion.translateLeetToNormal
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,12 +33,13 @@ lateinit var wordIndexMap: Map<String, Int> // walang built in tokenizer android
 lateinit var interpreter: Interpreter
 
 var preprocessedUrl: String = ""
+var finalText: String = ""
 // Define the maximum length for padding
 var maxLength = 130 //base sa model
 lateinit var tokens: List<Int>
 lateinit var paddedSequence: IntArray
 
-/*val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
+/*val blockedKeywords = listOf("whore", "penis", "dick", "pussy") example lang
 // eto papalitan ng database firebase, mga example ng mga false positive ni model*/
 @Suppress("UNREACHABLE_CODE")
 class Childscreen : AppCompatActivity() {
@@ -55,6 +61,7 @@ class Childscreen : AppCompatActivity() {
         val childId2 = sharedPreferences.getString("childId", "") ?: ""
         Log.d("CHILD ID", childId2)
 
+        //ServicesInitializer = eto na yun pero di ko muna binura ung file baka may need pa dun
         if (!isServiceRunning) { // Run the services
             val serviceIntent = Intent(this, ChildMainService::class.java)
             serviceIntent.action = ChildMainService.CounterAction.START.name
@@ -77,13 +84,20 @@ class Childscreen : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString() ?: "" // url input
                 preprocessedUrl = preprocessText(url) // preprocess
+                // leet speak
+                finalText = translateLeetToNormal(preprocessedUrl)
+
+                val normalText = normalizeText(finalText)
+                Log.d("FILTERING LOGIC","SUCCESSFUL RUN")
                 Log.d("text:", url.toString())
                 Log.d("preprocessed text:", preprocessedUrl.toString())
+                Log.d("Final text:", finalText.toString())
+                Log.d("Normalized:", normalText.toString())
 
-                //asa kabila file function mga to
-                val paddedSequence = TfLiteModel.cleanUrl(preprocessedUrl, maxLength)
+                //asa kabila mga functions for this
+                val paddedSequence = TfLiteModel.cleanUrl(finalText, maxLength)
                 val predictedLabel = TfLiteModel.modelInference(
-                    preprocessedUrl,
+                    finalText,
                     interpreter,
                     wordIndexMap,
                     maxLength,
