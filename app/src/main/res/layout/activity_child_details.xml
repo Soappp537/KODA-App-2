@@ -95,6 +95,25 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             tools:ignore="HardcodedText" />
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_SiteFilter"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Site Filtering"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:backgroundTint="@color/orange"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/gray"
+            app:cornerRadius="8dp"
+            android:layout_marginBottom="10dp"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:rippleColor="@color/rippleColor"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            tools:ignore="HardcodedText" />
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_DeviceScheduling"
             android:padding="10dp"
             android:layout_width="wrap_content"
