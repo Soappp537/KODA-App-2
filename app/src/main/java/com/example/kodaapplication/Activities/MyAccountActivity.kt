@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kodaapplication.Classes.CurrentUser
+import com.example.kodaapplication.CurrentUser
 import com.example.kodaapplication.R
 import com.example.kodaapplication.databinding.ActivityMyAccountBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MyAccountActivity : AppCompatActivity() {
 
@@ -23,6 +24,72 @@ class MyAccountActivity : AppCompatActivity() {
 
         setupUI()
         setupLogoutButton()
+        setupDeleteButton()
+    }
+
+    private fun setupDeleteButton() {
+        binding.deleteParent.setOnClickListener {
+            showDeleteDialog()
+        }
+    }
+
+    private fun showDeleteDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle(R.string.delete_account)
+        alertDialog.setMessage(R.string.delete_account_confirmation)
+        alertDialog.setPositiveButton(R.string.yes) { _, _ ->
+            deleteParentAndAssociatedChildAccounts()
+        }
+        alertDialog.setNegativeButton(R.string.no) { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
+    private fun deleteParentAndAssociatedChildAccounts() {
+        val parentId = session.getParentId()
+        val firestore = FirebaseFirestore.getInstance()
+
+        // Delete parent account
+        firestore.collection("ParentAccounts").document(parentId)
+            .delete()
+            .addOnSuccessListener {
+                // Delete associated child accounts
+                firestore.collection("ChildAccounts").whereEqualTo("parentId", parentId)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        val batch = firestore.batch()
+                        for (document in querySnapshot.documents) {
+                            batch.delete(document.reference)
+                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                // Logout and navigate to login
+                                logoutAndNavigateToLogin()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(
+                                    this@MyAccountActivity,
+                                    "Failed to delete child accounts: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this@MyAccountActivity,
+                            "Failed to fetch child accounts: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this@MyAccountActivity,
+                    "Failed to delete parent account: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun setupLogoutButton() {
@@ -49,8 +116,15 @@ class MyAccountActivity : AppCompatActivity() {
         CurrentUser.loggedInParentId = ""
         Toast.makeText(this@MyAccountActivity, "Account successfully logged out", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+        /*session.logout()
+        CurrentUser.loggedInParentId = ""
+        Toast.makeText(this@MyAccountActivity, "Account successfully logged out", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()*/
     }
 
     private fun setupUI() {

@@ -1,5 +1,6 @@
 package com.example.kodaapplication.Activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -73,8 +74,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
-
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         val lowerCaseUsername = username.toLowerCase(Locale.ROOT)
@@ -114,10 +113,9 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
     }
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        super.onBackPressed()
-        // Prevent going back to the previous activity
-        finish()
+
     }
 
     fun isNetworkAvailable(context: Context): Boolean {

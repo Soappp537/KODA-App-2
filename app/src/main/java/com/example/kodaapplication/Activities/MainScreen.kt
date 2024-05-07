@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodaapplication.Classes.CurrentUser
-import com.example.kodaapplication.R
 import com.example.kodaapplication.Classes.childAdapter
 import com.example.kodaapplication.Classes.childData
+import com.example.kodaapplication.R
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore

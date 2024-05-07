@@ -58,25 +58,7 @@ class Childscreen : AppCompatActivity() {
         val childId = sharedPreferences.getString("childId", null)
         Log.e("fromGetChildApps", "ID $childId")
 
-        /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
-        // Check if the app was last opened in the Childscreen
-        /*sharedPreferences = getSharedPreferences("ChildscreenSession", Context.MODE_PRIVATE)
-        val isInChildscreen = sharedPreferences.getBoolean("isInChildscreen", false)
 
-        // If the app was not last opened in the Childscreen, navigate to the Childscreen
-        if (!isInChildscreen) {
-            val intent = Intent(this, Childscreen::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
-
-        // Save the session information
-        with(sharedPreferences.edit()) {
-            putBoolean("isInChildscreen", true)
-            apply()
-        }*/
-        /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
 
         val childId2 = sharedPreferences.getString("childId", "") ?: ""
         Log.d("CHILD ID", childId2)
@@ -160,17 +142,6 @@ class Childscreen : AppCompatActivity() {
             }
         }
     }
-    /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
-   /* override fun onResume() {
-        super.onResume()
-        // Reset the session information when the activity is resumed
-        with(sharedPreferences.edit()) {
-            putBoolean("isInChildscreen", false)
-            apply()
-        }
-    }*/
-    /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
-
     override fun onResume() {
         super.onResume()
         // Reset the flag when the activity is resumed
