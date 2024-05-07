@@ -47,8 +47,10 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
                 val categories = mutableListOf<Category>()
                 for (document in documents) {
                     val name = document.id
-                    val words = document["words"] as? List<String> ?: emptyList()
-                    categories.add(Category(name, words))
+                    if (!name.startsWith("exclude_")) { // Exclude specific document
+                        val words = document["words"] as? List<String> ?: emptyList()
+                        categories.add(Category(name, words))
+                    }
                 }
                 adapter.setCategories(categories)
             }
