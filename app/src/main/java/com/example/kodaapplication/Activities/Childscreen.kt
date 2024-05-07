@@ -13,14 +13,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kodaapplication.R
-import com.example.kodaapplication.Services.ChildMainService
 import com.example.kodaapplication.Classes.TfLiteModel
 import com.example.kodaapplication.Classes.TfLiteModel.Companion.loadModel
 import com.example.kodaapplication.Classes.TfLiteModel.Companion.loadWordIndexMap
 import com.example.kodaapplication.Classes.TfLiteModel.Companion.normalizeText
 import com.example.kodaapplication.Classes.TfLiteModel.Companion.preprocessText
 import com.example.kodaapplication.Classes.TfLiteModel.Companion.translateLeetToNormal
+import com.example.kodaapplication.R
+import com.example.kodaapplication.Services.ChildMainService
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,6 +58,26 @@ class Childscreen : AppCompatActivity() {
         val childId = sharedPreferences.getString("childId", null)
         Log.e("fromGetChildApps", "ID $childId")
 
+        /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
+        // Check if the app was last opened in the Childscreen
+        /*sharedPreferences = getSharedPreferences("ChildscreenSession", Context.MODE_PRIVATE)
+        val isInChildscreen = sharedPreferences.getBoolean("isInChildscreen", false)
+
+        // If the app was not last opened in the Childscreen, navigate to the Childscreen
+        if (!isInChildscreen) {
+            val intent = Intent(this, Childscreen::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        // Save the session information
+        with(sharedPreferences.edit()) {
+            putBoolean("isInChildscreen", true)
+            apply()
+        }*/
+        /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
+
         val childId2 = sharedPreferences.getString("childId", "") ?: ""
         Log.d("CHILD ID", childId2)
 
@@ -78,6 +98,8 @@ class Childscreen : AppCompatActivity() {
         wordIndexMap = loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
 
         webView = findViewById(R.id.theWebView)
+        val webSettings: WebSettings = webView.settings
+        webSettings.javaScriptEnabled = true // Enable JavaScript
         /*webView.loadUrl("https://www.google.com/search?q=&safe=strict")*/
         webView.loadUrl("https://www.google.com")
         webView.webViewClient = object : WebViewClient() {
@@ -138,6 +160,17 @@ class Childscreen : AppCompatActivity() {
             }
         }
     }
+    /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
+   /* override fun onResume() {
+        super.onResume()
+        // Reset the session information when the activity is resumed
+        with(sharedPreferences.edit()) {
+            putBoolean("isInChildscreen", false)
+            apply()
+        }
+    }*/
+    /*ETO UNG SA KAPAG NAG EXIT KA FROM CHILDSCREEN AND KAPAG INOPEN MO UNG APP ULIT, SA CHILDSCREEN AGAD MAPUPUNTA*/
+
     override fun onResume() {
         super.onResume()
         // Reset the flag when the activity is resumed

@@ -2,6 +2,7 @@ package com.example.kodaapplication.Activities
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,12 +25,15 @@ interface OnToggleClickListener {
 class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Implement OnToggleClickListener
     private val firestore = FirebaseFirestore.getInstance()
     private lateinit var adapter: CategoryAdapter
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_keyword_filtering)
 
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("CategoryPreferences", MODE_PRIVATE)
         // Setup RecyclerView
         adapter = CategoryAdapter(emptyList(), this)
         val recyclerView_forDocuments = findViewById<RecyclerView>(R.id.recyclerView_forDocuments)
@@ -63,14 +67,32 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
     override fun onToggleClicked(category: Category, isChecked: Boolean) {
         // Handle toggle click here
         category.isSelected = isChecked
-        if (isChecked) {
-            // Block words in Firestore
-            blockWordsInFirestore(category)
-        } else {
-            // Unblock words in Firestore
-            unblockWordsInFirestore(category)
-        }
+        updateTogglePreference(category.name, isChecked) // Save the toggle state
+        updateBlockedFieldInFirestore(category, isChecked)
     }
+
+    private fun updateTogglePreference(categoryName: String, isChecked: Boolean) {
+        // Save the toggle state in SharedPreferences or Firestore
+        // For example, using SharedPreferences:
+        val sharedPreferences = getSharedPreferences("CategoryPreferences", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean(categoryName, isChecked).apply()
+    }
+
+    private fun updateBlockedFieldInFirestore(category: Category, isChecked: Boolean) {
+        val collectionRef = firestore.collection("blocked_Keywords").document(category.name)
+        collectionRef.update("blocked", isChecked) // Update the "blocked" field to the new value
+            .addOnSuccessListener {
+                if (isChecked) {
+                    Log.d(TAG, "${category.name} is now blocked.")
+                } else {
+                    Log.d(TAG, "${category.name} is now unblocked.")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error updating ${category.name} blocked status: ", exception)
+            }
+    }
+
     private fun blockWordsInFirestore(category: Category) {
         val collectionRef = firestore.collection("blocked_Keywords").document(category.name)
         collectionRef.update("blocked", true) // Update the "blocked" field to false
@@ -124,7 +146,7 @@ RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
         val category = categories[position]
         holder.categoryName.text = category.name
         holder.categoryToggle.isChecked = category.isSelected // Update toggle state
-        holder.categoryToggle.setOnCheckedChangeListener(null) // Remove previous listener
+        /*holder.categoryToggle.setOnCheckedChangeListener(null) // Remove previous listener*/
         holder.categoryToggle.setOnCheckedChangeListener { _, isChecked ->
             // Update the isSelected property of the category when the toggle is clicked
             category.isSelected = isChecked

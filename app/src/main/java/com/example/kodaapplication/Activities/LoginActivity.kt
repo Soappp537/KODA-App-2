@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
+
 /*sd*/
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
@@ -72,6 +73,8 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
+
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         val lowerCaseUsername = username.toLowerCase(Locale.ROOT)
@@ -111,13 +114,18 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
     }
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Prevent going back to the previous activity
+        finish()
+    }
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo!= null && connectivityManager.activeNetworkInfo!!.isConnected
     }
 }
+
 
 class SessionManager(context: Context) {
     private val sharedPreferences: SharedPreferences
@@ -159,5 +167,6 @@ class SessionManager(context: Context) {
     fun getUsername(): String {
         return sharedPreferences.getString("username", "")?: ""
     }
+
 
 }
