@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
-
+/*sd*/
 @Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
