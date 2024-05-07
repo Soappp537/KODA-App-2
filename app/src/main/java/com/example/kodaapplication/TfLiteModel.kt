@@ -155,7 +155,7 @@ class TfLiteModel {
             return maxIndex
         }
 
-        /*fun containsBlockedKeywords(url: String): Boolean {
+       /* fun containsBlockedKeywords(url: String): Boolean {
             return blockedKeywords.any { keyword -> url.contains(keyword, ignoreCase = true) }
         }*/
     }

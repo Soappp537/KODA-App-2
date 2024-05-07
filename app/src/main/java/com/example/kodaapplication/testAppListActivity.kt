@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AppListActivity : AppCompatActivity() {
+class testAppListActivity : AppCompatActivity() {
 
     private lateinit var appRecyclerView: RecyclerView
     private val db = FirebaseFirestore.getInstance()
@@ -32,6 +32,7 @@ class AppListActivity : AppCompatActivity() {
         appRecyclerView.layoutManager = LinearLayoutManager(this)
 
         newChildId = intent.getStringExtra("newchildId")
+        // Log or use the newChildId as needed in AppListActivity
         Log.d("AppListActivity", "Received newchildId: $newChildId")
 
         fetchAppDataFromFirestore()
@@ -52,7 +53,6 @@ class AppListActivity : AppCompatActivity() {
     class AppAdapter(
         private val apps: List<AppItem>,
         private val onAppItemClickListener: OnAppItemClickListener,
-        private val newChildId: String?
 
         ) : RecyclerView.Adapter<AppAdapter.AppViewHolder>() {
         class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -85,20 +85,24 @@ class AppListActivity : AppCompatActivity() {
                     ).show()
                 }
 
-                updateAppInFirestore(updatedApp, newChildId)
+                updateAppInFirestore(updatedApp)
             }
             holder.itemView.setOnClickListener { onAppItemClickListener.onAppItemClick(apps[position]) }
         }
 
-        private fun updateAppInFirestore(updatedApp: AppItem, newChildId: String?) {
+        private fun updateAppInFirestore(updatedApp: AppItem) {
             // Reference to your collection
-            val db = FirebaseFirestore.getInstance()
-            val collectionRef = db.collection("ChildAccounts")
-
+            val db = FirebaseFirestore.getInstance() // Declaring this here, because its inside another class
+            val collectionRef = db.collection("ChildAccounts")  //
+            val tempoChildId = "38749f37-c" //delete after testing
             // Construct a query to retrieve documents where childId equals the specified value
-            val query = collectionRef.whereEqualTo("childId", newChildId) // change to newChild after testing
+
+            val query = collectionRef.whereEqualTo(
+                "childId",
+                tempoChildId
+            ) // change to newChild after testing
+
             // Execute the query
-            Log.d("updateAppInFirestore", "Received newchildId: $newChildId")
             query.get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
@@ -136,15 +140,19 @@ class AppListActivity : AppCompatActivity() {
     }
 
     private fun fetchAppDataFromFirestore() {
+        // Reference to your collection
+//        val collectionRef = db.collection("ChildAccounts")  // Make this global
+        val tempoChildId= "38749f37-c" //delete after testing           //
 
-        val query = collectionRef.whereEqualTo("childId", newChildId)
-        Log.d("fetchAppDataFrom", "Received newchildId: $newChildId")
+        // Construct a query to retrieve documents where childId equals the specified value
+        val query = collectionRef.whereEqualTo("childId", tempoChildId) // change to newChild after testing
 
+        // Execute the query
         query.get()
             .addOnSuccessListener { documents ->
                 val apps = mutableListOf<AppItem>()
                 for (document in documents) {
-
+                    // Access the "apps" map within the document
                     val appsMap = document["apps"] as? Map<String, Map<String, Any>> ?: continue
 
                     // Iterate over each entry in the "apps" map
@@ -167,19 +175,18 @@ class AppListActivity : AppCompatActivity() {
             override fun onAppItemClick(app: AppItem) {
                 if (app.locked) {
                     Toast.makeText(
-                        this@AppListActivity,
+                        this@testAppListActivity,
                         "App is locked by KODA App",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     Toast.makeText(
-                        this@AppListActivity,
+                        this@testAppListActivity,
                         "You clicked on ${app.label}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
-        }, newChildId) // Pass newChildId here
+        })
     }
-
 }

@@ -14,22 +14,33 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildDetails : AppCompatActivity() {
     private lateinit var childNameTextView: TextView
+    private lateinit var sessionManager: SessionManager // para sa parent ID
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_child_details)
+
+        sessionManager = SessionManager(this)// initialize session
+        val parentId = sessionManager.getParentId() // Retrive parent ID
+
         childNameTextView = findViewById(R.id.cont_for_childName)
+
+        val childId = intent.getStringExtra("childId")
+        Log.d("AnotherActivity", "Received childId: $childId")
+        if (childId != null) {
+            fetchChildName(parentId, childId)
+        }
+
         val buttonLockApps = findViewById<MaterialButton>(R.id.button_lock_apps)
         /* buttonLockApps para to sa pag pinindot ung "App Lock" mag oopen ung AppListActivity na kung
         saan naka list laaht nung apps na nakainstall sa device */
         buttonLockApps.setOnClickListener {
-            val intent = Intent(this@ChildDetails, AppListActivity::class.java)
-            startActivity(intent)
-        }
 
-        val childId = intent.getStringExtra("childId")
-        if (childId != null) {
-            fetchChildName(CurrentUser.loggedInParentId, childId)
+            val intent = Intent(this, AppListActivity::class.java).apply {
+                putExtra("newchildId", childId)
+            }
+            startActivity(intent)
         }
 
         val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
@@ -37,19 +48,13 @@ class ChildDetails : AppCompatActivity() {
             startActivity(Intent(this, pageForWebFiltering::class.java))
         }
 
-        val blockSiting = findViewById<MaterialButton>(R.id.button_SiteBlocking)
-        blockSiting.setOnClickListener {
-            startActivity(Intent(this, KeywordFiltering::class.java))
-        }
-
         val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
         deleteChildButton.setOnClickListener {
             val childId = intent.getStringExtra("childId")
             if (childId!= null) {
-                deleteChildAccount(CurrentUser.loggedInParentId, childId)
+                deleteChildAccount(parentId, childId)
             }
         }
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -96,7 +101,6 @@ class ChildDetails : AppCompatActivity() {
                     document.reference.delete()
                         .addOnSuccessListener {
                             Log.d("ChildDetails", "Child account deleted successfully")
-                            Toast.makeText(this@ChildDetails, "Successfully deleted child account", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@ChildDetails, mainScreen::class.java)
                             startActivity(intent)
                             finish()

@@ -24,6 +24,7 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
     private lateinit var childArrayList: ArrayList<childData>
     private lateinit var aadapter: childAdapter
     private lateinit var bd: FirebaseFirestore
+    private lateinit var sessionManager: SessionManager // para sa parent ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -37,6 +38,8 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
 
+        sessionManager = SessionManager(this)// initialize session
+
         childRecyclerView = findViewById(R.id.main_recyclerView)
         childRecyclerView.layoutManager = LinearLayoutManager(this)
         childRecyclerView.setHasFixedSize(true)
@@ -46,41 +49,41 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
 
         getChildData()
 
-
         val accShow = findViewById<ExtendedFloatingActionButton>(R.id.myAccount)
         accShow.setOnClickListener {
             val intent = Intent(this, MyAccountActivity::class.java)
             startActivity(intent)
         }
 
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getChildData() {
         bd = FirebaseFirestore.getInstance()
+        val parentId = sessionManager.getParentId() // Retrive parent ID
         bd.collection("ChildAccounts")
-            .whereEqualTo("parentId", CurrentUser.loggedInParentId)
+            .whereEqualTo("parentId", parentId)
+//            .whereEqualTo("parentId", CurrentUser.loggedInParentId) from this
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     Log.e("Firestore Error", error.message.toString())
                     return@addSnapshotListener
                 }
+                childArrayList.clear()
                 value?.let { snapshot ->
                     for (dc in snapshot.documentChanges) {
                         if (dc.type == DocumentChange.Type.ADDED) {
-                            val childData = dc.document.toObject(childData::class.java)
-                            // Only add if it's not already in the list
-                            if (!childArrayList.contains(childData)) {
-                                childArrayList.add(childData)
-                            }
+                            childArrayList.add(dc.document.toObject(childData::class.java))
                         }
                     }
+                    val parentID= CurrentUser.loggedInParentId
+                    // Log the size of childArrayList
+                    Log.d("Firestore", "Child data size: ${childArrayList.size}")
+                    Log.d("PARENT", "LoggedID: $parentID")
                     aadapter.notifyDataSetChanged()
                 }
             }
     }
-
 
     override fun onItemClick(childData: childData) {
         val intent = Intent(this, ChildDetails::class.java)
@@ -114,5 +117,4 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         alertDialog.setNegativeButton("No") { _, _ -> }
         alertDialog.show()
     }
-
 }

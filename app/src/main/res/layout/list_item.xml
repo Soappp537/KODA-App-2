@@ -18,7 +18,8 @@
         app:strokeWidth="1dp"
         app:rippleColor="#12020202"
 
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_weight="1"

@@ -7,16 +7,23 @@
     android:fitsSystemWindows="true"
     tools:context=".mainScreen">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_recyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            app:layout_anchorGravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/list_item" />
+            android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/main_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    app:layout_anchorGravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/list_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/myAccount"
@@ -27,7 +34,7 @@
             android:drawableEnd="@android:drawable/ic_menu_manage"
             android:elevation="8dp"
             android:text="Account"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:translationZ="4dp"
             app:backgroundTint="@color/light_blue"

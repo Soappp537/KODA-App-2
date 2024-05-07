@@ -2,19 +2,17 @@ package com.example.kodaapplication
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kodaapplication.databinding.ActivitySignupBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
 
 class SignupActivity : AppCompatActivity() {
 
@@ -72,13 +70,15 @@ class SignupActivity : AppCompatActivity() {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         val uniqueId = generateRandomString(10)
 
-        usersCollection.document(uniqueId)
+        val lowerCaseUsername = username.lowercase(Locale.getDefault())
+
+        usersCollection.whereEqualTo("username", lowerCaseUsername)
             .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (!documentSnapshot.exists()) {
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
                     val userData = mapOf(
                         "id" to uniqueId,
-                        "username" to username,
+                        "username" to lowerCaseUsername, // Save the lowercase username to the database
                         "password" to password
                     )
                     usersCollection.document(uniqueId)
@@ -100,8 +100,11 @@ class SignupActivity : AppCompatActivity() {
                             ).show()
                         }
                 } else {
-                    // Retry with a new unique ID if the generated ID already exists
-                    signupUser(username, password)
+                    Toast.makeText(
+                        this@SignupActivity,
+                        "Username already exists, please choose another one",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { e ->

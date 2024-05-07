@@ -1,7 +1,9 @@
-package com.example.kodaapplication // palitan lng package
+package com.example.kodaapplication
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -31,27 +33,42 @@ var maxLength = 130 //base sa model
 lateinit var tokens: List<Int>
 lateinit var paddedSequence: IntArray
 
-val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
-// eto papalitan ng database firebase, mga example ng mga false positive ni model
+/*val blockedKeywords = listOf("whore", "penis", "dick", "pussy")
+// eto papalitan ng database firebase, mga example ng mga false positive ni model*/
 @Suppress("UNREACHABLE_CODE")
 class Childscreen : AppCompatActivity() {
 
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var webView: WebView
-    /*private lateinit var session: SessionManager*/
+    private var isServiceRunning = false
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_homescreen)
-        /*session = SessionManager(this)*/
+
+        // Save the childId to SharedPreferences before starting the services
+        val sharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
+        val childId = sharedPreferences.getString("childId", null)
+        Log.e("fromGetChildApps", "ID $childId")
+
+        val childId2 = sharedPreferences.getString("childId", "") ?: ""
+        Log.d("CHILD ID", childId2)
+
+        if (!isServiceRunning) { // Run the services
+            val serviceIntent = Intent(this, ChildMainService::class.java)
+            serviceIntent.action = ChildMainService.CounterAction.START.name
+            intent.putExtra("childId", childId) // Pass childId to ChildMainService
+            startService(serviceIntent)
+            isServiceRunning = true // Set the flag to indicate that the service is running
+        }
 
         firebaseFirestore = FirebaseFirestore.getInstance()
         // Load the TensorFlow Lite model
         interpreter = loadModel(this, "LSTM_Model.tflite")
 
         // Load word-index mappings from word_dict.json
-        wordIndexMap =
-            loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
+        wordIndexMap = loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
 
         webView = findViewById(R.id.theWebView)
         /*webView.loadUrl("https://www.google.com/search?q=&safe=strict")*/
@@ -106,28 +123,33 @@ class Childscreen : AppCompatActivity() {
                 return true
             }
         }
-
-        fun updateBlockedStatus(site: String, isBlocked: Boolean) {
-            val url = Uri.parse(site)
-            val domain = url.host ?: return
-            val documentReference = firebaseFirestore.collection("blocked_Sites").document(domain)
-            documentReference.set(mapOf("blocked" to isBlocked))
-        }
-
-        // para di lng mag exit
-        @Deprecated("Deprecated in Java")
-        fun onBackPressed() {
-            // Check if the WebView can go back in its history
-            if (webView.canGoBack()) {
-                // If so, go back in the WebView's history
-                webView.goBack()
-            } else {
-                // If not, perform the default back button action (exit the activity)
-                super.onBackPressed()
-            }
-        }
+    }
+    override fun onResume() {
+        super.onResume()
+        // Reset the flag when the activity is resumed
+        isServiceRunning = false
     }
 
+
+    fun updateBlockedStatus(site: String, isBlocked: Boolean) {
+        val url = Uri.parse(site)
+        val domain = url.host?: return
+        val documentReference = firebaseFirestore.collection("blocked_Sites").document(domain)
+        documentReference.set(mapOf("blocked" to isBlocked))
+    }
+
+    // para di lng mag exit
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        // Check if the WebView can go back in its history
+        if (webView.canGoBack()) {
+            // If so, go back in the WebView's history
+            webView.goBack()
+        } else {
+            // If not, perform the default back button action (exit the activity)
+            super.onBackPressed()
+        }
+    }
     fun isSiteBlocked(url: String, callback: (Boolean) -> Unit) {
         val site = Uri.parse(url).host
         if (site != null) {
@@ -139,7 +161,6 @@ class Childscreen : AppCompatActivity() {
             callback(false)
         }
     }
-
     suspend fun containsBlockedKeywords(url: String, firestore: FirebaseFirestore): Boolean {
         var isBlocked = false
         // Fetch data from Firestore
@@ -162,10 +183,9 @@ class Childscreen : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 // Error handling
-                Log.e(TAG, "Error getting documents: ", exception)
+                Log.e(ContentValues.TAG, "Error getting documents: ", exception)
             }
             .await() // Wait for Firestore operation to complete
         return isBlocked
     }
-
 }

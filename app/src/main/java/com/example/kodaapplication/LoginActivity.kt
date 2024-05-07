@@ -39,6 +39,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        /*session = SessionManager(this)
+        // Check if the user is already logged in
+        if (session.isLoggedIn()) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }*/
+
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
         session = SessionManager(this) /*initialize session manager*/
@@ -51,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener // Add this line
             }
             if (loginUsername.isNotEmpty() && loginPassword.isNotEmpty()) {
-                loginUser(loginUsername,loginPassword)
+                    loginUser(loginUsername,loginPassword)
             }else{
                 Toast.makeText(this@LoginActivity, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -65,15 +73,18 @@ class LoginActivity : AppCompatActivity() {
 
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
-        usersCollection.whereEqualTo("username", username.toLowerCase(Locale.ROOT))
+        val lowerCaseUsername = username.toLowerCase(Locale.ROOT)
+
+        usersCollection.whereEqualTo("username", lowerCaseUsername)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     for (document in querySnapshot.documents) {
                         val userData = document.toObject(UserData::class.java)
                         if (userData!= null && userData.password == password) {
-                            CurrentUser.loggedInParentId = document.getString("id")?: ""
-                            session.createLoginSession(username, password) /*create login session*/
+                            val parentId = document.getString("id") ?: ""
+                            val userType = "Parent"
+                            session.createLoginSession(lowerCaseUsername, password, parentId, userType) /*create login session*/
                             Toast.makeText(
                                 this@LoginActivity,
                                 "Login Successful",
@@ -100,17 +111,10 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.activeNetworkInfo!= null && connectivityManager.activeNetworkInfo!!.isConnected
-    }
-
-    fun logout() {
-        // Clear the session and navigate to LoginActivity
-        SessionManager(this).logout()
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }
 
@@ -121,15 +125,25 @@ class SessionManager(context: Context) {
         sharedPreferences = context.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)
     }
 
-    fun createLoginSession(username: String, password: String) {
+    fun createLoginSession(username: String, password: String, parentId: String, userType: String) {
         val editor = sharedPreferences.edit()
         editor.putString("username", username)
         editor.putString("password", password)
+        editor.putString("parentId", parentId) //store parent ID
+        editor.putString("userType", userType) // Store user type
         editor.apply()
     }
 
     fun isLoggedIn(): Boolean {
         return sharedPreferences.contains("username") && sharedPreferences.contains("password")
+    }
+
+    fun getUserType(): String {
+        return sharedPreferences.getString("userType", "") ?: ""
+    }
+
+    fun getParentId(): String {
+        return sharedPreferences.getString("parentId", "") ?: ""
     }
 
     fun logout() {
@@ -138,7 +152,11 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
+    fun getId(): String{
+        return sharedPreferences.getString("parentId","")?:""
+    }
     fun getUsername(): String {
         return sharedPreferences.getString("username", "")?: ""
     }
+
 }
