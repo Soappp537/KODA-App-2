@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
@@ -50,10 +51,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun navigateToChildScreen() {
+
+    private fun navigateToChildScreen() {
         startActivity(Intent(this@MainActivity, Childscreen::class.java))
         finish() // Optionally finish this activity if not needed anymore
-    }*/
+    }
 
     override fun onBackPressed() {
         val alertDialog = AlertDialog.Builder(this)
