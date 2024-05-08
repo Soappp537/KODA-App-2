@@ -193,6 +193,7 @@ class Childscreen : AppCompatActivity() {
                     } else if (!word.contains("/") && url.contains(word, ignoreCase = true)) {
                         isBlocked = true
                         break
+                        //test lang naman
                     }
                 }
             }
