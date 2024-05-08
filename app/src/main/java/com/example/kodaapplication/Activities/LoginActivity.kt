@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
 /*sd*/
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "UNREACHABLE_CODE")
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
@@ -42,17 +42,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        /*session = SessionManager(this)
-        // Check if the user is already logged in
-        if (session.isLoggedIn()) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
-        }*/
-
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts") /*creation of firebase*/
         session = SessionManager(this) /*initialize session manager*/
+
+        // Check if the user is already logged in and the flow is completed
+        if (session.isLoggedIn() && childDevice()) {
+            navigateToChildScreen()
+            return
+        }else if (session.isLoggedIn() && parentDevice()){
+            navigateToMainScreen()
+            return
+        }
 
         binding.loginButton.setOnClickListener {
             val loginUsername = binding.loginUsername.text.toString().trim()
@@ -74,6 +75,24 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun navigateToChildScreen() {
+        startActivity(Intent(this@LoginActivity, Childscreen::class.java))
+        finish()
+    }
+    private fun navigateToMainScreen() {
+        startActivity(Intent(this@LoginActivity, mainScreen::class.java))
+        finish()
+    }
+
+    private fun childDevice(): Boolean {
+        val sharedPreferencesChild = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        return sharedPreferencesChild.getBoolean("flowCompletedChild", false)
+    }
+    private fun parentDevice(): Boolean {
+        val sharedPreferencesParent = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        return sharedPreferencesParent.getBoolean("flowCompletedParent", false)
+    }
+
     fun loginUser(username: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         val lowerCaseUsername = username.toLowerCase(Locale.ROOT)
@@ -93,9 +112,9 @@ class LoginActivity : AppCompatActivity() {
                                 "Login Successful",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                            finish()
-                            return@addOnSuccessListener
+
+                                navigateToMainActivity()
+                                return@addOnSuccessListener
                         }
                     }
                 }
@@ -113,6 +132,12 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
     }
+
+    private fun navigateToMainActivity() {
+        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        finish()
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
 

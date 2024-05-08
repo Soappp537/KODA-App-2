@@ -89,10 +89,15 @@
             android:exported="false" />
         <activity
             android:name=".Activities.Childscreen"
+            android:exported="false"
             android:label="@string/title_activity_Child_homescreen"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="fullSensor"
             tools:ignore="DiscouragedApi">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".Activities.LoginActivity"

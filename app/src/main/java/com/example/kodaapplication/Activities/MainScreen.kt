@@ -1,6 +1,7 @@
 package com.example.kodaapplication.Activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.kodaapplication.Classes.CurrentUser
 import com.example.kodaapplication.Classes.childAdapter
 import com.example.kodaapplication.Classes.childData
@@ -29,6 +31,7 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
     private lateinit var aadapter: childAdapter
     private lateinit var bd: FirebaseFirestore
     private lateinit var sessionManager: SessionManager // para sa parent ID
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -42,6 +45,11 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
 
+        // Initialize SwipeRefreshLayout
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        swipeRefreshLayout.setOnRefreshListener {
+            getChildData() //call to reload data
+        }
         sessionManager = SessionManager(this)// initialize session
 
         childRecyclerView = findViewById(R.id.main_recyclerView)
@@ -50,6 +58,11 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
         childArrayList = arrayListOf()
         aadapter = childAdapter(childArrayList, this)
         childRecyclerView.adapter = aadapter
+
+        val ParentsharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val Parentdeditor = ParentsharedPreferences.edit()
+        Parentdeditor.putBoolean("flowCompletedParent", true)
+        Parentdeditor.apply()
 
         getChildData()
 
@@ -72,6 +85,11 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
                 if (error != null) {
                     Log.e("Firestore Error", error.message.toString())
                     return@addSnapshotListener
+                } else {
+                    // Notify RecyclerView adapter when data is updated
+                    aadapter.notifyDataSetChanged()
+                    // Stop refreshing animation
+                    swipeRefreshLayout.isRefreshing = false
                 }
                 childArrayList.clear()
                 value?.let { snapshot ->
@@ -114,6 +132,12 @@ class mainScreen : AppCompatActivity(), childAdapter.OnItemClickListener {
             // Clear the session and navigate to LoginActivity
             Toast.makeText(this@mainScreen, "Successfully Logged Out", Toast.LENGTH_SHORT).show()
             SessionManager(this).logout()
+
+            val ParentsharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val Parentdeditor = ParentsharedPreferences.edit()
+            Parentdeditor.putBoolean("flowCompletedParent", false)
+            Parentdeditor.apply()
+
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()

@@ -35,6 +35,8 @@ class getChildApps : AppCompatActivity() {
     private fun navigateToChildScreen() {
         val childIdSharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
         val childId = childIdSharedPreferences.getString("childId", null)
+        Log.e("getChildApps", "ID $childId")
+
 
         val intent = Intent(this, Childscreen::class.java)
         startActivity(intent)

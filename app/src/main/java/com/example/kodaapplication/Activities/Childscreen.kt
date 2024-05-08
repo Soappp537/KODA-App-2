@@ -59,7 +59,6 @@ class Childscreen : AppCompatActivity() {
         Log.e("fromGetChildApps", "ID $childId")
 
 
-
         val childId2 = sharedPreferences.getString("childId", "") ?: ""
         Log.d("CHILD ID", childId2)
 
