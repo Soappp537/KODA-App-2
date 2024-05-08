@@ -1,6 +1,5 @@
 package com.example.kodaapplication.Activities
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -182,6 +181,29 @@ class Childscreen : AppCompatActivity() {
     suspend fun containsBlockedKeywords(url: String, firestore: FirebaseFirestore): Boolean {
         var isBlocked = false
         // Fetch data from Firestore
+        val documents = firestore.collection("blocked_Keywords").get().await()
+        for (document in documents) {
+            val words = document["words"] as? List<String> ?: emptyList()
+            val isBlockedInDoc = document.getBoolean("blocked") ?: false
+            if (isBlockedInDoc) {
+                for (word in words) {
+                    if (word.contains("/") && url.contains(word, ignoreCase = true)) {
+                        isBlocked = true
+                        break
+                    } else if (!word.contains("/") && url.contains(word, ignoreCase = true)) {
+                        isBlocked = true
+                        break
+                    }
+                }
+            }
+            if (isBlocked) break
+        }
+        return isBlocked
+    }
+
+    /*suspend fun containsBlockedKeywords(url: String, firestore: FirebaseFirestore): Boolean {
+        var isBlocked = false
+        // Fetch data from Firestore
         firestore.collection("blocked_Keywords")
             .get()
             .addOnSuccessListener { documents ->
@@ -205,5 +227,5 @@ class Childscreen : AppCompatActivity() {
             }
             .await() // Wait for Firestore operation to complete
         return isBlocked
-    }
+    }*/
 }
