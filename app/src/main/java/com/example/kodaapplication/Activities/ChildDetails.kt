@@ -44,17 +44,17 @@ class ChildDetails : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
+        /*val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
         buttonWebFilter.setOnClickListener {
             startActivity(Intent(this, pageForWebFiltering::class.java))
-        }
+        }*/
 
-        val buttonSiteFilter = findViewById<MaterialButton>(R.id.button_SiteFilter)
+       /* val buttonSiteFilter = findViewById<MaterialButton>(R.id.button_SiteFilter)
         buttonSiteFilter.setOnClickListener {
             startActivity(Intent(this, KeywordFiltering::class.java))
         }
 
-
+*/
 
         val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
         deleteChildButton.setOnClickListener {

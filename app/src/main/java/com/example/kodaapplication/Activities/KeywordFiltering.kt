@@ -2,6 +2,7 @@ package com.example.kodaapplication.Activities
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodaapplication.R
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 interface OnToggleClickListener {
@@ -32,6 +34,10 @@ class KeywordFiltering : AppCompatActivity(), OnToggleClickListener { // Impleme
         enableEdgeToEdge()
         setContentView(R.layout.activity_keyword_filtering)
 
+        val urlFilter = findViewById<MaterialButton>(R.id.url_Filtering)
+        urlFilter.setOnClickListener {
+            startActivity(Intent(this, pageForWebFiltering::class.java))
+        }
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("CategoryPreferences", MODE_PRIVATE)
         // Setup RecyclerView

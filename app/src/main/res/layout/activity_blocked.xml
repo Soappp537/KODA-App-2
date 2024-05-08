@@ -1,17 +1,32 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="@color/white">
 
+    <!--<ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_bear_stop"
+        android:layout_gravity="center"
+        android:contentDescription="Guard saying stop"
+        tools:ignore="HardcodedText" />-->
     <TextView
         android:id="@+id/blockedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Blocked"
-        android:textSize="44sp"
+        android:layout_gravity="center"
+        android:text="Sorry, this is blocked by KODA"
+        android:textColor="@color/orange"
+        android:shadowColor="@color/black"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:layout_marginTop="0dp"
         android:textStyle="bold"
+        android:maxWidth="350dp"
         tools:ignore="HardcodedText" />
 
-</LinearLayout>
+</FrameLayout>

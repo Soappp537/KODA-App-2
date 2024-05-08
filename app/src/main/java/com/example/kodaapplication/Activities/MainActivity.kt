@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun navigateToChildScreen() {
         startActivity(Intent(this@MainActivity, Childscreen::class.java))
         finish() // Optionally finish this activity if not needed anymore

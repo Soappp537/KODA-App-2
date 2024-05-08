@@ -75,7 +75,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             tools:ignore="HardcodedText" />
 
-        <com.google.android.material.button.MaterialButton
+        <!--<com.google.android.material.button.MaterialButton
             android:id="@+id/button_WebFilter"
             android:padding="10dp"
             android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
             app:iconPadding="8dp"
             app:rippleColor="@color/rippleColor"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText" />-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_DeviceScheduling"
             android:padding="10dp"
