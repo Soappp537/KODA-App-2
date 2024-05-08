@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kodaapplication.databinding.ActivityAddChildInfoBinding
 import com.google.firebase.Firebase
@@ -40,12 +41,18 @@ class addChildInfo : AppCompatActivity() {
         }
 
     }
-    /*override fun onBackPressed() {
-        super.onBackPressed()
-
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }*/
+    override fun onBackPressed() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Warning")
+            .setMessage("Do you want to cancel adding a child? Any unsaved changes will be discarded.")
+            .setPositiveButton("Yes") { _, _ ->
+                startActivity(Intent(this@addChildInfo, MainActivity::class.java))
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .create()
+        alertDialog.show()
+    }
 
     private fun getParentId(callback: (parentId: String) -> Unit) {
 //        val currentUserId = CurrentUser.loggedInParentId
@@ -99,10 +106,16 @@ class addChildInfo : AppCompatActivity() {
                     editor.putString("childId", childId)
                     editor.apply()
 
-                    Log.e("addChild", "ID $randomId")
-                    Log.e("addChild", "ID $childId")
-                    val intent = Intent(this@addChildInfo, ActivityPermissions::class.java)
-                    setResult(Activity.RESULT_OK, intent)
+                    Log.e("addChildRandom", "ID $randomId")
+                    Log.e("addChildSent", "ID $childId")
+
+                    val ChildsharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                    val Childeditor = ChildsharedPreferences.edit()
+                    Childeditor.putBoolean("flowCompletedChild", true)
+                    Childeditor.apply()
+
+                    val intent = Intent(this@addChildInfo, getChildApps::class.java)
+                    startActivity(intent)
                     finish() // Finish the current activity
                 }
                 .addOnFailureListener {

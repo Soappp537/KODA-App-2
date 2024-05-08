@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,6 +25,7 @@ import com.example.kodaapplication.Receiver.MyDeviceAdminReceiver
 import com.example.kodaapplication.R
 
 
+@Suppress("DEPRECATION")
 class ActivityPermissions : AppCompatActivity() {
     private lateinit var writeSettingsSwitch: Switch
     private lateinit var overlaySwitch: Switch
@@ -46,9 +48,9 @@ class ActivityPermissions : AppCompatActivity() {
 
         appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
 
-        val childIDsharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
-        val childId = childIDsharedPreferences.getString("childId", null)
-        Log.e("ActivityPermission", "ID $childId")
+//        val childIDsharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
+//        val childId = childIDsharedPreferences.getString("childId", null)
+//        Log.e("ActivityPermission", "ID $childId")
 
 //                requestAccessibilityPermission()
 //                requestWriteSettingsPermission()
@@ -140,8 +142,7 @@ class ActivityPermissions : AppCompatActivity() {
                 accessibilitySwitch.isChecked) {
                 // Proceed to next screen
 
-                val intent = Intent(this, getChildApps::class.java)// uncomment after testing
-                intent.putExtra("childId", childId) // uncomment after test
+                val intent = Intent(this, addChildInfo::class.java)// uncomment after testing
                 startActivity(intent)
                 finish()
             } else {
@@ -159,9 +160,16 @@ class ActivityPermissions : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Warning")
+            .setMessage("Are you sure you want to go back to the main screen?")
+            .setPositiveButton("Yes") { _, _ ->
+                startActivity(Intent(this@ActivityPermissions, MainActivity::class.java))
+                super.onBackPressed()
+            }
+            .setNegativeButton("No", null)
+            .create()
+        alertDialog.show()
     }
 
     private fun requestAccessibilityPermission() {

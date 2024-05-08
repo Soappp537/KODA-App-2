@@ -118,5 +118,7 @@ dependencies {
     testImplementation ("com.google.firebase:firebase-firestore:24.0.0")
     testImplementation ("org.easymock:easymock:4.0.2")
 
+    implementation ("com.opencsv:opencsv:5.6")
+
 }
 

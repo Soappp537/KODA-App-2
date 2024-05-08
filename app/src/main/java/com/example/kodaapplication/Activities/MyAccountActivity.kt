@@ -1,11 +1,12 @@
 package com.example.kodaapplication.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kodaapplication.CurrentUser
+import com.example.kodaapplication.Classes.CurrentUser
 import com.example.kodaapplication.R
 import com.example.kodaapplication.databinding.ActivityMyAccountBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -112,6 +113,12 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun logoutAndNavigateToLogin() {
+
+        val ParentsharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val Parentdeditor = ParentsharedPreferences.edit()
+        Parentdeditor.putBoolean("flowCompletedParent", false)
+        Parentdeditor.apply()
+
         session.logout()
         CurrentUser.loggedInParentId = ""
         Toast.makeText(this@MyAccountActivity, "Account successfully logged out", Toast.LENGTH_SHORT).show()
