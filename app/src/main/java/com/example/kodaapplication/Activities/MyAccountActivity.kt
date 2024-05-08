@@ -24,8 +24,15 @@ class MyAccountActivity : AppCompatActivity() {
         session = SessionManager(this)
 
         setupUI()
+        setupWebFilterButton()
         setupLogoutButton()
         setupDeleteButton()
+    }
+
+    private fun setupWebFilterButton() {
+        binding.buttonWebFilter.setOnClickListener {
+            startActivity(Intent(this, KeywordFiltering::class.java))
+        }
     }
 
     private fun setupDeleteButton() {

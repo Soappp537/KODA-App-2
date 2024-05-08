@@ -35,29 +35,30 @@
             tools:ignore="HardcodedText"/>
 
         <!--di ko na ni include to kukulangin sa time-->
-      <!-- <LinearLayout
+       <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="horizontal"
-           android:gravity="center"
+           android:gravity="end"
            android:padding="10dp">
-
-           <TextView
+           <com.google.android.material.button.MaterialButton
+               android:id="@+id/url_Filtering"
+               android:padding="10dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="Select All"
-               android:textSize="20sp"
+               android:text="URL Filtering"
+               android:textSize="15sp"
                android:textStyle="bold"
+               android:textColor="@color/gray"
+               android:backgroundTint="@color/orange"
+               app:strokeWidth="1dp"
+               app:strokeColor="@color/gray"
+               app:cornerRadius="8dp"
+               app:iconPadding="8dp"
+               app:rippleColor="@color/rippleColor"
+               style="@style/Widget.MaterialComponents.Button.TextButton"
                tools:ignore="HardcodedText" />
-
-           <Button
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginStart="170dp"
-               android:backgroundTint="@color/red"
-               android:text="Toggle All"
-               android:textColor="#000000" />
-       </LinearLayout>-->
+       </LinearLayout>
         <!--Line break lang to:-->
         <View
             android:layout_width="match_parent"
