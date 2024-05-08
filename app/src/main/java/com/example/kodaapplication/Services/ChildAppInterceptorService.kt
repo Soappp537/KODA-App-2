@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.example.kodaapplication.Activities.BlockedActivity
+import com.example.kodaapplication.Activities.LockedActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ChildAppInterceptorService : AccessibilityService() {

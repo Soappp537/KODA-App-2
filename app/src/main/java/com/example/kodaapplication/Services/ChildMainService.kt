@@ -77,10 +77,30 @@ class ChildMainService : Service() {
 //            compareInstalledApps()
             fetchCompareApps()
             fetchAppDataFromFirestore()
+            printProfile()
             Log.d("LAP NUMBER", "5 second delay completed")
-            handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(10))
+            handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(2))
         }
         handler.post(runnable)
+    }
+
+    private fun printProfile() {
+        val sharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
+        val childId = sharedPreferences.getString("childId", null)
+        Log.e("CHILD ID", "$childId")
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("ChildAccounts")
+            .whereEqualTo("childId", childId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents.firstOrNull()
+                    val firstName = document?.getString("firstName")
+                    val lastName = document?.getString("lastName")
+                    Log.e("Name", "$firstName, $lastName")
+                }
+            }
     }
 
     private fun createNotificationChannel() {

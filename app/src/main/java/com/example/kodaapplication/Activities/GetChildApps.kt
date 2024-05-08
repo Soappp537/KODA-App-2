@@ -23,13 +23,31 @@ class getChildApps : AppCompatActivity() {
 
         // Get list of installed apps
         val packageManager = packageManager
-        val apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-            .filter { it.flags and ApplicationInfo.FLAG_SYSTEM == 0 }
-            .map { AppItem2(it.loadLabel(packageManager).toString(), it.packageName, false) }
+        val apps = getInstalledApps(packageManager)
 
         // Save list of apps to database
         saveAppsToFirestore(apps)
         navigateToChildScreen()
+    }
+
+    private fun getInstalledApps(packageManager: PackageManager): List<AppItem2> {
+        // Package names of specific apps to include
+        val includedApps = listOf("com.google.android.youtube", "com.android.chrome")
+
+        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+            .filter {
+                // Check if the app is included in the list or is a user-installed app with a launch intent
+                includedApps.contains(it.packageName) ||
+                        (it.flags and ApplicationInfo.FLAG_SYSTEM == 0 && packageManager.getLaunchIntentForPackage(it.packageName) != null)
+            }
+            .map {
+                AppItem2(it.loadLabel(packageManager).toString(), it.packageName, false)
+            }
+    }
+
+    private fun isGoogleApp(packageName: String): Boolean {
+        // Check if the package name belongs to Google apps or not
+        return packageName.startsWith("com.google") || packageName.startsWith("com.android.vending")
     }
 
     private fun navigateToChildScreen() {

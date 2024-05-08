@@ -44,19 +44,17 @@ class AppListActivity : AppCompatActivity() {
         }
     }
 
-    data class AppItem(val label: String, val packageName: String, var locked: Boolean = false)
+    data class AppItem(val label: String, val packageName: String, var isBlocked: Boolean)
 
     interface OnAppItemClickListener {
         fun onAppItemClick(app: AppItem)
     }
 
-    class AppAdapter(
-        private val apps: List<AppItem>,
-        private val onAppItemClickListener: OnAppItemClickListener,
-        private val newChildId: String?
+    inner class AppAdapter(
+        private val apps: List<AppItem>
+    ) : RecyclerView.Adapter<AppAdapter.AppViewHolder>() {
 
-        ) : RecyclerView.Adapter<AppAdapter.AppViewHolder>() {
-        class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val appName: TextView = itemView.findViewById(R.id.app_name)
             val toggleButton: ToggleButton = itemView.findViewById(R.id.toggle_button)
         }
@@ -67,88 +65,31 @@ class AppListActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: AppViewHolder, position: Int) {
-            holder.appName.text = apps[position].label
-            holder.toggleButton.isChecked = apps[position].locked
-            holder.toggleButton.setOnCheckedChangeListener { _, isChecked ->
-                val updatedApp = apps[position].copy(locked = isChecked)
+            val app = apps[position]
+            holder.appName.text = app.label
 
-                if (isChecked) {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "App is being locked",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        holder.itemView.context,
-                        "App is now unlocked",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            holder.toggleButton.isChecked = app.isBlocked
 
-                updateAppInFirestore(updatedApp, newChildId)
+            holder.toggleButton.setOnClickListener {
+                app.isBlocked = holder.toggleButton.isChecked
+                updateAppInFirestore(app)
+                notifyDataSetChanged()
             }
-            holder.itemView.setOnClickListener { onAppItemClickListener.onAppItemClick(apps[position]) }
-        }
 
-        private fun updateAppInFirestore(updatedApp: AppItem, newChildId: String?) {
-            // Reference to your collection
-            val db = FirebaseFirestore.getInstance()
-            val collectionRef = db.collection("ChildAccounts")
-
-            // Construct a query to retrieve documents where childId equals the specified value
-            val query = collectionRef.whereEqualTo("childId", newChildId) // change to newChild after testing
-            // Execute the query
-            Log.d("updateAppInFirestore", "Received newchildId: $newChildId")
-            query.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        // Access the "apps" map within the document
-                        val appsMap = document["apps"] as? Map<String, Map<String, Any>> ?: continue
-
-                        // Iterate over each entry in the "apps" map
-                        for ((appName, appData) in appsMap) {
-                            val packageName = appData["packageName"] as? String ?: ""
-                            if (packageName == updatedApp.packageName) {
-                                val updatedAppData = appData.toMutableMap().apply {
-                                    put("isBlocked", updatedApp.locked)
-                                }
-                                document.reference.update("apps.$appName", updatedAppData)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "FirestoreData",
-                                            "DocumentSnapshot successfully updated!"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w("FirestoreData", "Error updating document", e)
-                                    }
-                                break
-                            }
-                        }
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("FirestoreData", "Error getting documents: ", exception)
-                }
+            holder.itemView.setOnClickListener { onAppItemClick(app) }
         }
 
         override fun getItemCount(): Int = apps.size
     }
 
     private fun fetchAppDataFromFirestore() {
-
         val query = collectionRef.whereEqualTo("childId", newChildId)
-        Log.d("fetchAppDataFrom", "Received newchildId: $newChildId")
 
         query.get()
             .addOnSuccessListener { documents ->
                 val apps = mutableListOf<AppItem>()
                 for (document in documents) {
-
                     val appsMap = document["apps"] as? Map<String, Map<String, Any>> ?: continue
-
-                    // Iterate over each entry in the "apps" map
                     for ((appName, appData) in appsMap) {
                         val label = appData["label"] as? String ?: ""
                         val packageName = appData["packageName"] as? String ?: ""
@@ -156,31 +97,55 @@ class AppListActivity : AppCompatActivity() {
                         apps.add(AppItem(label, packageName, isBlocked))
                     }
                 }
-                updateRecyclerView(apps)
+                appRecyclerView.adapter = AppAdapter(apps)
             }
             .addOnFailureListener { exception ->
                 Log.e("FirestoreData", "Error getting documents: ", exception)
             }
     }
 
-    private fun updateRecyclerView(apps: List<AppItem>) {
-        appRecyclerView.adapter = AppAdapter(apps, object : OnAppItemClickListener {
-            override fun onAppItemClick(app: AppItem) {
-                if (app.locked) {
-                    Toast.makeText(
-                        this@AppListActivity,
-                        "App is locked by KODA App",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        this@AppListActivity,
-                        "You clicked on ${app.label}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+    private fun updateAppInFirestore(updatedApp: AppItem) {
+        val query = collectionRef.whereEqualTo("childId", newChildId)
+        query.get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val appsMap = document["apps"] as? Map<String, Map<String, Any>> ?: continue
+                    for ((appName, appData) in appsMap) {
+                        val packageName = appData["packageName"] as? String ?: ""
+                        if (packageName == updatedApp.packageName) {
+                            val updatedAppData = appData.toMutableMap().apply {
+                                put("isBlocked", updatedApp.isBlocked)
+                            }
+                            document.reference.update("apps.$appName", updatedAppData)
+                                .addOnSuccessListener {
+                                    Log.d("FirestoreData", "DocumentSnapshot successfully updated!")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("FirestoreData", "Error updating document", e)
+                                }
+                            break
+                        }
+                    }
                 }
             }
-        }, newChildId) // Pass newChildId here
+            .addOnFailureListener { exception ->
+                Log.e("FirestoreData", "Error getting documents: ", exception)
+            }
     }
 
+    private fun onAppItemClick(app: AppItem) {
+        if (app.isBlocked) {
+            Toast.makeText(
+                this@AppListActivity,
+                "App is locked by KODA App",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                this@AppListActivity,
+                "You clicked on ${app.label}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 }

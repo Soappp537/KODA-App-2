@@ -119,6 +119,11 @@
             android:exported="false"
             android:label="Blocked Screen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Activities.LockedActivity"
+            android:exported="false"
+            android:label="Locked Screen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <service android:name=".Services.ChildMainService"
             android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"

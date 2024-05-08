@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!--<ImageView
+   <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:src="@drawable/ic_bear_stop"
+        android:src="@drawable/ic_bear_blocked"
         android:layout_gravity="center"
         android:contentDescription="Guard saying stop"
-        tools:ignore="HardcodedText" />-->
+        tools:ignore="HardcodedText" />
     <TextView
         android:id="@+id/blockedTextView"
         android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
         android:shadowRadius="2"
         android:textAlignment="center"
         android:textSize="25sp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="130dp"
         android:textStyle="bold"
         android:maxWidth="350dp"
         tools:ignore="HardcodedText" />
