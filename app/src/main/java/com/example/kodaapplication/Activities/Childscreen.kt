@@ -132,6 +132,7 @@ class Childscreen : AppCompatActivity() {
                                         "This site is blocked by KODA App",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java)) /*ilagay mo lang ito dito*/
                                 }
                             }
                         }
