@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kodaapplication.databinding.ActivitySignupBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +20,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -33,15 +35,20 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        auth = FirebaseAuth.getInstance()
+
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts")
 
+
+
         binding.signupButton.setOnClickListener {
             val signupUsername = binding.getUsername.text.toString()
+            val signupEmail = binding.getEmail.text.toString()
             val signupPassword = binding.getPassword.text.toString()
 
             if (signupUsername.isNotEmpty() && signupPassword.isNotEmpty()) {
-                signupUser(signupUsername,signupPassword)
+                signupUser(signupUsername,signupEmail,signupPassword)
             }else{
                 Toast.makeText(this@SignupActivity, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -66,11 +73,11 @@ class SignupActivity : AppCompatActivity() {
     }
 
 
-    private fun signupUser(username: String, password: String) {
+    private fun signupUser(username: String, email: String, password: String) {
         val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
         val uniqueId = generateRandomString(10)
-
         val lowerCaseUsername = username.lowercase(Locale.getDefault())
+        val eemail = email
 
         usersCollection.whereEqualTo("username", lowerCaseUsername)
             .get()
@@ -79,6 +86,7 @@ class SignupActivity : AppCompatActivity() {
                     val userData = mapOf(
                         "id" to uniqueId,
                         "username" to lowerCaseUsername, // Save the lowercase username to the database
+                        "email" to eemail, // Save the lowercase username to the database
                         "password" to password
                     )
                     usersCollection.document(uniqueId)
