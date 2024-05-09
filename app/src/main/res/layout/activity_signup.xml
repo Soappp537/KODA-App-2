@@ -1,114 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="26dp"
     tools:context=".Activities.SignupActivity">
 
+    <!-- Titld -->
     <TextView
         android:id="@+id/signup_title"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="164dp"
-        android:layout_marginEnd="85dp"
-        android:ems="10"
         android:fontFamily="@font/architects_daughter_font"
         android:gravity="center"
-        android:inputType="text"
-        android:minHeight="48dp"
         android:text="Signup"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.575"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="50sp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayout_username"
-        android:layout_width="300dp"
+    <!-- Input Fields -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_title">
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginTop="38dp">
 
-        <EditText
-            android:id="@+id/get_username"
-            android:layout_width="300dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayout_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/get_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="enter username"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                tools:ignore="HardcodedText" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayout_email"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20sp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/get_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="enter email"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                tools:ignore="HardcodedText,TextFields" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayout_password"
+            android:layout_marginTop="20sp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="enter username"
-            android:textColorHint="@color/black"
-            android:inputType="text"
-            android:minHeight="48dp"
-            android:padding="12dp"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/get_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="enter password"
+                android:textColorHint="@color/black"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="@color/orange"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/gray"
+            android:text="Signup"
+            android:textColor="@color/gray"
+            android:textSize="17.5sp"
+            android:textStyle="bold"
+            app:cornerRadius="10sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_title" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/inputLayout_password2"
+            tools:ignore="HardcodedText" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputLayout_password"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayout_username"
-        app:passwordToggleEnabled="true">
-
-        <EditText
-            android:id="@+id/get_password"
-            android:layout_width="300dp"
+        <!-- Login Redirect -->
+        <TextView
+            android:id="@+id/login_redirect"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="enter password"
-            android:textColorHint="@color/black"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:padding="12dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="Already registered? Login"
+            android:textSize="17sp"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/signup_button"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/orange"
-        android:text="Signup"
-        android:textColor="@color/gray"
-        app:cornerRadius="10sp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/gray"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayout_password" />
-
-    <TextView
-        android:id="@+id/login_redirect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="Already registered? Login"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.50"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_button" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
