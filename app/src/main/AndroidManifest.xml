@@ -39,9 +39,6 @@
         <activity
             android:name=".Activities.KeywordFiltering"
             android:exported="false" />
-         <activity
-            android:name=".Activities.ViewingOfBlockedSites"
-            android:exported="false" />
         <activity
             android:name=".Activities.ActivityPermissions"
             android:exported="true"> <!-- false to true ung login -->
