@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ViewingOfBlockedSites">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activities.ViewingOfBlockedSites">
+        <!-- Your existing layout content here -->
+        <TextView
+            android:id="@+id/text_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blocked Sites"
+            android:paddingTop="@dimen/text_size_20sp"
+            android:textStyle="bold"
+            android:textColor="@color/orange"
+            android:textSize="40sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            tools:ignore="HardcodedText" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_blocked_sites"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/text_header"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_blocked_site" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_gravity="center"
+        android:background="#9A736F6F"
+        app:layout_constraintTop_toBottomOf="@id/text_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />-->
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
