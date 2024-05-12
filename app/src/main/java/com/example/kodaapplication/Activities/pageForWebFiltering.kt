@@ -37,9 +37,9 @@ class pageForWebFiltering : AppCompatActivity() {
         firebaseFirestore = FirebaseFirestore.getInstance()
 
         blockSiteButton = findViewById(R.id.block_button)
-        unBlockSiteButton = findViewById(R.id.Unblock_button)
         editTextBlockSite = findViewById(R.id.block_site)
-        editTextUnblockSite = findViewById(R.id.unblock_site)
+        /*unBlockSiteButton = findViewById(R.id.Unblock_button)*/
+        /*editTextUnblockSite = findViewById(R.id.unblock_site)*/
 
         blockSiteButton.setOnClickListener {
             val siteToBlock = editTextBlockSite.text.toString()
@@ -50,13 +50,19 @@ class pageForWebFiltering : AppCompatActivity() {
             }
         }
 
-        unBlockSiteButton.setOnClickListener {
+        /*unBlockSiteButton.setOnClickListener {
             val siteToUnblock = editTextUnblockSite.text.toString()
             if (siteToUnblock.isNotEmpty()) {
                 unblockSite(siteToUnblock)
             } else {
                 Toast.makeText(this, "Please enter a site to unblock", Toast.LENGTH_SHORT).show()
             }
+        }*/
+
+        val seeBlockedSites = findViewById<Button>(R.id.see_BlockedSites)
+        seeBlockedSites.setOnClickListener {
+            startActivity(Intent(this@pageForWebFiltering, ViewingOfBlockedSites::class.java))
+            finish()
         }
 
         /*DI NA NEED ITO*/
@@ -114,7 +120,7 @@ class pageForWebFiltering : AppCompatActivity() {
         }
     }
 
-    fun unblockSite(url: String) {
+    /*fun unblockSite(url: String) {
         val site = Uri.parse(url).host
         if (site != null) {
             val docRef = firebaseFirestore.collection("blocked_Sites").document(site)
@@ -123,5 +129,5 @@ class pageForWebFiltering : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Invalid URL", Toast.LENGTH_SHORT).show()
         }
-    }
+    }*/
 }
