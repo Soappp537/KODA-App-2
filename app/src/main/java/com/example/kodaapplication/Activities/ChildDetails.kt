@@ -43,6 +43,21 @@ class ChildDetails : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        val buttonScreenTime = findViewById<MaterialButton>(R.id.button_screentime)
+        buttonScreenTime.setOnClickListener {
+            //tinest ko lang tu papalitan ko pa nyan para sa screentime management
+            val intent = Intent(this, AppListActivity::class.java).apply {
+                putExtra("newchildId", childId)
+            }
+            startActivity(intent)
+        }
+        val schedDeviceButton = findViewById<MaterialButton>(R.id.button_DeviceScheduling)
+        schedDeviceButton.setOnClickListener {
+            val intent = Intent(this, DeviceSchedulingActivity::class.java).apply {
+                putExtra("childId", childId)
+            }
+            startActivity(intent)
+        }
 
         /*val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
         buttonWebFilter.setOnClickListener {
@@ -108,6 +123,7 @@ class ChildDetails : AppCompatActivity() {
                     val document = querySnapshot.documents.first()
                     document.reference.delete()
                         .addOnSuccessListener {
+                           /* unregisterReceiverForChildAccount()*/ // Unregister the receiver
                             Log.d("ChildDetails", "Child account deleted successfully")
                             val intent = Intent(this@ChildDetails, mainScreen::class.java)
                             startActivity(intent)
@@ -127,4 +143,15 @@ class ChildDetails : AppCompatActivity() {
                 Toast.makeText(this@ChildDetails, "Failed to fetch child account", Toast.LENGTH_SHORT).show()
             }
     }
+
+    /*wala lang to may ni try lang ako, pag nag delete ng child, matatangaal ung ung pagka
+    'on' nung sa device admin aps*/
+    /*private fun unregisterReceiverForChildAccount() {
+        val devicePolicyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val componentName = ComponentName(this, MyDeviceAdminReceiver::class.java)
+        if (devicePolicyManager.isAdminActive(componentName)) {
+            devicePolicyManager.removeActiveAdmin(componentName)
+        }
+    }*/
+
 }
