@@ -41,21 +41,27 @@
                 tools:ignore="HardcodedText" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayout_email"
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="20sp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/get_email"
+            android:layout_gravity="center_vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayout_email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="enter email"
-                android:textColorHint="@color/black"
-                android:inputType="text"
-                tools:ignore="HardcodedText,TextFields" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/get_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="enter email"
+                    android:textColorHint="@color/black"
+                    android:inputType="text"
+                    tools:ignore="HardcodedText,TextFields" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputLayout_password"
             android:layout_marginTop="20sp"
@@ -68,6 +74,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="enter password"
+                android:textColorHint="@color/black"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayout_confPassword"
+            android:layout_marginTop="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/get_confPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="confirm password"
                 android:textColorHint="@color/black"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -103,5 +124,4 @@
             android:textSize="17sp"
             tools:ignore="HardcodedText" />
     </LinearLayout>
-
 </LinearLayout>
