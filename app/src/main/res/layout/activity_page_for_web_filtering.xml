@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".Activities.pageForWebFiltering">
-
+<!--sd-->
     <!-- Filter a word section
     <TextView
         android:layout_width="wrap_content"
@@ -68,14 +68,15 @@
         android:id="@+id/block_site"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Enter a site to block"
         android:inputType="textUri"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:minHeight="48dp"
+        android:padding="13dp"
         tools:ignore="HardcodedText" />
 
     <Button
@@ -92,18 +93,21 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         tools:ignore="HardcodedText" />
-    <EditText
+
+<!--    nicomment out ko muna ito-->
+    <!--<EditText
         android:id="@+id/unblock_site"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Enter a site to unblock"
         android:inputType="textUri"
-        android:background="@drawable/edit_text_background"
+        android:minHeight="48dp"
         android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         tools:ignore="HardcodedText" />
     <Button
         android:id="@+id/Unblock_button"
@@ -118,6 +122,22 @@
         android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText" />-->
 
+    <Button
+        android:id="@+id/see_BlockedSites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Blocked \nSites"
+        android:textColor="@color/gray"
+        android:backgroundTint="@color/orange"
+        app:strokeWidth="1dp"
+        android:textStyle="bold"
+        app:strokeColor="@color/gray"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        tools:ignore="HardcodedText" />
 </LinearLayout>
