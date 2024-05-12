@@ -3,6 +3,7 @@ package com.example.kodaapplication.Activities
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -51,6 +52,7 @@ class Childscreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_homescreen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         // Save the childId to SharedPreferences before starting the services
         val sharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
@@ -109,7 +111,7 @@ class Childscreen : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val isBlocked = containsBlockedKeywords(preprocessedUrl, firebaseFirestore)
-                    if (predictedLabel == 1 || isBlocked) {
+                    if (predictedLabel == 1 || isBlocked || isGoogleImagesUrl(url)) {
                         // matic blocked or detected keyword from database
                         startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                     } else {
@@ -138,6 +140,11 @@ class Childscreen : AppCompatActivity() {
                     }
                 }
                 return true
+            }
+
+            /*eto dapat ung magbloblock nung 'images' tab sa webview*/
+            private fun isGoogleImagesUrl(url: String): Boolean {
+                return url.startsWith("https://www.google.com/search") && url.contains("tbm=isch")
             }
         }
     }
@@ -193,6 +200,7 @@ class Childscreen : AppCompatActivity() {
                     } else if (!word.contains("/") && url.contains(word, ignoreCase = true)) {
                         isBlocked = true
                         break
+                        //test lang naman
                     }
                 }
             }
@@ -200,7 +208,6 @@ class Childscreen : AppCompatActivity() {
         }
         return isBlocked
     }
-
     /*suspend fun containsBlockedKeywords(url: String, firestore: FirebaseFirestore): Boolean {
         var isBlocked = false
         // Fetch data from Firestore
