@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".Activities.KeywordFiltering">
-<!--wag muna ito iinclude since nasa db na sya-->
+    <!--wag muna ito iinclude since nasa db na sya-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,11 +18,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" KEYWORD\n FILTERING"
+            android:text=" URL\n CLASSIFICATION"
             android:paddingTop="@dimen/text_size_20sp"
             android:textStyle="bold"
             android:textColor="@color/orange"
-            android:textSize="42sp"
+            android:textSize="40sp"
             android:layout_margin="10dp"
             tools:ignore="HardcodedText" />
 
@@ -35,30 +35,30 @@
             tools:ignore="HardcodedText"/>
 
         <!--di ko na ni include to kukulangin sa time-->
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:gravity="end"
-           android:padding="10dp">
-           <com.google.android.material.button.MaterialButton
-               android:id="@+id/url_Filtering"
-               android:padding="10dp"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="URL Filtering"
-               android:textSize="15sp"
-               android:textStyle="bold"
-               android:textColor="@color/gray"
-               android:backgroundTint="@color/orange"
-               app:strokeWidth="1dp"
-               app:strokeColor="@color/gray"
-               app:cornerRadius="8dp"
-               app:iconPadding="8dp"
-               app:rippleColor="@color/rippleColor"
-               style="@style/Widget.MaterialComponents.Button.TextButton"
-               tools:ignore="HardcodedText" />
-       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:padding="10dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/url_Filtering"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="URL Filtering"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray"
+                android:backgroundTint="@color/orange"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/gray"
+                app:cornerRadius="8dp"
+                app:iconPadding="8dp"
+                app:rippleColor="@color/rippleColor"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
         <!--Line break lang to:-->
         <View
             android:layout_width="match_parent"
