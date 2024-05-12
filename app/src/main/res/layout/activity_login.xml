@@ -9,7 +9,7 @@
     android:focusableInTouchMode="true"
     tools:context=".Activities.LoginActivity"
     tools:layout_editor_absoluteX="2dp"
-    android:layout_gravity="center"
+    android:gravity="center_vertical"
     tools:layout_editor_absoluteY="-38dp">
 
     <TextView
@@ -27,7 +27,7 @@
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
-<!--this is a test comment-->
+    <!--this is a test comment-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout_email"
         android:layout_width="300dp"
@@ -38,13 +38,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title">
 
+        <!-- android:id="@+id/login_username" (eto ung orig)-->
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_username"
+            android:id="@+id/login_email"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="36dp"
             android:ems="10"
-            android:hint="enter username"
+            android:hint="enter email"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="12dp"
@@ -115,7 +116,7 @@
         android:id="@+id/imageView"
         android:layout_width="192dp"
         android:layout_height="163dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="12dp"
         android:foregroundGravity="center"
         android:src="@drawable/koda_logo2"
         app:layout_constraintEnd_toEndOf="parent"
