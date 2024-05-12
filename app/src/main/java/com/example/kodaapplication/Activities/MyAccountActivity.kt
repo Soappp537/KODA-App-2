@@ -40,7 +40,7 @@ class MyAccountActivity : AppCompatActivity() {
             showDeleteDialog()
         }
     }
-
+/*sd*/
     private fun showDeleteDialog() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.setTitle(R.string.delete_account)
@@ -55,38 +55,30 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun deleteParentAndAssociatedChildAccounts() {
+        /*mahirap na magdelete nung sa parent account kasi authentication na ung gamit natin*/
         val parentId = session.getParentId()
         val firestore = FirebaseFirestore.getInstance()
 
-        // Delete parent account
-        firestore.collection("ParentAccounts").document(parentId)
-            .delete()
-            .addOnSuccessListener {
-                // Delete associated child accounts
-                firestore.collection("ChildAccounts").whereEqualTo("parentId", parentId)
-                    .get()
-                    .addOnSuccessListener { querySnapshot ->
-                        val batch = firestore.batch()
-                        for (document in querySnapshot.documents) {
-                            batch.delete(document.reference)
-                        }
-                        batch.commit()
-                            .addOnSuccessListener {
-                                // Logout and navigate to login
-                                logoutAndNavigateToLogin()
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(
-                                    this@MyAccountActivity,
-                                    "Failed to delete child accounts: ${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+        // Delete associated child accounts
+        firestore.collection("ChildAccounts").whereEqualTo("parentId", parentId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot.documents) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this@MyAccountActivity,
+                            "Associated child accounts deleted successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(
                             this@MyAccountActivity,
-                            "Failed to fetch child accounts: ${e.message}",
+                            "Failed to delete associated child accounts: ${e.message}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -94,7 +86,7 @@ class MyAccountActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Toast.makeText(
                     this@MyAccountActivity,
-                    "Failed to delete parent account: ${e.message}",
+                    "Failed to fetch associated child accounts: ${e.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -120,7 +112,6 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun logoutAndNavigateToLogin() {
-
         val ParentsharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val Parentdeditor = ParentsharedPreferences.edit()
         Parentdeditor.putBoolean("flowCompletedParent", false)
@@ -142,12 +133,13 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        val username = session.getUsername()
-        val parentId = session.getParentId()
+        val username = session.getParentName()
+        val parentEmail = session.getParentId()
 
-        binding.usernameTextview.text = getString(R.string.username_format, username)
-        binding.idTextview.text = getString(R.string.id_format, parentId)
+        binding.usernameTextview.text = getString(R.string.parent_name, username)
+        binding.idTextview.text = getString(R.string.id_format, parentEmail)
 
         binding.initialsTextview.text = (username.firstOrNull()?.uppercaseChar() ?: "").toString()
     }
+
 }
