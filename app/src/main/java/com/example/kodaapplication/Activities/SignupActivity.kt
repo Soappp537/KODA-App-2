@@ -20,7 +20,10 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference /*required to create connection to the db*/
-    private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseauth: FirebaseAuth
+    // Declare authStateListener as a member variable
+    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -35,24 +38,86 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
+        firebaseauth = FirebaseAuth.getInstance()
 
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.reference.child("parentAccounts")
 
-
-
         binding.signupButton.setOnClickListener {
+            /*bale after mag signup or gumawa nung parent, mareredirect sa login page tas ichecheck ni parent
+            sa gmail nya ung verification email*/
             val signupUsername = binding.getUsername.text.toString()
             val signupEmail = binding.getEmail.text.toString()
             val signupPassword = binding.getPassword.text.toString()
+            val signupConfirmPassword = binding.getConfPassword.text.toString()
 
-            if (signupUsername.isNotEmpty() && signupPassword.isNotEmpty()) {
+            if (signupUsername.isNotEmpty() && signupEmail.isNotEmpty() && signupPassword.isNotEmpty() && signupConfirmPassword.isNotEmpty()) {
+                if (signupPassword.length < 6) {
+                    Toast.makeText(this@SignupActivity, "Password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
+                } else if (signupPassword == signupConfirmPassword) {
+                    firebaseauth.createUserWithEmailAndPassword(signupEmail, signupPassword).addOnCompleteListener { createTask ->
+                        if (createTask.isSuccessful) {
+                            val user = firebaseauth.currentUser
+                            user?.sendEmailVerification()?.addOnCompleteListener { emailTask ->
+                                if (emailTask.isSuccessful) {
+                                    // Email sent, update UI accordingly
+                                    Toast.makeText(this@SignupActivity, "Verification email sent, please check your inbox or spam folder.", Toast.LENGTH_SHORT).show()
+
+                                    // Add the user to "ParentAccounts"
+                                    val uniqueId = user?.uid ?: ""
+                                    val lowerCaseUsername = signupUsername.lowercase(Locale.getDefault())
+
+                                    val userData = mapOf(
+                                        "id" to uniqueId,
+                                        "username" to lowerCaseUsername,
+                                        "email" to signupEmail,
+                                        "password" to signupPassword
+                                    )
+                                    val usersCollection = FirebaseFirestore.getInstance().collection("ParentAccounts")
+                                    usersCollection.document(uniqueId).set(userData)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                this@SignupActivity,
+                                                "Account created successfully",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            val intent = Intent(this, LoginActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Toast.makeText(
+                                                this@SignupActivity,
+                                                "Failed to create account: ${e.message}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                } else {
+                                    // Email not sent, display an error message
+                                    Toast.makeText(this@SignupActivity, "Failed to send verification email: ${emailTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            // Handle Firebase authentication failure
+                            Toast.makeText(this@SignupActivity, "Failed to create account: ${createTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(this@SignupActivity, "Password does not match", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this@SignupActivity, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
+            }
+
+            /*if (signupUsername.isNotEmpty() && signupPassword.isNotEmpty()) {
                 signupUser(signupUsername,signupEmail,signupPassword)
             }else{
                 Toast.makeText(this@SignupActivity, "Please fill all fields", Toast.LENGTH_SHORT).show()
-            }
+            }*/
         }
+
+
 
         binding.loginRedirect.setOnClickListener {
             startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
