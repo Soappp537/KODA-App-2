@@ -33,9 +33,8 @@
         android:layout_below="@id/buttonImmediateLock"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
-
-
-
+    
+    <!--di ko pa nalagyan ng function to-->
     <Button
         android:id="@+id/buttonSetTime"
         android:layout_width="wrap_content"
@@ -44,5 +43,4 @@
         android:layout_below="@id/buttonUnlock"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
-
 </RelativeLayout>
