@@ -1,10 +1,13 @@
 package com.example.kodaapplication.Activities
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
@@ -16,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodaapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Timer
+import java.util.TimerTask
 
 class AppListActivity : AppCompatActivity() {
 
@@ -57,6 +62,7 @@ class AppListActivity : AppCompatActivity() {
         inner class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val appName: TextView = itemView.findViewById(R.id.app_name)
             val toggleButton: ToggleButton = itemView.findViewById(R.id.toggle_button)
+            val setTimeButton: Button = itemView.findViewById(R.id.set_TimeButton)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
@@ -75,8 +81,61 @@ class AppListActivity : AppCompatActivity() {
                 updateAppInFirestore(app)
                 notifyDataSetChanged()
             }
+            holder.setTimeButton.setOnClickListener {
+                val dialog = Dialog(holder.itemView.context)
+                dialog.setContentView(R.layout.timer_dialog)
+
+                val setTimerButton = dialog.findViewById<Button>(R.id.set_timer_button)
+                val hoursEditText = dialog.findViewById<EditText>(R.id.timer_edit_textHours)
+                val minutesEditText = dialog.findViewById<EditText>(R.id.timer_edit_textMinutes)
+                val secondsEditText = dialog.findViewById<EditText>(R.id.timer_edit_textSeconds)
+
+                setTimerButton.setOnClickListener {
+                    val hours = hoursEditText.text.toString().toIntOrNull() ?: 0
+                    val minutes = minutesEditText.text.toString().toIntOrNull() ?: 0
+                    val seconds = secondsEditText.text.toString().toIntOrNull() ?: 0
+
+                    val totalSeconds = hours * 3600 + minutes * 60 + seconds
+
+                    if (totalSeconds > 0) {
+                        // Start the timer for the app
+                        startTimerForApp(app, totalSeconds)
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(
+                            holder.itemView.context,
+                            "Please enter a valid timer value",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                dialog.show()
+            }
 
             holder.itemView.setOnClickListener { onAppItemClick(app) }
+        }
+
+        private fun startTimerForApp(app: AppItem, totalSeconds: Int) {
+            // Start a timer for the app
+            val timer = Timer()
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    app.isBlocked = true
+                    updateAppInFirestore(app)
+                    runOnUiThread {
+                        notifyDataSetChanged()
+                        val hours = totalSeconds / 3600
+                        val minutes = (totalSeconds % 3600) / 60
+                        val seconds = totalSeconds % 60
+                        Toast.makeText(
+                            this@AppListActivity,
+                            "${app.label} has been blocked after $hours hour(s), $minutes minute(s), and $seconds second(s)",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }, totalSeconds * 1000L)
+            
         }
 
         override fun getItemCount(): Int = apps.size
