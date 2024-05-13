@@ -43,22 +43,13 @@ class ChildDetails : AppCompatActivity() {
             }
             startActivity(intent)
         }
-        val buttonScreenTime = findViewById<MaterialButton>(R.id.button_screentime)
-        buttonScreenTime.setOnClickListener {
-            //tinest ko lang tu papalitan ko pa nyan para sa screentime management
-            val intent = Intent(this, AppListActivity::class.java).apply {
-                putExtra("newchildId", childId)
-            }
-            startActivity(intent)
-        }
-        val schedDeviceButton = findViewById<MaterialButton>(R.id.button_DeviceScheduling)
-        schedDeviceButton.setOnClickListener {
+        val screenManagementButton = findViewById<MaterialButton>(R.id.button_ScreenManagement)
+        screenManagementButton.setOnClickListener {
             val intent = Intent(this, DeviceSchedulingActivity::class.java).apply {
                 putExtra("childId", childId)
             }
             startActivity(intent)
         }
-
         /*val buttonWebFilter = findViewById<MaterialButton>(R.id.button_WebFilter)
         buttonWebFilter.setOnClickListener {
             startActivity(Intent(this, pageForWebFiltering::class.java))
@@ -67,10 +58,7 @@ class ChildDetails : AppCompatActivity() {
        /* val buttonSiteFilter = findViewById<MaterialButton>(R.id.button_SiteFilter)
         buttonSiteFilter.setOnClickListener {
             startActivity(Intent(this, KeywordFiltering::class.java))
-        }
-
-*/
-
+        }*/
         val deleteChildButton = findViewById<MaterialButton>(R.id.delete_child)
         deleteChildButton.setOnClickListener {
             val childId = intent.getStringExtra("childId")
