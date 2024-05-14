@@ -3,7 +3,6 @@ package com.example.kodaapplication.Activities
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -35,7 +34,8 @@ lateinit var interpreter: Interpreter
 var preprocessedUrl: String = ""
 var finalText: String = ""
 // Define the maximum length for padding
-var maxLength = 130 //base sa model
+//var maxLength = 130 //base sa model
+var maxLength = 122 // base sa second model
 lateinit var tokens: List<Int>
 lateinit var paddedSequence: IntArray
 
@@ -52,7 +52,6 @@ class Childscreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_homescreen)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         // Save the childId to SharedPreferences before starting the services
         val sharedPreferences = getSharedPreferences("ChildIdPrefs", Context.MODE_PRIVATE)
@@ -74,10 +73,10 @@ class Childscreen : AppCompatActivity() {
 
         firebaseFirestore = FirebaseFirestore.getInstance()
         // Load the TensorFlow Lite model
-        interpreter = loadModel(this, "LSTM_Model.tflite")
+        interpreter = loadModel(this, "LSTM_Model_II.tflite")
 
         // Load word-index mappings from word_dict.json
-        wordIndexMap = loadWordIndexMap(this, "word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
+        wordIndexMap = loadWordIndexMap(this, "latest_word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
 
         webView = findViewById(R.id.theWebView)
         val webSettings: WebSettings = webView.settings
@@ -111,7 +110,7 @@ class Childscreen : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     val isBlocked = containsBlockedKeywords(preprocessedUrl, firebaseFirestore)
-                    if (predictedLabel == 1 || isBlocked || isGoogleImagesUrl(url)) {
+                    if (predictedLabel == 1 || isBlocked) {
                         // matic blocked or detected keyword from database
                         startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                     } else {
@@ -140,11 +139,6 @@ class Childscreen : AppCompatActivity() {
                     }
                 }
                 return true
-            }
-
-            /*eto dapat ung magbloblock nung 'images' tab sa webview*/
-            private fun isGoogleImagesUrl(url: String): Boolean {
-                return url.startsWith("https://www.google.com/search") && url.contains("tbm=isch")
             }
         }
     }
@@ -200,7 +194,6 @@ class Childscreen : AppCompatActivity() {
                     } else if (!word.contains("/") && url.contains(word, ignoreCase = true)) {
                         isBlocked = true
                         break
-                        //test lang naman
                     }
                 }
             }
@@ -208,6 +201,7 @@ class Childscreen : AppCompatActivity() {
         }
         return isBlocked
     }
+
     /*suspend fun containsBlockedKeywords(url: String, firestore: FirebaseFirestore): Boolean {
         var isBlocked = false
         // Fetch data from Firestore

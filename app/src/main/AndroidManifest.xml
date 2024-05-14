@@ -7,26 +7,25 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.QUERY_USAGE_STATS" />
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission
-        android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" /> <!-- Test Foreground permissions -->
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Test Foreground permissions   -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN"
-        tools:ignore="ProtectedPermissions" />
-    
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <!--<uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+        tools:ignore="ProtectedPermissions" />-->
+    <!-- Test ends   -->
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -38,13 +37,7 @@
         android:theme="@style/Theme.KODAApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.DeviceSchedulingActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.KeywordFiltering"
-            android:exported="false" />
-        <activity
-            android:name=".Activities.ViewingOfBlockedSites"
             android:exported="false" />
         <activity
             android:name=".Activities.ActivityPermissions"
@@ -65,7 +58,6 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
             </intent-filter>
         </receiver>
-
         <activity
             android:name=".Activities.getChildApps"
             android:exported="false">
@@ -97,25 +89,23 @@
             android:exported="false" />
         <activity
             android:name=".Activities.Childscreen"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_Child_homescreen"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="fullSensor"
             tools:ignore="DiscouragedApi">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".Activities.SignupActivity"
@@ -129,18 +119,15 @@
             android:exported="false"
             android:label="Blocked Screen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <!--
-  <activity
+        <activity
             android:name=".Activities.LockedActivity"
             android:exported="false"
             android:label="Locked Screen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        -->
-        <service
-            android:name=".Services.ChildMainService"
-            android:exported="true"
+        <service android:name=".Services.ChildMainService"
             android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true"
             tools:ignore="ForegroundServicePermission">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -148,12 +135,11 @@
         </service>
         <service
             android:name=".Services.ChildAppInterceptorService"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
-
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
