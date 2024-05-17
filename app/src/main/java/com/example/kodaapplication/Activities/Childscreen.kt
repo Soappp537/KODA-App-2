@@ -34,8 +34,8 @@ lateinit var interpreter: Interpreter
 var preprocessedUrl: String = ""
 var finalText: String = ""
 // Define the maximum length for padding
-//var maxLength = 130 //base sa model
-var maxLength = 122 // base sa second model
+var maxLength = 112 //base sa model
+//var maxLength = 122 // base sa second model
 lateinit var tokens: List<Int>
 lateinit var paddedSequence: IntArray
 
@@ -73,10 +73,10 @@ class Childscreen : AppCompatActivity() {
 
         firebaseFirestore = FirebaseFirestore.getInstance()
         // Load the TensorFlow Lite model
-        interpreter = loadModel(this, "LSTM_Model_II.tflite")
+        interpreter = loadModel(this, "New_LSTM_Model.tflite")
 
-        // Load word-index mappings from word_dict.json
-        wordIndexMap = loadWordIndexMap(this, "latest_word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
+        // Load word-index mappings frFom word_dict.json
+        wordIndexMap = loadWordIndexMap(this, "tokenized_word_dict.json") //dictionary ng words with tokens ex. fuck : 4;
 
         webView = findViewById(R.id.theWebView)
         val webSettings: WebSettings = webView.settings
@@ -85,19 +85,25 @@ class Childscreen : AppCompatActivity() {
         webView.loadUrl("https://www.google.com")
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val url = request?.url?.toString() ?: "" // url input
-                preprocessedUrl = preprocessText(url) // preprocess
-                // leet speak
+                val url = request?.url?.toString() ?: ""
+                processUrl(url, view)
+                return true
+            }
+        }
+    }
+
+    fun processUrl(url: String, view: WebView?) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                preprocessedUrl = preprocessText(url) // preprocess the URL
                 finalText = translateLeetToNormal(preprocessedUrl)
-
                 val normalText = normalizeText(finalText)
-                Log.d("FILTERING LOGIC","SUCCESSFUL RUN")
-                Log.d("text:", url.toString())
-                Log.d("preprocessed text:", preprocessedUrl.toString())
-                Log.d("Final text:", finalText.toString())
-                Log.d("Normalized:", normalText.toString())
+                Log.d("FILTERING LOGIC", "SUCCESSFUL RUN")
+                Log.d("text:", url)
+                Log.d("preprocessed text:", preprocessedUrl)
+                Log.d("Final text:", finalText)
+                Log.d("Normalized:", normalText)
 
-                //asa kabila mga functions for this
                 val paddedSequence = TfLiteModel.cleanUrl(finalText, maxLength)
                 val predictedLabel = TfLiteModel.modelInference(
                     finalText,
@@ -108,40 +114,37 @@ class Childscreen : AppCompatActivity() {
                 )
                 Log.d("Predicted Label:", predictedLabel.toString())
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val isBlocked = containsBlockedKeywords(preprocessedUrl, firebaseFirestore)
-                    if (predictedLabel == 1 || isBlocked) {
-                        // matic blocked or detected keyword from database
-                        startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                val isBlocked = containsBlockedKeywords(preprocessedUrl, firebaseFirestore)
+                if (predictedLabel == 1 || isBlocked) {
+                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
+                } else {
+                    if (url.startsWith("https://www.google.com/")) {
+                        view?.loadUrl(url)
                     } else {
-                        if (url.startsWith("https://www.google.com/")) {
-                            // Allow Google search page to load
-                            view?.loadUrl(url)
-                        } else {
-                            // Check if the site is blocked
-                            isSiteBlocked(url) { isBlocked ->
-                                if (!isBlocked) {
-                                    view?.clearCache(true) // Clear the WebView cache
-                                    view?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE
-                                    view?.settings?.domStorageEnabled = false
-                                    view?.clearHistory()
-                                    view?.loadUrl(url)
-                                } else {
-                                    Toast.makeText(
-                                        this@Childscreen,
-                                        "This site is blocked by KODA App",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    startActivity(Intent(this@Childscreen, BlockedActivity::class.java)) /*ilagay mo lang ito dito*/
-                                }
+                        isSiteBlocked(url) { isBlocked ->
+                            if (!isBlocked) {
+                                view?.clearCache(true)
+                                view?.settings?.cacheMode = WebSettings.LOAD_NO_CACHE
+                                view?.settings?.domStorageEnabled = false
+                                view?.clearHistory()
+                                view?.loadUrl(url)
+                            } else {
+                                Toast.makeText(
+                                    this@Childscreen,
+                                    "This site is blocked by KODA App",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                startActivity(Intent(this@Childscreen, BlockedActivity::class.java))
                             }
                         }
                     }
                 }
-                return true
+            } catch (e: Exception) {
+                Log.e("processUrl", "Error processing URL: $url", e)
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         // Reset the flag when the activity is resumed
