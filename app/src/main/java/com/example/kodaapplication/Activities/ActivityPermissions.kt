@@ -21,8 +21,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.kodaapplication.Receiver.MyDeviceAdminReceiver
 import com.example.kodaapplication.R
+import com.example.kodaapplication.Receiver.MyDeviceAdminReceiver
 
 
 @Suppress("DEPRECATION")
