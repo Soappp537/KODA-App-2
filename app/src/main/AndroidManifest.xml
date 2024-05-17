@@ -94,18 +94,18 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="fullSensor"
             tools:ignore="DiscouragedApi">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Activities.SignupActivity"
@@ -119,11 +119,11 @@
             android:exported="false"
             android:label="Blocked Screen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
+        <!--<activity
             android:name=".Activities.LockedActivity"
             android:exported="false"
             android:label="Locked Screen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
         <service android:name=".Services.ChildMainService"
             android:foregroundServiceType="specialUse"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
