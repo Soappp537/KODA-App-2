@@ -1,9 +1,9 @@
 package com.example.kodaapplication.Classes
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.util.Patterns
-import com.example.kodaapplication.Activities.finalText
 import com.example.kodaapplication.Activities.wordIndexMap
 import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
@@ -53,31 +53,64 @@ class TfLiteModel {
         }
 
         fun preprocessText(text: String): String {
-            if (Patterns.WEB_URL.matcher(text).matches()) {
-                return preprocessUrl(text)
+            Log.d("Preprocess", "Original text: $text")
+            val result = if (Patterns.WEB_URL.matcher(text).matches()) {
+                preprocessUrl(text)
+            } else {
+                var processedText = text.toLowerCase()
+                processedText = processedText.replace("[^a-zA-Z\\s]".toRegex(), "")
+
+                val tokens: List<String> = processedText.split("\\s+".toRegex()).filter { it.isNotBlank() }
+                val stopWords: Set<String> = setOf("a", "an", "the", "is", "are", "am", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "shall", "should", "can", "could", "may", "might", "must")
+                val filteredTokens: List<String> = tokens.filter { !stopWords.contains(it) }
+
+                filteredTokens.joinToString(" ")
             }
-            var processedText = text.toLowerCase()
-            processedText = processedText.replace("[^a-zA-Z\\s]".toRegex(), "")
-
-            val tokens: List<String> = processedText.split("\\s+".toRegex()).filter { it.isNotBlank() }
-            val stopWords: Set<String> = setOf("a", "an", "the", "is", "are", "am", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "shall", "should", "can", "could", "may", "might", "must")
-            val filteredTokens: List<String> = tokens.filter { !stopWords.contains(it) }
-
-            return filteredTokens.joinToString(" ")
+            Log.d("Preprocess", "Processed text: $result")
+            return result
         }
+
 
 
         fun preprocessUrl(url: String): String {
-            val decodedUrl = URLDecoder.decode(url, "UTF-8")
-            val queryString = decodedUrl.substringAfter("?")
-            val keywordPattern: Pattern = Pattern.compile("q=([^&]*)")
-            val keywordMatcher: Matcher = keywordPattern.matcher(queryString)
-            val keywords = StringBuilder()
-            while (keywordMatcher.find()) {
-                keywords.append(keywordMatcher.group(1)).append(" ")
+            Log.d("Preprocess", "Original URL: $url")
+            return try {
+                val decodedUrl = URLDecoder.decode(url, "UTF-8")
+                val uri = Uri.parse(decodedUrl)
+                val queryString = uri.query ?: ""
+
+                // Extract keywords from the query string
+                val keywordPattern: Pattern = Pattern.compile("q=([^&]*)")
+                val keywordMatcher: Matcher = keywordPattern.matcher(queryString)
+                val keywords = StringBuilder()
+                while (keywordMatcher.find()) {
+                    keywords.append(keywordMatcher.group(1)).append(" ")
+                }
+
+                // Extract meaningful parts from the URL path
+                val domain = uri.host ?: ""
+                val path = uri.path ?: ""
+                val processedDomain = domain.replace("[^a-zA-Z\\s]".toRegex(), " ").toLowerCase()
+                val processedPath = path.replace("[^a-zA-Z\\s]".toRegex(), " ").toLowerCase()
+
+                // Combine keywords, domain, and processed path for final result
+                val combined = (keywords.toString() + " " + processedDomain + " " + processedPath).toLowerCase()
+                val processedText = combined.replace("[^a-zA-Z\\s]".toRegex(), "")
+
+                val tokens: List<String> = processedText.split("\\s+".toRegex()).filter { it.isNotBlank() }
+                val stopWords: Set<String> = setOf("www", "com", "org", "net", "http", "https", "fandom", "search", "google")
+                val filteredTokens: List<String> = tokens.filter { !stopWords.contains(it) }
+
+                val result = filteredTokens.joinToString(" ")
+                Log.d("Preprocess", "Processed URL text: $result")
+                result
+            } catch (e: Exception) {
+                Log.e("preprocessUrl", "Error preprocessing URL: $url", e)
+                ""
             }
-            return keywords.trim().toString()
         }
+
+
 
         fun tokenizeText(text: String): List<Int> {
             val tokens: List<String> = text.split("\\s+".toRegex())
@@ -104,7 +137,7 @@ class TfLiteModel {
                 'g' to listOf("6", "&", "(_+", "₲", "ǥ", "ĝ", "ğ", "ġ", "ģ", "Ḡ"),
                 'h' to listOf("|-|", "#", "[-]", "<~>", "(-)", "):-:", ")-(", "}{", "ɦ", "ḧ", "ḩ", "ḥ", "Ḥ", "Ḫ"),
                 'i' to listOf("1", "!", "|", "][", "]", "!", "ȋ", "ḭ", "ǐ", "ī", "į", "ḯ", "Ḭ"),
-                'j' to listOf("._|", "_|", "._]", "_]", "_)", "ʝ", "ĵ", "ǰ", "ɉ"),
+                'j' to listOf("._|", "|", "._]", "_]", ")", "ʝ", "ĵ", "ǰ", "ɉ"),
                 'k' to listOf("|<", "|{", "ɮ", "ḳ", "ḵ", "ⓚ", "Κ", "к"),
                 'l' to listOf("|_", "|", "|'", "1", "ℓ", "ḻ", "ḷ", "ḹ", "Ḽ", "Ḷ", "Ḹ"),
                 'm' to listOf("/\\/\\", "|\\/|", "^^", "em", "AA", "[]\\/][", "ḿ", "ṁ", "ṃ", "ⓜ"),
@@ -173,9 +206,9 @@ class TfLiteModel {
             return maxIndex
         }
 
-       /* fun containsBlockedKeywords(url: String): Boolean {
-            return blockedKeywords.any { keyword -> url.contains(keyword, ignoreCase = true) }
-        }*/
+        /* fun containsBlockedKeywords(url: String): Boolean {
+             return blockedKeywords.any { keyword -> url.contains(keyword, ignoreCase = true) }
+         }*/
     }
 
 }
